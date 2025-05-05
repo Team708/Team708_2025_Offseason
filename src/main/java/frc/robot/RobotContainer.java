@@ -132,31 +132,31 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    poseMapBlue.put(1, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(2, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(3, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(4, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(5, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(6, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(7, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(8, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(9, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(10, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(11, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapBlue.put(12, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(1, new Pose2d(3.12, 4.18, new Rotation2d(0)));
+    poseMapBlue.put(2, new Pose2d(3.12, 3.84, new Rotation2d(0)));
+    poseMapBlue.put(3, new Pose2d(3.63, 2.92, new Rotation2d(Math.PI / 3)));
+    poseMapBlue.put(4, new Pose2d(3.96, 2.73, new Rotation2d(Math.PI / 3)));
+    poseMapBlue.put(5, new Pose2d(5.04, 2.76, new Rotation2d((2 * Math.PI) / 3)));
+    poseMapBlue.put(6, new Pose2d(5.32, 2.90, new Rotation2d((2 * Math.PI) / 3)));
+    poseMapBlue.put(7, new Pose2d(5.88, 3.84, new Rotation2d(-Math.PI)));
+    poseMapBlue.put(8, new Pose2d(5.88, 4.18, new Rotation2d(-Math.PI)));
+    poseMapBlue.put(9, new Pose2d(5.32, 5.198, new Rotation2d(-(2 * Math.PI) / 3)));
+    poseMapBlue.put(10, new Pose2d(5.04, 5.407, new Rotation2d(-(2 * Math.PI) / 3)));
+    poseMapBlue.put(11, new Pose2d(3.96, 5.407, new Rotation2d(-Math.PI / 3)));
+    poseMapBlue.put(12, new Pose2d(3.63, 5.198, new Rotation2d(-Math.PI / 3)));
 
-    poseMapRed.put(1, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(2, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(3, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(4, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(5, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(6, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(7, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(8, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(9, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(10, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(11, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseMapRed.put(12, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(1, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI)));
+    poseMapRed.put(2, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI)));
+    poseMapRed.put(3, new Pose2d(0.0, 0.0, new Rotation2d(-(2 * Math.PI) / 3)));
+    poseMapRed.put(4, new Pose2d(0.0, 0.0, new Rotation2d(-(2 * Math.PI) / 3)));
+    poseMapRed.put(5, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI / 3)));
+    poseMapRed.put(6, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI / 3)));
+    poseMapRed.put(7, new Pose2d(0.0, 0.0, new Rotation2d(0)));
+    poseMapRed.put(8, new Pose2d(0.0, 0.0, new Rotation2d(0)));
+    poseMapRed.put(9, new Pose2d(0.0, 0.0, new Rotation2d(Math.PI / 3)));
+    poseMapRed.put(10, new Pose2d(0.0, 0.0, new Rotation2d(Math.PI / 3)));
+    poseMapRed.put(11, new Pose2d(0.0, 0.0, new Rotation2d((2 * Math.PI) / 3)));
+    poseMapRed.put(12, new Pose2d(0.0, 0.0, new Rotation2d((2 * Math.PI) / 3)));
 
     configureButtonBindings();
   }
@@ -186,9 +186,6 @@ public class RobotContainer {
                 () -> -controller.getLeftX(),
                 () -> new Rotation2d()));
 
-    // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
     // Reset gyro to 0° when B button is pressed
     controller
         .b()
@@ -196,9 +193,10 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d(1.0))),
+                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
     if (alliance == Alliance.Blue) {
       for (int i = 1; i < 13; i++) {
