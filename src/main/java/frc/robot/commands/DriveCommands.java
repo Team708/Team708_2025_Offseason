@@ -13,6 +13,8 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -288,6 +290,12 @@ public class DriveCommands {
                               + formatter.format(Units.metersToInches(wheelRadius))
                               + " inches");
                     })));
+  }
+
+  public static Command driveToPose(Pose2d pose, Drive drive) {
+    Command c = AutoBuilder.pathfindToPose(pose, new PathConstraints(2.0, 2.0, 5.0, 5.0), 0.0);
+    c.addRequirements(drive);
+    return c;
   }
 
   private static class WheelRadiusCharacterizationState {

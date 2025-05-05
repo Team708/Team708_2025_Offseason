@@ -16,11 +16,15 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -34,6 +38,7 @@ import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import java.util.HashMap;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -49,6 +54,10 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final Joystick reefController = new Joystick(1);
+
+  HashMap<Integer, Pose2d> poseMapBlue = new HashMap<Integer, Pose2d>();
+  HashMap<Integer, Pose2d> poseMapRed = new HashMap<Integer, Pose2d>();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -123,6 +132,32 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
+    poseMapBlue.put(1, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(2, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(3, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(4, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(5, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(6, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(7, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(8, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(9, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(10, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(11, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapBlue.put(12, new Pose2d(0.0, 0.0, new Rotation2d()));
+
+    poseMapRed.put(1, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(2, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(3, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(4, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(5, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(6, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(7, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(8, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(9, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(10, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(11, new Pose2d(0.0, 0.0, new Rotation2d()));
+    poseMapRed.put(12, new Pose2d(0.0, 0.0, new Rotation2d()));
+
     configureButtonBindings();
   }
 
@@ -161,9 +196,21 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d(1.0))),
                     drive)
                 .ignoringDisable(true));
+    Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+    if (alliance == Alliance.Blue) {
+      for (int i = 1; i < 13; i++) {
+        new JoystickButton(reefController, i)
+            .onTrue(DriveCommands.driveToPose(poseMapBlue.get(i), drive));
+      }
+    } else {
+      for (int i = 1; i < 13; i++) {
+        new JoystickButton(reefController, i)
+            .onTrue(DriveCommands.driveToPose(poseMapRed.get(i), drive));
+      }
+    }
   }
 
   /**

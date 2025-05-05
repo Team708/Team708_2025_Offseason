@@ -23,8 +23,8 @@ import edu.wpi.first.math.util.Units;
 public class DriveConstants {
   public static final double maxSpeedMetersPerSec = 4.8;
   public static final double odometryFrequency = 100.0; // Hz
-  public static final double trackWidth = Units.inchesToMeters(18.875);
-  public static final double wheelBase = Units.inchesToMeters(24.75);
+  public static final double trackWidth = Units.inchesToMeters(26.5);
+  public static final double wheelBase = Units.inchesToMeters(26.5);
   public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
   public static final Translation2d[] moduleTranslations =
       new Translation2d[] {
@@ -71,10 +71,10 @@ public class DriveConstants {
   public static final double driveKd = 0.0;
   public static final double driveKs = 0.0;
   public static final double driveKv = 0.1;
-  public static final double driveSimP = 0.05;
+  public static final double driveSimP = 0.8;
   public static final double driveSimD = 0.0;
   public static final double driveSimKs = 0.0;
-  public static final double driveSimKv = 0.0789;
+  public static final double driveSimKv = 0.1;
 
   // Turn motor configuration
   public static final boolean turnInverted = false;
