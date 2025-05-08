@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -209,27 +208,6 @@ public class RobotContainer {
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
-
-    // Lock to 0° when A button is held
-    controller
-        .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> new Rotation2d()));
-
-    // Reset gyro to 0° when B button is pressed
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                    drive)
-                .ignoringDisable(true));
 
     controller.y().onTrue(new InstantCommand(() -> chute.extend()));
     controller.x().onTrue(new InstantCommand(() -> chute.retract()));
