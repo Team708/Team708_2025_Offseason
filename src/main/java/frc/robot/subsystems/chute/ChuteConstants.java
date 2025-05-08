@@ -8,6 +8,7 @@ public class ChuteConstants {
   public static final double kEncoderPositionFactor = kGearRatio / kScrewTravelPerRev;
   public static final double kEncoderVelocityFactor = (kGearRatio / kScrewTravelPerRev) / 60.0;
   public static final double kMotorReduction = 1;
+  public static final double kJKgMetersSquared = 0.025;
   public static final double kP = 50.0;
   public static final double kI = 0.0;
   public static final double kD = 0.0;

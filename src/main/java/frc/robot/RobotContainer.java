@@ -29,14 +29,27 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.chute.Chute;
+import frc.robot.subsystems.chute.ChuteIO;
 import frc.robot.subsystems.chute.ChuteIOSim;
 import frc.robot.subsystems.chute.ChuteIOSpark;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberIOSpark;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOSpark;
+import frc.robot.subsystems.manipulator.Manipulator;
+import frc.robot.subsystems.manipulator.ManipulatorIO;
+import frc.robot.subsystems.manipulator.ManipulatorIOSim;
+import frc.robot.subsystems.manipulator.ManipulatorIOSpark;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
@@ -56,11 +69,15 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
   private final Chute chute;
+  private final Elevator elevator;
+  private final Climber climber;
+  private final Manipulator manipulator;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
   private final Joystick reefController = new Joystick(1);
 
+  // Pose maps
   HashMap<Integer, Pose2d> poseMapBlue = new HashMap<Integer, Pose2d>();
   HashMap<Integer, Pose2d> poseMapRed = new HashMap<Integer, Pose2d>();
 
@@ -85,6 +102,9 @@ public class RobotContainer {
                 new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
                 new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
         chute = new Chute(new ChuteIOSpark());
+        elevator = new Elevator(new ElevatorIOSpark());
+        climber = new Climber(new ClimberIOSpark());
+        manipulator = new Manipulator(new ManipulatorIOSpark());
         break;
 
       case SIM:
@@ -104,6 +124,9 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(
                     VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
         chute = new Chute(new ChuteIOSim());
+        elevator = new Elevator(new ElevatorIOSim());
+        climber = new Climber(new ClimberIOSim());
+        manipulator = new Manipulator(new ManipulatorIOSim());
         break;
 
       default:
@@ -116,7 +139,10 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        chute = new Chute(new ChuteIOSim());
+        chute = new Chute(new ChuteIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
+        climber = new Climber(new ClimberIO() {});
+        manipulator = new Manipulator(new ManipulatorIO() {});
         break;
     }
 

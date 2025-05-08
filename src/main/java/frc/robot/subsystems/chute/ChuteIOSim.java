@@ -18,7 +18,7 @@ public class ChuteIOSim implements ChuteIO {
 
   public ChuteIOSim() {
     gearBox = DCMotor.getNEO(1).withReduction(kMotorReduction);
-    linearSystem = LinearSystemId.createDCMotorSystem(gearBox, 0.025, kMotorReduction);
+    linearSystem = LinearSystemId.createDCMotorSystem(gearBox, kJKgMetersSquared, kMotorReduction);
     motorSim = new DCMotorSim(linearSystem, gearBox);
     appliedVolts = 0.0;
   }
@@ -34,6 +34,13 @@ public class ChuteIOSim implements ChuteIO {
     inputs.positionMeters = motorSim.getAngularPositionRotations() * kScrewTravelPerRev;
     inputs.velocityMetersPerSecond = motorSim.getAngularVelocityRPM() / 60.0 * kScrewTravelPerRev;
 
+    /*
+     * Simulated hard stops
+     * Set to min/max extension. Vecbuilder for state takes angularPosition and angularVelocity
+     * In this context angularPosition is the total accumulated shaft rotation over time
+     * Rotations = linear position / pitch
+     * Angular position (radians) = rotations * 2PI
+     */
     if (inputs.isFullyRetracted && inputs.velocityMetersPerSecond < 0) {
       motorSim.setState(VecBuilder.fill(kRetractedMeters, 0.0));
     } else if (inputs.isFullyExtended && inputs.velocityMetersPerSecond > 0) {
