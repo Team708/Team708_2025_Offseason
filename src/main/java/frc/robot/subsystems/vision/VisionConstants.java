@@ -57,5 +57,5 @@ public class VisionConstants {
       Double.POSITIVE_INFINITY; // No rotation data available
 
   // Sim max sight range
-  public static double simMaxSightRange = 7;
+  public static double simMaxSightRange = 5;
 }
