@@ -2,32 +2,31 @@ package frc.robot.subsystems.chute;
 
 import static frc.robot.subsystems.chute.ChuteConstants.*;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Chute extends SubsystemBase {
 
   private enum State {
     UNKNOWN,
+    MOVING,
     RETRACTED,
     EXTENDED
   }
 
-  private State state;
-  private State desiredState;
+  @AutoLogOutput private State state;
+  @AutoLogOutput private State desiredState;
   private final ChuteIO io;
   private final ChuteIOInputsAutoLogged inputs;
   private final PIDController controller;
-  private double zeroOffset;
-  private double goalMeters;
 
   public Chute(ChuteIO io) {
     this.io = io;
     inputs = new ChuteIOInputsAutoLogged();
     controller = new PIDController(kP, kI, kD);
-    controller.enableContinuousInput(-12.0, 12.0);
-    zeroOffset = 0.0;
     state = State.UNKNOWN;
     desiredState = State.RETRACTED;
   }
@@ -44,7 +43,6 @@ public class Chute extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Chute", inputs);
-
     if (inputs.isFullyRetracted) {
       state = State.RETRACTED;
     } else if (inputs.isFullyExtended) {
@@ -67,8 +65,9 @@ public class Chute extends SubsystemBase {
           desiredPosition = kRetractedMeters;
           break;
       }
+      state = State.MOVING;
       double outputVolts = controller.calculate(inputs.positionMeters, desiredPosition);
-      io.setVoltage(outputVolts);
+      io.setVoltage(MathUtil.clamp(outputVolts, -12.0, 12.0));
     } else {
       io.setVoltage(0.0);
     }

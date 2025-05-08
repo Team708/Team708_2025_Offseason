@@ -17,7 +17,7 @@ public class ChuteIOSim implements ChuteIO {
   private double appliedVolts;
 
   public ChuteIOSim() {
-    gearBox = DCMotor.getNEO(1);
+    gearBox = DCMotor.getNEO(1).withReduction(kMotorReduction);
     linearSystem = LinearSystemId.createDCMotorSystem(gearBox, 0.025, kMotorReduction);
     motorSim = new DCMotorSim(linearSystem, gearBox);
     appliedVolts = 0.0;
@@ -27,23 +27,17 @@ public class ChuteIOSim implements ChuteIO {
   public void updateInputs(ChuteIOInputs inputs) {
     motorSim.update(kSimUpdateInterval);
     inputs.connected = true;
-    inputs.isFullyRetracted = inputs.positionMeters <= kRetractedMeters;
-    inputs.isFullyExtended = inputs.positionMeters >= kExtendedMeters;
+    inputs.isFullyRetracted = inputs.positionMeters <= kRetractedMeters + kTolerance;
+    inputs.isFullyExtended = inputs.positionMeters >= kExtendedMeters - kTolerance;
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = motorSim.getCurrentDrawAmps();
     inputs.positionMeters = motorSim.getAngularPositionRotations() * kScrewTravelPerRev;
     inputs.velocityMetersPerSecond = motorSim.getAngularVelocityRPM() / 60.0 * kScrewTravelPerRev;
 
-    if (inputs.positionMeters <= kRetractedMeters && inputs.velocityMetersPerSecond < 0) {
-      System.out.println("HARD STOP RETRACT");
-      // Hit bottom hard stop
-      motorSim.setInput(0.0);
+    if (inputs.isFullyRetracted && inputs.velocityMetersPerSecond < 0) {
       motorSim.setState(VecBuilder.fill(kRetractedMeters, 0.0));
-    } else if (inputs.positionMeters >= kExtendedMeters && inputs.velocityMetersPerSecond > 0) {
-      System.out.println("HARD STOP EXTEND");
-      // Hit top hard stop
-      motorSim.setInput(0.0);
-      motorSim.setState(VecBuilder.fill(kExtendedMeters * 2 * Math.PI, 0.0));
+    } else if (inputs.isFullyExtended && inputs.velocityMetersPerSecond > 0) {
+      motorSim.setState(VecBuilder.fill((kExtendedMeters / kScrewTravelPerRev) * 2 * Math.PI, 0.0));
     }
   }
 

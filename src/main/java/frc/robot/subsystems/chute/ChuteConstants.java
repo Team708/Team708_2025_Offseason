@@ -13,6 +13,6 @@ public class ChuteConstants {
   public static final double kD = 0.0;
   public static final double kSimUpdateInterval = 0.02;
   public static final double kRetractedMeters = 0.0;
-  public static final double kExtendedMeters = 0.3;
+  public static final double kExtendedMeters = 1;
   public static final double kTolerance = 0.005;
 }
