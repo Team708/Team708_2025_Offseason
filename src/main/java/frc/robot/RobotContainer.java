@@ -218,7 +218,8 @@ public class RobotContainer {
         new JoystickButton(reefController, i)
             .onTrue(DriveCommands.driveToPose(poseMapBlue.get(i), drive));
       }
-    } else {
+    } 
+    else {
       for (int i = 1; i < 13; i++) {
         new JoystickButton(reefController, i)
             .onTrue(DriveCommands.driveToPose(poseMapRed.get(i), drive));

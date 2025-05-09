@@ -23,14 +23,17 @@ public class Chute extends SubsystemBase {
   private final ChuteIO io;
   private final ChuteIOInputsAutoLogged inputs;
   private final PIDController controller;
+  private double zeroingFactor;
   private static final LoggedTunableNumber maxVolts =
       new LoggedTunableNumber("Chute/Volts", kMaxVoltage);
-  private static final LoggedTunableNumber pGain = new LoggedTunableNumber("Chute/P", kP);
+  private static final LoggedTunableNumber pGain = 
+      new LoggedTunableNumber("Chute/P", kP);
 
   public Chute(ChuteIO io) {
     this.io = io;
     inputs = new ChuteIOInputsAutoLogged();
     controller = new PIDController(pGain.get(), kI, kD);
+    zeroingFactor = 0.0;
     state = State.UNKNOWN;
     desiredState = State.RETRACTED;
   }
@@ -49,7 +52,8 @@ public class Chute extends SubsystemBase {
     Logger.processInputs("Chute", inputs);
     if (inputs.isFullyRetracted) {
       state = State.RETRACTED;
-    } else if (inputs.isFullyExtended) {
+    } 
+    else if (inputs.isFullyExtended) {
       state = State.EXTENDED;
     }
 
@@ -57,7 +61,8 @@ public class Chute extends SubsystemBase {
     if (state != desiredState) {
       switch (desiredState) {
         case UNKNOWN:
-          desiredPosition = kRetractedMeters;
+          desiredPosition = kRetractedMeters - zeroingFactor;
+          zeroingFactor++;
           break;
         case RETRACTED:
           desiredPosition = kRetractedMeters;
@@ -74,11 +79,11 @@ public class Chute extends SubsystemBase {
       // Update controller P if needed
       if (pGain.hasChanged(pGain.hashCode())) {
         controller.setP(pGain.get());
-        System.out.println("KP CHANGED");
       }
       double outputVolts = controller.calculate(inputs.positionMeters, desiredPosition);
       io.setVoltage(MathUtil.clamp(outputVolts, -maxVolts.get(), maxVolts.get()));
-    } else {
+    } 
+    else {
       io.setVoltage(0.0);
     }
   }

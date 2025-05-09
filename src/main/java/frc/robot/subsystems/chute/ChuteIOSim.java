@@ -20,6 +20,7 @@ public class ChuteIOSim implements ChuteIO {
     gearBox = DCMotor.getNEO(1).withReduction(kMotorReduction);
     linearSystem = LinearSystemId.createDCMotorSystem(gearBox, kJKgMetersSquared, kMotorReduction);
     motorSim = new DCMotorSim(linearSystem, gearBox);
+    motorSim.setState(VecBuilder.fill((0.2 / kScrewTravelPerRev) * 2 * Math.PI, 0.0));
     appliedVolts = 0.0;
   }
 
@@ -27,11 +28,11 @@ public class ChuteIOSim implements ChuteIO {
   public void updateInputs(ChuteIOInputs inputs) {
     motorSim.update(kSimUpdateInterval);
     inputs.connected = true;
+    inputs.positionMeters = motorSim.getAngularPositionRotations() * kScrewTravelPerRev;
     inputs.isFullyRetracted = inputs.positionMeters <= kRetractedMeters + kTolerance;
     inputs.isFullyExtended = inputs.positionMeters >= kExtendedMeters - kTolerance;
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = motorSim.getCurrentDrawAmps();
-    inputs.positionMeters = motorSim.getAngularPositionRotations() * kScrewTravelPerRev;
     inputs.velocityMetersPerSecond = motorSim.getAngularVelocityRPM() / 60.0 * kScrewTravelPerRev;
 
     /*
@@ -43,7 +44,8 @@ public class ChuteIOSim implements ChuteIO {
      */
     if (inputs.isFullyRetracted && inputs.velocityMetersPerSecond < 0) {
       motorSim.setState(VecBuilder.fill(kRetractedMeters, 0.0));
-    } else if (inputs.isFullyExtended && inputs.velocityMetersPerSecond > 0) {
+    } 
+    else if (inputs.isFullyExtended && inputs.velocityMetersPerSecond > 0) {
       motorSim.setState(VecBuilder.fill((kExtendedMeters / kScrewTravelPerRev) * 2 * Math.PI, 0.0));
     }
   }

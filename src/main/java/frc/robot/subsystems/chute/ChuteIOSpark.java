@@ -69,6 +69,10 @@ public class ChuteIOSpark implements ChuteIO {
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionMeters = encoder.getPosition();
     inputs.velocityMetersPerSecond = encoder.getVelocity();
+
+    if (inputs.isFullyRetracted) {
+      encoder.setPosition(0.0);
+    }
   }
 
   @Override
