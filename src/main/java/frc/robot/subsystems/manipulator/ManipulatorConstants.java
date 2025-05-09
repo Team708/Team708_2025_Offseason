@@ -1,5 +1,3 @@
 package frc.robot.subsystems.manipulator;
 
-public class ManipulatorConstants {
-    
-}
+public class ManipulatorConstants {}
