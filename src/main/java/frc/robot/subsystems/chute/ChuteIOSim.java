@@ -20,7 +20,6 @@ public class ChuteIOSim implements ChuteIO {
     gearBox = DCMotor.getNEO(1).withReduction(kMotorReduction);
     linearSystem = LinearSystemId.createDCMotorSystem(gearBox, kJKgMetersSquared, kMotorReduction);
     motorSim = new DCMotorSim(linearSystem, gearBox);
-    motorSim.setState(VecBuilder.fill((0.2 / kScrewTravelPerRev) * 2 * Math.PI, 0.0));
     appliedVolts = 0.0;
   }
 

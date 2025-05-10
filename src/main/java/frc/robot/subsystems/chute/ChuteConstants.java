@@ -17,4 +17,5 @@ public class ChuteConstants {
   public static final double kExtendedMeters = 1;
   public static final double kTolerance = 0.005;
   public static final double kMaxVoltage = 6.0;
+  public static final double kZeroingVolts = 1.0;
 }
