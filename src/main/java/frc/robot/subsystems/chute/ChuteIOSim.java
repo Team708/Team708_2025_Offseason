@@ -32,6 +32,7 @@ public class ChuteIOSim implements ChuteIO {
     inputs.isFullyExtended = inputs.positionMeters >= kExtendedMeters - kTolerance;
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = motorSim.getCurrentDrawAmps();
+    inputs.rpm = motorSim.getAngularVelocityRPM();
     inputs.velocityMetersPerSecond = motorSim.getAngularVelocityRPM() / 60.0 * kScrewTravelPerRev;
 
     /*

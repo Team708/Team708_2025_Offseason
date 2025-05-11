@@ -1,5 +1,6 @@
 package frc.robot.subsystems.chute;
 
+import static frc.robot.subsystems.chute.ChuteConstants.*;
 import static frc.robot.subsystems.drive.DriveConstants.odometryFrequency;
 import static frc.robot.util.SparkUtil.*;
 
@@ -69,6 +70,7 @@ public class ChuteIOSpark implements ChuteIO {
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionMeters = encoder.getPosition();
     inputs.velocityMetersPerSecond = encoder.getVelocity();
+    inputs.rpm = (encoder.getVelocity() / kScrewTravelPerRev) * 60;
 
     if (inputs.isFullyRetracted) {
       encoder.setPosition(0.0);

@@ -23,6 +23,8 @@ public class Chute extends SubsystemBase {
   private final ChuteIO io;
   private final ChuteIOInputsAutoLogged inputs;
   private final PIDController controller;
+  @AutoLogOutput private boolean manualOverride;
+  @AutoLogOutput private double manualVoltage;
   private static final LoggedTunableNumber maxVolts =
       new LoggedTunableNumber("Chute/Volts", kMaxVoltage);
   private static final LoggedTunableNumber pGain = 
@@ -36,6 +38,8 @@ public class Chute extends SubsystemBase {
     controller = new PIDController(pGain.get(), kI, kD);
     state = State.UNKNOWN;
     desiredState = State.RETRACTED;
+    manualOverride = false;
+    manualVoltage = 0.0;
   }
 
   public void retract() {
@@ -50,6 +54,12 @@ public class Chute extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Chute", inputs);
+
+    if(manualOverride) {
+      io.setVoltage(manualVoltage);
+      return;
+    }
+
     if (inputs.isFullyRetracted) {
       state = State.RETRACTED;
     } 
@@ -94,5 +104,13 @@ public class Chute extends SubsystemBase {
 
   public boolean isRetracted() {
     return inputs.isFullyRetracted;
+  }
+
+  public void setManualOverride(boolean manualOverride) {
+    this.manualOverride = manualOverride;
+  }
+
+  public void setManualVoltage(double manualVoltage) {
+    this.manualVoltage = manualVoltage;
   }
 }

@@ -12,6 +12,7 @@ public interface ChuteIO {
     public double currentAmps = 0.0;
     public double positionMeters = 0.0;
     public double velocityMetersPerSecond = 0.0;
+    public double rpm = 0.0;
   }
 
   public default void updateInputs(ChuteIOInputs inputs) {}
