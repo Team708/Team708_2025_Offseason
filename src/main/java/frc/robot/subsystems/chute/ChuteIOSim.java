@@ -44,8 +44,7 @@ public class ChuteIOSim implements ChuteIO {
      */
     if (inputs.isFullyRetracted && inputs.velocityMetersPerSecond < 0) {
       motorSim.setState(VecBuilder.fill(kRetractedMeters, 0.0));
-    } 
-    else if (inputs.isFullyExtended && inputs.velocityMetersPerSecond > 0) {
+    } else if (inputs.isFullyExtended && inputs.velocityMetersPerSecond > 0) {
       motorSim.setState(VecBuilder.fill((kExtendedMeters / kScrewTravelPerRev) * 2 * Math.PI, 0.0));
     }
   }

@@ -27,8 +27,7 @@ public class Chute extends SubsystemBase {
   @AutoLogOutput private double manualVoltage;
   private static final LoggedTunableNumber maxVolts =
       new LoggedTunableNumber("Chute/Volts", kMaxVoltage);
-  private static final LoggedTunableNumber pGain = 
-      new LoggedTunableNumber("Chute/P", kP);
+  private static final LoggedTunableNumber pGain = new LoggedTunableNumber("Chute/P", kP);
   private static final LoggedTunableNumber zeroingVolts =
       new LoggedTunableNumber("Chute/ZeroingVolts", kZeroingVolts);
 
@@ -55,15 +54,14 @@ public class Chute extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Chute", inputs);
 
-    if(manualOverride) {
+    if (manualOverride) {
       io.setVoltage(manualVoltage);
       return;
     }
 
     if (inputs.isFullyRetracted) {
       state = State.RETRACTED;
-    } 
-    else if (inputs.isFullyExtended && state != State.UNKNOWN) {
+    } else if (inputs.isFullyExtended && state != State.UNKNOWN) {
       state = State.EXTENDED;
     }
 
@@ -92,8 +90,7 @@ public class Chute extends SubsystemBase {
       }
       double outputVolts = controller.calculate(inputs.positionMeters, desiredPosition);
       io.setVoltage(MathUtil.clamp(outputVolts, -maxVolts.get(), maxVolts.get()));
-    } 
-    else {
+    } else {
       io.setVoltage(0.0);
     }
   }

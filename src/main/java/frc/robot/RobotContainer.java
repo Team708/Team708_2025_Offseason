@@ -212,7 +212,7 @@ public class RobotContainer {
 
     controller.y().onTrue(new InstantCommand(() -> chute.extend()));
     controller.x().onTrue(new InstantCommand(() -> chute.retract()));
-    controller.b().whileTrue(ChuteCommands.manualControl(chute, ()->-controller.getRightY()));
+    controller.b().whileTrue(ChuteCommands.manualControl(chute, () -> -controller.getRightY()));
 
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
     if (alliance == Alliance.Blue) {
@@ -220,8 +220,7 @@ public class RobotContainer {
         new JoystickButton(reefController, i)
             .onTrue(DriveCommands.driveToPose(poseMapBlue.get(i), drive));
       }
-    } 
-    else {
+    } else {
       for (int i = 1; i < 13; i++) {
         new JoystickButton(reefController, i)
             .onTrue(DriveCommands.driveToPose(poseMapRed.get(i), drive));
