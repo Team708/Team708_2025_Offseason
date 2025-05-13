@@ -29,7 +29,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ChuteCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.chute.Chute;
-import frc.robot.subsystems.chute.ChuteIO;
+import frc.robot.subsystems.chute.ChuteCtrl;
+import frc.robot.subsystems.chute.ChuteCtrlManual;
+import frc.robot.subsystems.chute.ChuteCtrlSystem;
 import frc.robot.subsystems.chute.ChuteIOSim;
 import frc.robot.subsystems.chute.ChuteIOSpark;
 import frc.robot.subsystems.climber.Climber;
@@ -101,7 +103,10 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
                 new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
-        chute = new Chute(new ChuteIOSpark());
+        chute =
+            Constants.chuteManualMode
+                ? new Chute(new ChuteCtrlManual(new ChuteIOSpark()))
+                : new Chute(new ChuteCtrlSystem(new ChuteIOSpark()));
         elevator = new Elevator(new ElevatorIOSpark());
         climber = new Climber(new ClimberIOSpark());
         manipulator = new Manipulator(new ManipulatorIOSpark());
@@ -123,7 +128,10 @@ public class RobotContainer {
                     VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(
                     VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
-        chute = new Chute(new ChuteIOSim());
+        chute =
+            Constants.chuteManualMode
+                ? new Chute(new ChuteCtrlManual(new ChuteIOSim()))
+                : new Chute(new ChuteCtrlSystem(new ChuteIOSim()));
         elevator = new Elevator(new ElevatorIOSim());
         climber = new Climber(new ClimberIOSim());
         manipulator = new Manipulator(new ManipulatorIOSim());
@@ -139,7 +147,11 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        chute = new Chute(new ChuteIO() {});
+        chute =
+            new Chute(
+                new ChuteCtrl() {
+                  public void periodic() {}
+                });
         elevator = new Elevator(new ElevatorIO() {});
         climber = new Climber(new ClimberIO() {});
         manipulator = new Manipulator(new ManipulatorIO() {});
@@ -210,9 +222,9 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    controller.y().onTrue(new InstantCommand(() -> chute.extend()));
-    controller.x().onTrue(new InstantCommand(() -> chute.retract()));
-    controller.b().whileTrue(ChuteCommands.manualControl(chute, () -> -controller.getRightY()));
+    controller.y().onTrue(new InstantCommand(() -> chute.getChuteCtrl().extend()));
+    controller.x().onTrue(new InstantCommand(() -> chute.getChuteCtrl().retract()));
+    controller.b().whileTrue(ChuteCommands.manualControl(chute, () -> controller.getRightY()));
 
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
     if (alliance == Alliance.Blue) {
