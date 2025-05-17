@@ -1,5 +1,4 @@
 {
-  "wpilib.skipSelectSimulateExtension": true,
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
   "files.exclude": {
