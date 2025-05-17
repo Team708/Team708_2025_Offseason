@@ -46,8 +46,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import frc.robot.subsystems.manipulator.Manipulator;
 import frc.robot.subsystems.manipulator.ManipulatorIO;
 import frc.robot.subsystems.manipulator.ManipulatorIOSim;
@@ -107,7 +105,10 @@ public class RobotContainer {
             Constants.chuteManualMode
                 ? new Chute(new ChuteCtrlManual(new ChuteIOSpark()))
                 : new Chute(new ChuteCtrlSystem(new ChuteIOSpark()));
-        elevator = new Elevator(new ElevatorIOSpark());
+        elevator =
+            Constants.elevatorManualMode
+                ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
+                : new Elevator(new ElevatorCtrlSystem(new ElevatorIOReal()));
         climber = new Climber(new ClimberIOSpark());
         manipulator = new Manipulator(new ManipulatorIOSpark());
         break;
@@ -132,7 +133,10 @@ public class RobotContainer {
             Constants.chuteManualMode
                 ? new Chute(new ChuteCtrlManual(new ChuteIOSim()))
                 : new Chute(new ChuteCtrlSystem(new ChuteIOSim()));
-        elevator = new Elevator(new ElevatorIOSim());
+        elevator =
+            Constants.elevatorManualMode
+                ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
+                : new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
         climber = new Climber(new ClimberIOSim());
         manipulator = new Manipulator(new ManipulatorIOSim());
         break;
