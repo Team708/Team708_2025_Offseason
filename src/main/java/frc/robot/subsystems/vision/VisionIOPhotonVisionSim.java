@@ -51,6 +51,7 @@ public class VisionIOPhotonVisionSim extends VisionIOPhotonVision {
     cameraSim = new PhotonCameraSim(camera, cameraProperties, aprilTagLayout);
     cameraSim.setMaxSightRange(VisionConstants.simMaxSightRange);
     visionSim.addCamera(cameraSim, robotToCamera);
+    visionSim.update(new Pose2d());
   }
 
   @Override
