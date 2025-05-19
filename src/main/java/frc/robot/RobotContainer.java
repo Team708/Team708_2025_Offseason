@@ -45,7 +45,11 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorCtrl;
+import frc.robot.subsystems.elevator.ElevatorCtrlManual;
+import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
+import frc.robot.subsystems.elevator.ElevatorIOReal;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.manipulator.Manipulator;
 import frc.robot.subsystems.manipulator.ManipulatorIO;
 import frc.robot.subsystems.manipulator.ManipulatorIOSim;
@@ -156,7 +160,11 @@ public class RobotContainer {
                 new ChuteCtrl() {
                   public void periodic() {}
                 });
-        elevator = new Elevator(new ElevatorIO() {});
+        elevator =
+            new Elevator(
+                new ElevatorCtrl() {
+                  public void periodic() {}
+                });
         climber = new Climber(new ClimberIO() {});
         manipulator = new Manipulator(new ManipulatorIO() {});
         break;
