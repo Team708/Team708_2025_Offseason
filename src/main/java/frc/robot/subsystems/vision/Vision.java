@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,7 +68,7 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // Avoid loop overrun
-    if (Timer.getFPGATimestamp() < Constants.startupPeriodicDelay) {
+    if (Timer.getFPGATimestamp() < startupPeriodicDelay) {
       return;
     }
 

@@ -127,7 +127,7 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     // Avoid loop overrun on startup
-    if (Timer.getFPGATimestamp() < Constants.startupPeriodicDelay) {
+    if (Timer.getFPGATimestamp() < startupPeriodicDelay) {
       return;
     }
 

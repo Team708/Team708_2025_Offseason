@@ -58,4 +58,6 @@ public class VisionConstants {
 
   // Sim max sight range
   public static double simMaxSightRange = 5;
+
+  public static final double startupPeriodicDelay = 2.0;
 }

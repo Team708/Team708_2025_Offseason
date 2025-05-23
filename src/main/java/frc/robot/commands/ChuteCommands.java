@@ -22,4 +22,22 @@ public class ChuteCommands {
         },
         chute);
   }
+
+  public static Command extend(Chute chute) {
+    return Commands.run(
+        () -> {
+          ChuteCtrl control = chute.getChuteCtrl();
+          control.extend();
+        },
+        chute);
+  }
+
+  public static Command retract(Chute chute) {
+    return Commands.run(
+        () -> {
+          ChuteCtrl control = chute.getChuteCtrl();
+          control.retract();
+        },
+        chute);
+  }
 }

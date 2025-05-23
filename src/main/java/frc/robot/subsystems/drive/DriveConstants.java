@@ -111,4 +111,5 @@ public class DriveConstants {
               driveMotorCurrentLimit,
               1),
           moduleTranslations);
+  public static final double startupPeriodicDelay = 2.0;
 }
