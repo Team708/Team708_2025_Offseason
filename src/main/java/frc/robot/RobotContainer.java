@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ChuteCommands;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
@@ -235,8 +236,9 @@ public class RobotContainer {
 
     controller.y().onTrue(ChuteCommands.extend(chute));
     controller.x().onTrue(ChuteCommands.retract(chute));
-    controller.b().whileTrue(ChuteCommands.manualControl(chute, () -> controller.getRightY()));
-
+    controller
+        .b()
+        .whileTrue(ElevatorCommands.manualControl(elevator, () -> controller.getRightY()));
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
     if (alliance == Alliance.Blue) {
       for (int i = 1; i < 13; i++) {

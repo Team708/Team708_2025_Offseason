@@ -18,6 +18,7 @@ public class ChuteCtrlManual extends SubsystemBase implements ChuteCtrl {
     Logger.processInputs("Chute", inputs);
   }
 
+  @Override
   public void setVoltage(double volts) {
     io.setVoltage(volts);
   }

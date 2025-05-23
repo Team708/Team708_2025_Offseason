@@ -35,7 +35,8 @@ public class ElevatorIOSim implements ElevatorIO {
     inputs.currentAmps = elevatorSim.getCurrentDrawAmps();
     inputs.positionMeters = elevatorSim.getPositionMeters();
     inputs.velocityMetersPerSecond = elevatorSim.getVelocityMetersPerSecond();
-    inputs.rpm = (elevatorSim.getVelocityMetersPerSecond() * 60) / (2 * Math.PI * kDrumRadiusMeters);
+    inputs.rpm =
+        (elevatorSim.getVelocityMetersPerSecond() * 60) / (2 * Math.PI * kDrumRadiusMeters);
   }
 
   @Override
@@ -43,5 +44,4 @@ public class ElevatorIOSim implements ElevatorIO {
     appliedVolts = volts;
     elevatorSim.setInputVoltage(volts);
   }
-
 }

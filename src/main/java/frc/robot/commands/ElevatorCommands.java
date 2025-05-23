@@ -8,8 +8,8 @@ import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
 public class ElevatorCommands {
-  private static final LoggedTunableNumber manualVolts =
-      new LoggedTunableNumber("Elevator/ManualVolts", 6.0);
+  private static final LoggedTunableNumber manualSpeedMeters =
+      new LoggedTunableNumber("Elevator/ManualChangeMeters", 0.0254);
 
   private ElevatorCommands() {}
 
@@ -17,8 +17,8 @@ public class ElevatorCommands {
     return Commands.run(
         () -> {
           ElevatorCtrl control = elevator.getElevatorCtrl();
-          Double voltage = joystickValue.getAsDouble() * manualVolts.getAsDouble();
-          control.setVoltage(voltage);
+          control.changeElevatorPosition(
+              manualSpeedMeters.getAsDouble() * joystickValue.getAsDouble());
         },
         elevator);
   }
