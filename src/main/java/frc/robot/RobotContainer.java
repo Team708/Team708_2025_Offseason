@@ -236,9 +236,9 @@ public class RobotContainer {
 
     controller.y().onTrue(ChuteCommands.extend(chute));
     controller.x().onTrue(ChuteCommands.retract(chute));
-    controller
-        .b()
-        .whileTrue(ElevatorCommands.manualControl(elevator, () -> controller.getRightY()));
+    elevator.setDefaultCommand(
+        ElevatorCommands.manualControl(elevator, () -> controller.getLeftY()));
+
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
     if (alliance == Alliance.Blue) {
       for (int i = 1; i < 13; i++) {

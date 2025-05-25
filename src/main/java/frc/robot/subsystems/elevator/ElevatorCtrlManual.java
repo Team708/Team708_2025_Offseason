@@ -11,11 +11,10 @@ import org.littletonrobotics.junction.Logger;
 public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
   private LoggedTunableNumber maxVoltage =
       new LoggedTunableNumber("Elevator/MaxVoltage", kMaxVoltage);
-  private LoggedTunableNumber pGain =
-      new LoggedTunableNumber("Elevator/PGain", kP);
+  private LoggedTunableNumber pGain = new LoggedTunableNumber("Elevator/PGain", kP);
   private final ElevatorIO io;
   private final ElevatorIOInputsAutoLogged inputs;
-  private PIDController controller;
+  private final PIDController controller;
   private double targetMeters;
 
   public ElevatorCtrlManual(ElevatorIO io) {
@@ -27,17 +26,20 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
 
   @Override
   public void periodic() {
-    // PID change
-    if(pGain.hasChanged(pGain.hashCode())) {
-      controller = new PIDController(pGain.get(), kI, kD);
+    // PID chang
+    if (pGain.hasChanged(pGain.hashCode())) {
+      controller.setP(kP);
     }
 
     // Scale PID to voltage output
-    double maxOutput = pGain.get() * (kMaxHeightMeters - kMinHeightMeters);
     double rawPID = controller.calculate(inputs.positionMeters, targetMeters);
-    double scaledOutput = MathUtil.clamp(rawPID / maxOutput, -1.0, 1.0) * maxVoltage.get();
+    double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
 
-    io.setVoltage(scaledOutput);
+    Logger.recordOutput("Elevator/rawPID", rawPID);
+    Logger.recordOutput("Elevator/finalVoltage", scaledVoltage);
+    Logger.recordOutput("Elevator/target", targetMeters);
+
+    io.setVoltage(scaledVoltage);
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
   }
@@ -45,5 +47,10 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
   @Override
   public void changeElevatorPosition(double meters) {
     targetMeters += meters;
+    if (targetMeters < 0) {
+      targetMeters = 0;
+    } else if (targetMeters > kMaxHeightMeters) {
+      targetMeters = kMaxHeightMeters;
+    }
   }
 }

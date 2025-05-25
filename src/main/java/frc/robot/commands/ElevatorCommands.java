@@ -8,8 +8,8 @@ import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
 public class ElevatorCommands {
-  private static final LoggedTunableNumber manualSpeedMeters =
-      new LoggedTunableNumber("Elevator/ManualChangeMeters", 0.0254);
+  private static final LoggedTunableNumber manualChangeMeters =
+      new LoggedTunableNumber("Elevator/ManualChangeMeters", 0.01);
 
   private ElevatorCommands() {}
 
@@ -18,7 +18,7 @@ public class ElevatorCommands {
         () -> {
           ElevatorCtrl control = elevator.getElevatorCtrl();
           control.changeElevatorPosition(
-              manualSpeedMeters.getAsDouble() * joystickValue.getAsDouble());
+              manualChangeMeters.getAsDouble() * -joystickValue.getAsDouble());
         },
         elevator);
   }
