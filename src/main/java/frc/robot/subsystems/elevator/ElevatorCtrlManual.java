@@ -26,7 +26,10 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
 
   @Override
   public void periodic() {
-    // PID chang
+    io.updateInputs(inputs);
+    Logger.processInputs("Elevator", inputs);
+
+    // PID change
     if (pGain.hasChanged(pGain.hashCode())) {
       controller.setP(kP);
     }
@@ -34,23 +37,11 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
     // Scale PID to voltage output
     double rawPID = controller.calculate(inputs.positionMeters, targetMeters);
     double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
-
-    Logger.recordOutput("Elevator/rawPID", rawPID);
-    Logger.recordOutput("Elevator/finalVoltage", scaledVoltage);
-    Logger.recordOutput("Elevator/target", targetMeters);
-
     io.setVoltage(scaledVoltage);
-    io.updateInputs(inputs);
-    Logger.processInputs("Elevator", inputs);
   }
 
   @Override
-  public void changeElevatorPosition(double meters) {
-    targetMeters += meters;
-    if (targetMeters < 0) {
-      targetMeters = 0;
-    } else if (targetMeters > kMaxHeightMeters) {
-      targetMeters = kMaxHeightMeters;
-    }
+  public void manualAdjustPosition(double meters) {
+    targetMeters = MathUtil.clamp(targetMeters + meters, 0, kMaxHeightMeters);
   }
 }

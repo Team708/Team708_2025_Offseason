@@ -3,12 +3,10 @@ package frc.robot.subsystems.elevator;
 import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ElevatorIOSim implements ElevatorIO {
   private ElevatorSim elevatorSim;
-  private DCMotor gearBox;
   private double appliedVolts;
 
   public ElevatorIOSim() {
@@ -42,6 +40,13 @@ public class ElevatorIOSim implements ElevatorIO {
       elevatorSim.setState(VecBuilder.fill(0.0, 0.0));
     } else if (inputs.positionMeters >= kMaxHeightMeters && inputs.velocityMetersPerSecond > 0) {
       elevatorSim.setState(VecBuilder.fill(kMaxHeightMeters, 0.0));
+    }
+
+    // Zero triggered
+    if (inputs.positionMeters <= 0) {
+      inputs.bottomLimitTriggered = true;
+    } else {
+      inputs.bottomLimitTriggered = false;
     }
   }
 

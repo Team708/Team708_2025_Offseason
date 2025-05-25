@@ -7,6 +7,7 @@ public interface ElevatorIO {
   public static class ElevatorIOInputs {
     public boolean motor1Connected = false;
     public boolean motor2Connected = false;
+    public boolean bottomLimitTriggered = false;
     public double appliedVolts = 0.0;
     public double currentAmps = 0.0;
     public double positionMeters = 0.0;

@@ -45,6 +45,7 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.elevator.ElevatorCtrl;
 import frc.robot.subsystems.elevator.ElevatorCtrlManual;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
@@ -236,6 +237,13 @@ public class RobotContainer {
 
     controller.y().onTrue(ChuteCommands.extend(chute));
     controller.x().onTrue(ChuteCommands.retract(chute));
+    controller
+        .b()
+        .onTrue(ElevatorCommands.moveToLevel(elevator, ElevatorConstants.ElevatorTarget.CORAL_L0));
+    controller
+        .a()
+        .onTrue(ElevatorCommands.moveToLevel(elevator, ElevatorConstants.ElevatorTarget.CORAL_L1));
+
     elevator.setDefaultCommand(
         ElevatorCommands.manualControl(elevator, () -> controller.getLeftY()));
 

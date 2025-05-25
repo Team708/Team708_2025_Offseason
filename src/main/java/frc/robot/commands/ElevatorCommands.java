@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import static frc.robot.subsystems.elevator.ElevatorConstants.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.elevator.Elevator;
@@ -9,7 +11,7 @@ import java.util.function.DoubleSupplier;
 
 public class ElevatorCommands {
   private static final LoggedTunableNumber manualChangeMeters =
-      new LoggedTunableNumber("Elevator/ManualChangeMeters", 0.01);
+      new LoggedTunableNumber("Elevator/ManualAdjustMeters", kManualAdjustMeters);
 
   private ElevatorCommands() {}
 
@@ -17,9 +19,18 @@ public class ElevatorCommands {
     return Commands.run(
         () -> {
           ElevatorCtrl control = elevator.getElevatorCtrl();
-          control.changeElevatorPosition(
+          control.manualAdjustPosition(
               manualChangeMeters.getAsDouble() * -joystickValue.getAsDouble());
         },
         elevator);
+  }
+
+  public static Command moveToLevel(Elevator elevator, ElevatorTarget target) {
+    return Commands.run(
+            () -> {
+              elevator.getElevatorCtrl().setTargetPosition(target);
+            },
+            elevator)
+        .until(() -> elevator.getElevatorCtrl().atTargetPosition());
   }
 }

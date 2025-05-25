@@ -8,13 +8,49 @@ public class ElevatorConstants {
   public static final double kCarriageMassKg = 4.0;
   public static final double kDrumRadiusMeters = 0.0152;
   public static final double kMinHeightMeters = 0.0;
-  public static final double kMaxHeightMeters = 1.5;
+  public static final double kMaxHeightMeters = 2.0;
   public static final boolean kSimulateGravity = true;
   public static final double kStartingHeightMeters = 0.0;
   public static final double kSimUpdateInterval = 0.02;
-  public static final double kP = 8;
+  public static final double kP = 16.0;
   public static final double kI = 0.0;
   public static final double kD = 0.0;
-  public static final double kMaxVoltage = 6.0;
+  public static final double kMaxVoltage = 12.0;
+  public static final double kManualAdjustMeters = 0.05;
   public static final DCMotor kMotors = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 2);
+  public static final double kL0 = 0.0;
+  public static final double kL1 = 0.45;
+  public static final double kL2 = 0.9;
+  public static final double kL3 = 1.3;
+  public static final double kL4 = 1.8;
+  public static final double kDeadband = 0.1;
+  public static final double kZeroingVoltage = -1.0;
+
+  public enum ElevatorTarget {
+    ALGAE_L0(0.0),
+    ALGAE_L1(0.45),
+    ALGAE_L2(0.9),
+    ALGAE_L3(1.3),
+    ALGAE_L4(1.8),
+    CORAL_L0(0.0),
+    CORAL_L1(0.45),
+    CORAL_L2(0.9),
+    CORAL_L3(1.3),
+    CORAL_L4(1.8);
+
+    public final double heightMeters;
+
+    ElevatorTarget(double heightMeters) {
+      this.heightMeters = heightMeters;
+    }
+
+    public static ElevatorTarget fromHeight(double heightMeters) {
+      for (ElevatorTarget position : values()) {
+        if (Math.abs(position.heightMeters - heightMeters) < ElevatorConstants.kDeadband) {
+          return position;
+        }
+      }
+      return null; // or throw if needed
+    }
+  }
 }
