@@ -51,10 +51,12 @@ import frc.robot.subsystems.elevator.ElevatorCtrlManual;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.manipulator.Manipulator;
-import frc.robot.subsystems.manipulator.ManipulatorIO;
-import frc.robot.subsystems.manipulator.ManipulatorIOSim;
-import frc.robot.subsystems.manipulator.ManipulatorIOSpark;
+import frc.robot.subsystems.moon.Moon;
+import frc.robot.subsystems.moon.MoonCtrl;
+import frc.robot.subsystems.moon.MoonCtrlManual;
+import frc.robot.subsystems.moon.MoonCtrlSystem;
+import frc.robot.subsystems.moon.MoonIOReal;
+import frc.robot.subsystems.moon.MoonIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
@@ -76,7 +78,7 @@ public class RobotContainer {
   private final Chute chute;
   private final Elevator elevator;
   private final Climber climber;
-  private final Manipulator manipulator;
+  private final Moon moon;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -115,7 +117,10 @@ public class RobotContainer {
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
                 : new Elevator(new ElevatorCtrlSystem(new ElevatorIOReal()));
         climber = new Climber(new ClimberIOSpark());
-        manipulator = new Manipulator(new ManipulatorIOSpark());
+        moon =
+            Constants.moonManualMode
+                ? new Moon(new MoonCtrlManual(new MoonIOReal()))
+                : new Moon(new MoonCtrlSystem(new MoonIOReal()));
         break;
 
       case SIM:
@@ -143,9 +148,11 @@ public class RobotContainer {
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
                 : new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
         climber = new Climber(new ClimberIOSim());
-        manipulator = new Manipulator(new ManipulatorIOSim());
+        moon =
+            Constants.moonManualMode
+                ? new Moon(new MoonCtrlManual(new MoonIOSim()))
+                : new Moon(new MoonCtrlSystem(new MoonIOSim()));
         break;
-
       default:
         // Replayed robot, disable IO implementations
         drive =
@@ -167,11 +174,15 @@ public class RobotContainer {
                   public void periodic() {}
                 });
         climber = new Climber(new ClimberIO() {});
-        manipulator = new Manipulator(new ManipulatorIO() {});
+        moon =
+            new Moon(
+                new MoonCtrl() {
+                  public void periodic() {}
+                });
         break;
     }
 
-    // Set up auto routines
+    // fSet up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
