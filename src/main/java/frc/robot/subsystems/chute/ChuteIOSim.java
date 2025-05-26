@@ -15,8 +15,8 @@ public class ChuteIOSim implements ChuteIO {
   private double appliedVolts;
 
   public ChuteIOSim() {
-    linearSystem = LinearSystemId.createDCMotorSystem(kMotors, kJKgMetersSquared, kMotorReduction);
-    motorSim = new DCMotorSim(linearSystem, kMotors);
+    linearSystem = LinearSystemId.createDCMotorSystem(kMotor, kJKgMetersSquared, kMotorReduction);
+    motorSim = new DCMotorSim(linearSystem, kMotor);
     appliedVolts = 0.0;
   }
 
