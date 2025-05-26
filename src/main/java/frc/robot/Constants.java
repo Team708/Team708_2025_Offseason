@@ -25,7 +25,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
   public static final boolean tuningMode = true;
   public static final boolean disableHAL = false;
-  public static final boolean chuteManualMode = true;
+  public static final boolean chuteManualMode = false;
   public static final boolean elevatorManualMode = false;
   public static final boolean moonManualMode = true;
 

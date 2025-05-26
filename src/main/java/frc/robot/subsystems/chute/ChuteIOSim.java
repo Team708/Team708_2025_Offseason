@@ -6,20 +6,17 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class ChuteIOSim implements ChuteIO {
-  private final DCMotor gearBox;
   private final LinearSystem<N2, N1, N2> linearSystem;
   private final DCMotorSim motorSim;
   private double appliedVolts;
 
   public ChuteIOSim() {
-    gearBox = DCMotor.getNEO(1).withReduction(kMotorReduction);
-    linearSystem = LinearSystemId.createDCMotorSystem(gearBox, kJKgMetersSquared, kMotorReduction);
-    motorSim = new DCMotorSim(linearSystem, gearBox);
+    linearSystem = LinearSystemId.createDCMotorSystem(kMotors, kJKgMetersSquared, kMotorReduction);
+    motorSim = new DCMotorSim(linearSystem, kMotors);
     appliedVolts = 0.0;
   }
 

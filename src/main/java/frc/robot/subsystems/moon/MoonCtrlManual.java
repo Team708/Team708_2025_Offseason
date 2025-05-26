@@ -17,4 +17,9 @@ public class MoonCtrlManual extends SubsystemBase implements MoonCtrl {
     io.updateInputs(inputs);
     Logger.processInputs("Moon", inputs);
   }
+
+  @Override
+  public void setVoltage(double voltage) {
+    io.setVoltage(voltage);
+  }
 }
