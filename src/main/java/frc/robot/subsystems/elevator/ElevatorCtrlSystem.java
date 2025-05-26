@@ -24,12 +24,14 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
     inputs = new ElevatorIOInputsAutoLogged();
     controller = new PIDController(pGain.get(), kI, kD);
     targetMeters = 0.0;
+    Logger.recordOutput("Elevator/TargetLevel", "Unknown");
   }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
+    Logger.recordOutput("Elevator/IsAtTarget", atTargetPosition());
 
     // PID change
     if (pGain.hasChanged(pGain.hashCode())) {
@@ -52,15 +54,12 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
 
   @Override
   public void setTargetPosition(ElevatorTarget target) {
+    Logger.recordOutput("Elevator/TargetLevel", target.name());
     targetMeters = target.heightMeters;
   }
 
   @Override
   public boolean atTargetPosition() {
-    boolean isAtTarget = Math.abs(inputs.positionMeters - targetMeters) <= kDeadband;
-    if (isAtTarget) {
-      Logger.recordOutput("Elevator/CurrentLevel", ElevatorTarget.fromHeight(targetMeters).name());
-    }
     return Math.abs(inputs.positionMeters - targetMeters) <= kDeadband;
   }
 }

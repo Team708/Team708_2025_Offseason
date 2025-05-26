@@ -32,8 +32,8 @@ import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
 import frc.robot.subsystems.chute.ChuteCtrlSystem;
+import frc.robot.subsystems.chute.ChuteIOReal;
 import frc.robot.subsystems.chute.ChuteIOSim;
-import frc.robot.subsystems.chute.ChuteIOSpark;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
@@ -108,8 +108,8 @@ public class RobotContainer {
                 new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
         chute =
             Constants.chuteManualMode
-                ? new Chute(new ChuteCtrlManual(new ChuteIOSpark()))
-                : new Chute(new ChuteCtrlSystem(new ChuteIOSpark()));
+                ? new Chute(new ChuteCtrlManual(new ChuteIOReal()))
+                : new Chute(new ChuteCtrlSystem(new ChuteIOReal()));
         elevator =
             Constants.elevatorManualMode
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))

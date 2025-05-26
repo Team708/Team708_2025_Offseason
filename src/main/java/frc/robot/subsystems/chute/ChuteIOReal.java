@@ -1,13 +1,11 @@
 package frc.robot.subsystems.chute;
 
 import static frc.robot.subsystems.chute.ChuteConstants.*;
-import static frc.robot.subsystems.drive.DriveConstants.odometryFrequency;
 import static frc.robot.util.SparkUtil.*;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -16,17 +14,15 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj.RobotController;
 
-public class ChuteIOSpark implements ChuteIO {
-  SparkFlex motor;
-  RelativeEncoder encoder;
-  SparkClosedLoopController controller;
-  SparkLimitSwitch reverseLimitSwitch;
-  SparkLimitSwitch forwardLimitSwitch;
+public class ChuteIOReal implements ChuteIO {
+  private final SparkFlex motor;
+  private final RelativeEncoder encoder;
+  private final SparkLimitSwitch reverseLimitSwitch;
+  private final SparkLimitSwitch forwardLimitSwitch;
 
-  public ChuteIOSpark() {
+  public ChuteIOReal() {
     motor = new SparkFlex(ChuteConstants.kCanID, MotorType.kBrushless);
     encoder = motor.getEncoder();
-    controller = motor.getClosedLoopController();
 
     // Configure drive motor
     var motorConfig = new SparkFlexConfig();
@@ -44,7 +40,7 @@ public class ChuteIOSpark implements ChuteIO {
     motorConfig
         .signals
         .primaryEncoderPositionAlwaysOn(true)
-        .primaryEncoderPositionPeriodMs((int) (1000.0 / odometryFrequency))
+        .primaryEncoderPositionPeriodMs((int) (1000.0 / 100.0))
         .primaryEncoderVelocityAlwaysOn(true)
         .primaryEncoderVelocityPeriodMs(20)
         .appliedOutputPeriodMs(20)
