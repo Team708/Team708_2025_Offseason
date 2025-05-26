@@ -44,9 +44,9 @@ public class ElevatorIOSim implements ElevatorIO {
 
     // Zero triggered
     if (inputs.positionMeters <= 0) {
-      inputs.bottomLimitTriggered = true;
+      inputs.reverseLimitTriggered = true;
     } else {
-      inputs.bottomLimitTriggered = false;
+      inputs.reverseLimitTriggered = false;
     }
   }
 

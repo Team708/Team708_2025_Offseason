@@ -39,7 +39,7 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
     }
 
     // Zeroing logic
-    if (!inputs.bottomLimitTriggered
+    if (!inputs.reverseLimitTriggered
         && targetMeters == 0
         && inputs.appliedVolts < zeroingVoltage.get()) {
       io.setVoltage(zeroingVoltage.get());
