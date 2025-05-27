@@ -29,7 +29,7 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
       new LoggedTunableNumber("Chute/Volts", kMaxVoltage);
   private static final LoggedTunableNumber pGain = new LoggedTunableNumber("Chute/P", kP);
   private static final LoggedTunableNumber zeroingVolts =
-      new LoggedTunableNumber("Chute/ZeroingVolts", kZeroingVolts);
+      new LoggedTunableNumber("Chute/ZeroingVolts", kZeroingVoltage);
 
   public ChuteCtrlSystem(ChuteIO io) {
     this.io = io;

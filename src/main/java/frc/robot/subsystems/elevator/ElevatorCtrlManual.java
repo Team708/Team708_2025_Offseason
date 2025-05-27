@@ -35,13 +35,13 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
     }
 
     // Scale PID to voltage output
-    double rawPID = controller.calculate(inputs.positionMeters, targetMeters);
+    double rawPID = controller.calculate(inputs.positionInches, targetMeters);
     double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
     io.setVoltage(scaledVoltage);
   }
 
   @Override
   public void manualAdjustPosition(double meters) {
-    targetMeters = MathUtil.clamp(targetMeters + meters, 0, kMaxHeightMeters);
+    targetMeters = MathUtil.clamp(targetMeters + meters, 0, kMaxHeightInches);
   }
 }

@@ -11,7 +11,7 @@ import java.util.function.DoubleSupplier;
 
 public class ElevatorCommands {
   private static final LoggedTunableNumber manualChangeMeters =
-      new LoggedTunableNumber("Elevator/ManualAdjustMeters", kManualAdjustMeters);
+      new LoggedTunableNumber("Elevator/ManualAdjustMeters", kManualAdjustInches);
 
   private ElevatorCommands() {}
 

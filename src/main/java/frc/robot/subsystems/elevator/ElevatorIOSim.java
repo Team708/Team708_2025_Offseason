@@ -4,6 +4,7 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.util.UnitUtil;
 
 public class ElevatorIOSim implements ElevatorIO {
   private ElevatorSim elevatorSim;
@@ -14,12 +15,12 @@ public class ElevatorIOSim implements ElevatorIO {
         new ElevatorSim(
             kMotors,
             kMotorReduction,
-            kCarriageMassKg,
-            kDrumRadiusMeters,
-            kMinHeightMeters,
-            kMaxHeightMeters,
+            UnitUtil.poundsToKilograms(kCarriageMassLbs),
+            UnitUtil.inchesToMeters(kEffectiveDrumRadiusInches),
+            UnitUtil.inchesToMeters(kMinHeightInches),
+            UnitUtil.inchesToMeters(kMaxHeightInches),
             kSimulateGravity,
-            kStartingHeightMeters);
+            UnitUtil.inchesToMeters(kStartingHeightInches));
     appliedVolts = 0.0;
   }
 
@@ -30,20 +31,20 @@ public class ElevatorIOSim implements ElevatorIO {
     inputs.motor2Connected = true;
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = elevatorSim.getCurrentDrawAmps();
-    inputs.positionMeters = elevatorSim.getPositionMeters();
-    inputs.velocityMetersPerSecond = elevatorSim.getVelocityMetersPerSecond();
+    inputs.positionInches = UnitUtil.metersToInches(elevatorSim.getPositionMeters());
+    inputs.velocityInchesPerSecond = UnitUtil.metersToInches(elevatorSim.getVelocityMetersPerSecond());
     inputs.rpm =
-        (elevatorSim.getVelocityMetersPerSecond() * 60) / (2 * Math.PI * kDrumRadiusMeters);
+        (UnitUtil.metersToInches(elevatorSim.getVelocityMetersPerSecond()) * 60) / (2 * Math.PI * kEffectiveDrumRadiusInches);
 
     // Hard limits
-    if (inputs.positionMeters <= 0 && inputs.velocityMetersPerSecond < 0) {
+    if (inputs.positionInches <= 0 && inputs.velocityInchesPerSecond < 0) {
       elevatorSim.setState(VecBuilder.fill(0.0, 0.0));
-    } else if (inputs.positionMeters >= kMaxHeightMeters && inputs.velocityMetersPerSecond > 0) {
-      elevatorSim.setState(VecBuilder.fill(kMaxHeightMeters, 0.0));
+    } else if (inputs.positionInches >= kMaxHeightInches && inputs.velocityInchesPerSecond > 0) {
+      elevatorSim.setState(VecBuilder.fill(kMaxHeightInches, 0.0));
     }
 
     // Zero triggered
-    if (inputs.positionMeters <= 0) {
+    if (inputs.positionInches <= 0) {
       inputs.reverseLimitTriggered = true;
     } else {
       inputs.reverseLimitTriggered = false;

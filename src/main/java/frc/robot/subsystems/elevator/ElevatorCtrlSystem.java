@@ -47,7 +47,7 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
     }
 
     // Scale PID to voltage output
-    double rawPID = controller.calculate(inputs.positionMeters, targetMeters);
+    double rawPID = controller.calculate(inputs.positionInches, targetMeters);
     double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
     io.setVoltage(scaledVoltage);
   }
@@ -60,6 +60,6 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
 
   @Override
   public boolean atTargetPosition() {
-    return Math.abs(inputs.positionMeters - targetMeters) <= kDeadband;
+    return Math.abs(inputs.positionInches - targetMeters) <= kDeadband;
   }
 }

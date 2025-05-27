@@ -75,8 +75,8 @@ public class ElevatorIOReal implements ElevatorIO {
     inputs.reverseLimitTriggered = reverseLimitSwitch.isPressed();
     inputs.appliedVolts = motorLeader.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motorLeader.getOutputCurrent();
-    inputs.positionMeters = encoder.getPosition();
-    inputs.velocityMetersPerSecond = encoder.getVelocity();
+    inputs.positionInches = encoder.getPosition();
+    inputs.velocityInchesPerSecond = encoder.getVelocity();
   }
 
   @Override
