@@ -16,7 +16,7 @@ public class ChuteConstants {
   public static final double kRetractedInches = 0.0;
   public static final double kExtendedInches = 13.0;
   public static final double kMassLbs = 1.0;
-  public static final double kEffectiveRadius = 0.001;
+  public static final double kEffectiveRadius = 0.005;
   public static final double kTolerance = 0.005;
   public static final double kMaxVoltage = 6.0;
   public static final double kZeroingVoltage = 1.0;

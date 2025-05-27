@@ -32,9 +32,11 @@ public class ElevatorIOSim implements ElevatorIO {
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = elevatorSim.getCurrentDrawAmps();
     inputs.positionInches = UnitUtil.metersToInches(elevatorSim.getPositionMeters());
-    inputs.velocityInchesPerSecond = UnitUtil.metersToInches(elevatorSim.getVelocityMetersPerSecond());
+    inputs.velocityInchesPerSecond =
+        UnitUtil.metersToInches(elevatorSim.getVelocityMetersPerSecond());
     inputs.rpm =
-        (UnitUtil.metersToInches(elevatorSim.getVelocityMetersPerSecond()) * 60) / (2 * Math.PI * kEffectiveDrumRadiusInches);
+        (UnitUtil.metersToInches(elevatorSim.getVelocityMetersPerSecond()) * 60 * kMotorReduction)
+            / (2 * Math.PI * kEffectiveDrumRadiusInches);
 
     // Hard limits
     if (inputs.positionInches <= 0 && inputs.velocityInchesPerSecond < 0) {

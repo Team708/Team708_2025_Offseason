@@ -12,17 +12,12 @@ public class ElevatorConstants {
   public static final boolean kSimulateGravity = true;
   public static final double kStartingHeightInches = 0.0;
   public static final double kSimUpdateInterval = 0.02;
-  public static final double kP = 16.0;
+  public static final double kP = 0.55;
   public static final double kI = 0.0;
   public static final double kD = 0.0;
   public static final double kMaxVoltage = 12.0;
   public static final double kManualAdjustInches = 2;
   public static final DCMotor kMotors = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 2);
-  public static final double kL0 = 0.0;
-  public static final double kL1 = 0.45;
-  public static final double kL2 = 0.9;
-  public static final double kL3 = 1.3;
-  public static final double kL4 = 1.8;
   public static final double kDeadband = 0.1;
   public static final double kZeroingVoltage = -1.0;
   public static final int kCanIDMotor1 = 21;
@@ -33,26 +28,26 @@ public class ElevatorConstants {
   public static final double kVelocityFactor = 0.0;
 
   public enum ElevatorTarget {
-    ALGAE_L0(0.2),
-    ALGAE_L1(0.4),
-    ALGAE_L2(0.8),
-    ALGAE_L3(1.2),
-    ALGAE_L4(1.9),
+    ALGAE_L0(8),
+    ALGAE_L1(16),
+    ALGAE_L2(32),
+    ALGAE_L3(48),
+    ALGAE_L4(74),
     CORAL_L0(0.0),
-    CORAL_L1(0.45),
-    CORAL_L2(0.9),
-    CORAL_L3(1.3),
-    CORAL_L4(1.8);
+    CORAL_L1(18),
+    CORAL_L2(35),
+    CORAL_L3(51),
+    CORAL_L4(79);
 
-    public final double heightMeters;
+    public final double heightInches;
 
-    ElevatorTarget(double heightMeters) {
-      this.heightMeters = heightMeters;
+    ElevatorTarget(double heightInches) {
+      this.heightInches = heightInches;
     }
 
-    public static ElevatorTarget fromHeight(double heightMeters) {
+    public static ElevatorTarget fromHeight(double heightInches) {
       for (ElevatorTarget position : values()) {
-        if (Math.abs(position.heightMeters - heightMeters) < 1e-3) {
+        if (Math.abs(position.heightInches - heightInches) < 1e-3) {
           return position;
         }
       }
