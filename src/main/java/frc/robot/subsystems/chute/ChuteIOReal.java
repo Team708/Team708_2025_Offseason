@@ -64,9 +64,9 @@ public class ChuteIOReal implements ChuteIO {
     inputs.isFullyExtended = forwardLimitSwitch.isPressed();
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
-    inputs.positionMeters = encoder.getPosition();
-    inputs.velocityMetersPerSecond = encoder.getVelocity();
-    inputs.rpm = (encoder.getVelocity() / kScrewTravelPerRev) * 60;
+    inputs.positionInches = encoder.getPosition();
+    inputs.velocityInchesPerSecond = encoder.getVelocity();
+    inputs.rpm = (encoder.getVelocity() / kScrewInchesPerRev) * 60;
 
     if (inputs.isFullyRetracted) {
       encoder.setPosition(0.0);

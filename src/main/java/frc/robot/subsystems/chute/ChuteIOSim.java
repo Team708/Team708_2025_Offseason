@@ -2,53 +2,49 @@ package frc.robot.subsystems.chute;
 
 import static frc.robot.subsystems.chute.ChuteConstants.*;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.system.LinearSystem;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.util.UnitUtil;
 
 public class ChuteIOSim implements ChuteIO {
-  private final LinearSystem<N2, N1, N2> linearSystem;
-  private final DCMotorSim motorSim;
+  private final ElevatorSim chuteSim;
   private double appliedVolts;
 
   public ChuteIOSim() {
-    linearSystem = LinearSystemId.createDCMotorSystem(kMotor, kJKgMetersSquared, kMotorReduction);
-    motorSim = new DCMotorSim(linearSystem, kMotor);
+    chuteSim =
+        new ElevatorSim(
+            kMotor,
+            kMotorReduction,
+            UnitUtil.poundsToKilograms(kMassLbs),
+            kEffectiveRadius,
+            UnitUtil.inchesToMeters(kRetractedInches),
+            UnitUtil.inchesToMeters(kExtendedInches),
+            false,
+            UnitUtil.inchesToMeters(kRetractedInches));
     appliedVolts = 0.0;
   }
 
   @Override
   public void updateInputs(ChuteIOInputs inputs) {
-    motorSim.update(kSimUpdateInterval);
+    chuteSim.update(kSimUpdateInterval);
     inputs.connected = true;
-    inputs.positionMeters = motorSim.getAngularPositionRotations() * kScrewTravelPerRev;
-    inputs.isFullyRetracted = inputs.positionMeters <= kRetractedMeters + kTolerance;
-    inputs.isFullyExtended = inputs.positionMeters >= kExtendedMeters - kTolerance;
+    inputs.positionInches = UnitUtil.metersToInches(chuteSim.getPositionMeters());
+    inputs.isFullyRetracted = inputs.positionInches <= kRetractedInches + kTolerance;
+    inputs.isFullyExtended = inputs.positionInches >= kExtendedInches - kTolerance;
     inputs.appliedVolts = appliedVolts;
-    inputs.currentAmps = motorSim.getCurrentDrawAmps();
-    inputs.rpm = motorSim.getAngularVelocityRPM();
-    inputs.velocityMetersPerSecond = motorSim.getAngularVelocityRPM() / 60.0 * kScrewTravelPerRev;
+    inputs.currentAmps = chuteSim.getCurrentDrawAmps();
+    inputs.velocityInchesPerSecond = UnitUtil.metersToInches(chuteSim.getVelocityMetersPerSecond());
+    inputs.rpm = (inputs.velocityInchesPerSecond * 60) / kScrewInchesPerRev;
 
-    /*
-     * Simulated hard stops
-     * Set to min/max extension. Vecbuilder for state takes angularPosition and angularVelocity
-     * In this context angularPosition is the total accumulated shaft rotation over time
-     * Rotations = linear position / pitch
-     * Angular position (radians) = rotations * 2PI
-     */
-    if (inputs.isFullyRetracted && inputs.velocityMetersPerSecond < 0) {
-      motorSim.setState(VecBuilder.fill(kRetractedMeters, 0.0));
-    } else if (inputs.isFullyExtended && inputs.velocityMetersPerSecond > 0) {
-      motorSim.setState(VecBuilder.fill((kExtendedMeters / kScrewTravelPerRev) * 2 * Math.PI, 0.0));
+    if (inputs.isFullyRetracted && inputs.velocityInchesPerSecond < 0) {
+      chuteSim.setState(UnitUtil.inchesToMeters(kRetractedInches), 0.0);
+    } else if (inputs.isFullyExtended && inputs.velocityInchesPerSecond > 0) {
+      chuteSim.setState(UnitUtil.inchesToMeters(kExtendedInches), 0.0);
     }
   }
 
   @Override
   public void setVoltage(double volts) {
     appliedVolts = volts;
-    motorSim.setInputVoltage(volts);
+    chuteSim.setInputVoltage(volts);
   }
 }

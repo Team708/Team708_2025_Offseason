@@ -62,17 +62,17 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
     if (state != desiredState) {
       switch (desiredState) {
         case UNKNOWN:
-          desiredPosition = kRetractedMeters;
+          desiredPosition = kRetractedInches;
           io.setVoltage(zeroingVolts.get());
           return;
         case RETRACTED:
-          desiredPosition = kRetractedMeters;
+          desiredPosition = kRetractedInches;
           break;
         case EXTENDED:
-          desiredPosition = kExtendedMeters;
+          desiredPosition = kExtendedInches;
           break;
         default:
-          desiredPosition = kRetractedMeters;
+          desiredPosition = kRetractedInches;
           break;
       }
       state = State.MOVING;
@@ -81,7 +81,7 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
       if (pGain.hasChanged(pGain.hashCode())) {
         controller.setP(pGain.get());
       }
-      double outputVolts = controller.calculate(inputs.positionMeters, desiredPosition);
+      double outputVolts = controller.calculate(inputs.positionInches, desiredPosition);
       io.setVoltage(MathUtil.clamp(outputVolts, -maxVolts.get(), maxVolts.get()));
     } else {
       io.setVoltage(0.0);

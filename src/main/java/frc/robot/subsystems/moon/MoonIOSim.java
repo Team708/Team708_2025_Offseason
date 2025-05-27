@@ -10,9 +10,9 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class MoonIOSim implements MoonIO {
-    private final LinearSystem<N2, N1, N2> linearSystem;
-    private final DCMotorSim motorSim;
-    private double appliedVolts;
+  private final LinearSystem<N2, N1, N2> linearSystem;
+  private final DCMotorSim motorSim;
+  private double appliedVolts;
 
   public MoonIOSim() {
     linearSystem = LinearSystemId.createDCMotorSystem(kMotor, kJKgMetersSquared, kMotorReduction);
@@ -30,8 +30,8 @@ public class MoonIOSim implements MoonIO {
     inputs.rpm = motorSim.getAngularVelocityRPM();
     inputs.velocityRadiansPerSecond = motorSim.getAngularVelocityRadPerSec();
 
-    if (inputs.positionRadians <=0 ) {
-            motorSim.setState(VecBuilder.fill(0.0, 0.0));
+    if (inputs.positionRadians <= 0) {
+      motorSim.setState(VecBuilder.fill(0.0, 0.0));
     }
   }
 
