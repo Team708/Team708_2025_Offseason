@@ -11,33 +11,33 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class MoonIOSim implements MoonIO {
   private final LinearSystem<N2, N1, N2> linearSystem;
-  private final DCMotorSim motorSim;
+  private final DCMotorSim moonSim;
   private double appliedVolts;
 
   public MoonIOSim() {
     linearSystem = LinearSystemId.createDCMotorSystem(kMotor, kJKgMetersSquared, kMotorReduction);
-    motorSim = new DCMotorSim(linearSystem, kMotor);
+    moonSim = new DCMotorSim(linearSystem, kMotor);
     appliedVolts = 0.0;
   }
 
   @Override
   public void updateInputs(MoonIOInputs inputs) {
-    motorSim.update(kSimUpdateInterval);
+    moonSim.update(kSimUpdateInterval);
     inputs.connected = true;
-    inputs.positionRadians = motorSim.getAngularPositionRad();
+    inputs.positionRadians = moonSim.getAngularPositionRad();
     inputs.appliedVolts = appliedVolts;
-    inputs.currentAmps = motorSim.getCurrentDrawAmps();
-    inputs.rpm = motorSim.getAngularVelocityRPM();
-    inputs.velocityRadiansPerSecond = motorSim.getAngularVelocityRadPerSec();
+    inputs.currentAmps = moonSim.getCurrentDrawAmps();
+    inputs.rpm = moonSim.getAngularVelocityRPM();
+    inputs.velocityRadiansPerSecond = moonSim.getAngularVelocityRadPerSec();
 
     if (inputs.positionRadians <= 0) {
-      motorSim.setState(VecBuilder.fill(0.0, 0.0));
+      moonSim.setState(VecBuilder.fill(0.0, 0.0));
     }
   }
 
   @Override
   public void setVoltage(double voltage) {
     appliedVolts = voltage;
-    motorSim.setInputVoltage(voltage);
+    moonSim.setInputVoltage(voltage);
   }
 }

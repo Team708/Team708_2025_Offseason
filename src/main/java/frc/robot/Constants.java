@@ -28,6 +28,7 @@ public final class Constants {
   public static final boolean chuteManualMode = false;
   public static final boolean elevatorManualMode = false;
   public static final boolean moonManualMode = true;
+  public static final boolean intakeManualMode = true;
 
   public static enum Mode {
     /** Running on a real robot. */

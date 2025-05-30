@@ -15,13 +15,13 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
   private final ElevatorIO io;
   private final ElevatorIOInputsAutoLogged inputs;
   private final PIDController controller;
-  private double targetMeters;
+  private double targetInches;
 
   public ElevatorCtrlManual(ElevatorIO io) {
     this.io = io;
     inputs = new ElevatorIOInputsAutoLogged();
     controller = new PIDController(pGain.get(), kI, kD);
-    targetMeters = 0.0;
+    targetInches = 0.0;
   }
 
   @Override
@@ -35,13 +35,13 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
     }
 
     // Scale PID to voltage output
-    double rawPID = controller.calculate(inputs.positionInches, targetMeters);
+    double rawPID = controller.calculate(inputs.positionInches, targetInches);
     double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
     io.setVoltage(scaledVoltage);
   }
 
   @Override
   public void manualAdjustPosition(double meters) {
-    targetMeters = MathUtil.clamp(targetMeters + meters, 0, kMaxHeightInches);
+    targetInches = MathUtil.clamp(targetInches + meters, 0, kMaxHeightInches);
   }
 }

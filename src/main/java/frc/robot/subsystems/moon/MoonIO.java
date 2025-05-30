@@ -16,5 +16,4 @@ public interface MoonIO {
   public default void updateInputs(MoonIOInputs inputs) {}
 
   public default void setVoltage(double voltage) {}
-  ;
 }
