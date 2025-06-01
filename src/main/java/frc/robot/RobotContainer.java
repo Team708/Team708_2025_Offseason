@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrl;
@@ -52,9 +53,8 @@ import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeCtrl;
-import frc.robot.subsystems.intake.IntakeCtrlManual;
 import frc.robot.subsystems.intake.IntakeCtrlSystem;
+import frc.robot.subsystems.intake.IntakeCtrlSystem.Mode;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.moon.Moon;
@@ -128,10 +128,7 @@ public class RobotContainer {
             Constants.moonManualMode
                 ? new Moon(new MoonCtrlManual(new MoonIOReal()))
                 : new Moon(new MoonCtrlSystem(new MoonIOReal()));
-        intake =
-            Constants.intakeManualMode
-                ? new Intake(new IntakeCtrlManual(new IntakeIOReal()))
-                : new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
+        intake = new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
 
         break;
 
@@ -164,10 +161,7 @@ public class RobotContainer {
             Constants.moonManualMode
                 ? new Moon(new MoonCtrlManual(new MoonIOSim()))
                 : new Moon(new MoonCtrlSystem(new MoonIOSim()));
-        intake =
-            Constants.intakeManualMode
-                ? new Intake(new IntakeCtrlManual(new IntakeIOSim()))
-                : new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
+        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
         break;
       default:
         // Replayed robot, disable IO implementations
@@ -195,11 +189,7 @@ public class RobotContainer {
                 new MoonCtrl() {
                   public void periodic() {}
                 });
-        intake =
-            new Intake(
-                new IntakeCtrl() {
-                  public void periodic() {}
-                });
+        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
         break;
     }
 
@@ -273,6 +263,9 @@ public class RobotContainer {
     controller
         .a()
         .onTrue(ElevatorCommands.moveToLevel(elevator, ElevatorConstants.ElevatorTarget.CORAL_L1));
+
+    controller.x().onTrue(IntakeCommands.setMode(intake, Mode.CORAL_INTAKE));
+    controller.y().onTrue(IntakeCommands.setHold(intake, true));
 
     moon.setDefaultCommand(
         MoonCommands.manualControl(moon, () -> deadBand(controller.getLeftY(), 0.1)));

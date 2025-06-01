@@ -3,9 +3,9 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-  private IntakeCtrl intakeCtrl;
+  private IntakeCtrlSystem intakeCtrl;
 
-  public Intake(IntakeCtrl intakeCtrl) {
+  public Intake(IntakeCtrlSystem intakeCtrl) {
     this.intakeCtrl = intakeCtrl;
   }
 
@@ -14,7 +14,7 @@ public class Intake extends SubsystemBase {
     intakeCtrl.periodic();
   }
 
-  public IntakeCtrl getIntakeCtrl() {
+  public IntakeCtrlSystem getIntakeCtrl() {
     return this.intakeCtrl;
   }
 }
