@@ -9,7 +9,7 @@ import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeCtrlSystem extends SubsystemBase {
-  public enum Mode {
+  public enum IntakeMode {
     STOP,
     CORAL_INTAKE,
     CORAL_OUTAKE,
@@ -31,14 +31,14 @@ public class IntakeCtrlSystem extends SubsystemBase {
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs;
   public PIDController controller;
-  private Mode mode;
+  private IntakeMode mode;
   private boolean holdingEnabled;
   private double targetHoldPosRad;
 
   public IntakeCtrlSystem(IntakeIO io) {
     this.io = io;
     inputs = new IntakeIOInputsAutoLogged();
-    mode = Mode.STOP;
+    mode = IntakeMode.STOP;
     controller = new PIDController(kP, kI, kD);
     holdingEnabled = false;
     targetHoldPosRad = 0.0;
@@ -94,7 +94,11 @@ public class IntakeCtrlSystem extends SubsystemBase {
     holdingEnabled = false;
   }
 
-  public void setMode(Mode mode) {
+  public void setMode(IntakeMode mode) {
     this.mode = mode;
+  }
+
+  public boolean hasCoral() {
+    return inputs.beamTriggered;
   }
 }

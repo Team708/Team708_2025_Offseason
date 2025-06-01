@@ -29,7 +29,11 @@ public class IntakeIOReal implements IntakeIO {
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(kCurrentLimit)
         .voltageCompensation(12.0);
-    motorConfig.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
+    motorConfig
+        .encoder
+        .positionConversionFactor(kEncoderPositionFactor)
+        .uvwMeasurementPeriod(10)
+        .uvwAverageDepth(2);
     motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     motorConfig
         .signals
@@ -56,6 +60,7 @@ public class IntakeIOReal implements IntakeIO {
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.rpm = encoder.getVelocity();
+    inputs.positionRad = encoder.getPosition();
     inputs.beamTriggered = beamBreak.get();
   }
 

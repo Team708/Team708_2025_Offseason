@@ -22,4 +22,14 @@ public class MoonCommands {
         },
         moon);
   }
+
+  public static Command moveToPosition(Moon moon, MoonTarget target) {
+    return Commands.run(
+            () -> {
+              moon.getMoonCtrl().setTargetPosition(target);
+              System.out.println("Moon moveToPosition");
+            },
+            moon)
+        .until(() -> moon.getMoonCtrl().atTargetPosition());
+  }
 }

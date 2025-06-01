@@ -18,4 +18,5 @@ public class IntakeConstants {
   public static final int kCanID = 32;
   public static final int kCurrentLimit = 80;
   public static final int kBeamChannel = 1;
+  public static final double kEncoderPositionFactor = (2 * Math.PI) / kMotorReduction;
 }
