@@ -9,7 +9,6 @@ public interface IntakeIO {
     public double appliedVolts = 0.0;
     public double currentAmps = 0.0;
     public double rpm = 0.0;
-    public double positionRad = 0.0;
     public boolean beamTriggered = false;
   }
 
