@@ -54,7 +54,6 @@ import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeCtrlSystem;
-import frc.robot.subsystems.intake.IntakeCtrlSystem.Mode;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.moon.Moon;
@@ -264,7 +263,7 @@ public class RobotContainer {
         .a()
         .onTrue(ElevatorCommands.moveToLevel(elevator, ElevatorConstants.ElevatorTarget.CORAL_L1));
 
-    controller.x().onTrue(IntakeCommands.setMode(intake, Mode.CORAL_INTAKE));
+    controller.x().onTrue(IntakeCommands.setMode(intake, IntakeMode.CORAL_INTAKE));
     controller.y().onTrue(IntakeCommands.setHold(intake, true));
 
     moon.setDefaultCommand(
