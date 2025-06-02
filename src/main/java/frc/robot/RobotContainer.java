@@ -14,10 +14,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -25,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.IntakeCommands;
@@ -54,6 +51,7 @@ import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeCtrlSystem;
+import frc.robot.subsystems.intake.IntakeCtrlSystem.IntakeMode;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.moon.Moon;
@@ -67,7 +65,6 @@ import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import java.util.HashMap;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -89,10 +86,6 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
   private final Joystick reefController = new Joystick(1);
-
-  // Pose maps
-  HashMap<Integer, Pose2d> poseMapBlue = new HashMap<Integer, Pose2d>();
-  HashMap<Integer, Pose2d> poseMapRed = new HashMap<Integer, Pose2d>();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -211,33 +204,6 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-    // Configure the button bindings
-    poseMapBlue.put(1, new Pose2d(3.12, 4.18, new Rotation2d(0)));
-    poseMapBlue.put(2, new Pose2d(3.12, 3.84, new Rotation2d(0)));
-    poseMapBlue.put(3, new Pose2d(3.63, 2.92, new Rotation2d(Math.PI / 3)));
-    poseMapBlue.put(4, new Pose2d(3.96, 2.73, new Rotation2d(Math.PI / 3)));
-    poseMapBlue.put(5, new Pose2d(5.04, 2.76, new Rotation2d((2 * Math.PI) / 3)));
-    poseMapBlue.put(6, new Pose2d(5.32, 2.90, new Rotation2d((2 * Math.PI) / 3)));
-    poseMapBlue.put(7, new Pose2d(5.88, 3.84, new Rotation2d(-Math.PI)));
-    poseMapBlue.put(8, new Pose2d(5.88, 4.18, new Rotation2d(-Math.PI)));
-    poseMapBlue.put(9, new Pose2d(5.32, 5.198, new Rotation2d(-(2 * Math.PI) / 3)));
-    poseMapBlue.put(10, new Pose2d(5.04, 5.407, new Rotation2d(-(2 * Math.PI) / 3)));
-    poseMapBlue.put(11, new Pose2d(3.96, 5.407, new Rotation2d(-Math.PI / 3)));
-    poseMapBlue.put(12, new Pose2d(3.63, 5.198, new Rotation2d(-Math.PI / 3)));
-
-    poseMapRed.put(1, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI)));
-    poseMapRed.put(2, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI)));
-    poseMapRed.put(3, new Pose2d(0.0, 0.0, new Rotation2d(-(2 * Math.PI) / 3)));
-    poseMapRed.put(4, new Pose2d(0.0, 0.0, new Rotation2d(-(2 * Math.PI) / 3)));
-    poseMapRed.put(5, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI / 3)));
-    poseMapRed.put(6, new Pose2d(0.0, 0.0, new Rotation2d(-Math.PI / 3)));
-    poseMapRed.put(7, new Pose2d(0.0, 0.0, new Rotation2d(0)));
-    poseMapRed.put(8, new Pose2d(0.0, 0.0, new Rotation2d(0)));
-    poseMapRed.put(9, new Pose2d(0.0, 0.0, new Rotation2d(Math.PI / 3)));
-    poseMapRed.put(10, new Pose2d(0.0, 0.0, new Rotation2d(Math.PI / 3)));
-    poseMapRed.put(11, new Pose2d(0.0, 0.0, new Rotation2d((2 * Math.PI) / 3)));
-    poseMapRed.put(12, new Pose2d(0.0, 0.0, new Rotation2d((2 * Math.PI) / 3)));
-
     configureButtonBindings();
   }
 
@@ -269,17 +235,9 @@ public class RobotContainer {
     moon.setDefaultCommand(
         MoonCommands.manualControl(moon, () -> deadBand(controller.getLeftY(), 0.1)));
 
-    Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
-    if (alliance == Alliance.Blue) {
-      for (int i = 1; i < 13; i++) {
-        new JoystickButton(reefController, i)
-            .onTrue(DriveCommands.driveToPose(poseMapBlue.get(i), drive));
-      }
-    } else {
-      for (int i = 1; i < 13; i++) {
-        new JoystickButton(reefController, i)
-            .onTrue(DriveCommands.driveToPose(poseMapRed.get(i), drive));
-      }
+    for (int i = 1; i < 13; i++) {
+      new JoystickButton(reefController, i)
+          .onTrue(CompositeCommands.score(drive, elevator, moon, intake, i));
     }
   }
 

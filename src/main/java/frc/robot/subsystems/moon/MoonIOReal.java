@@ -18,7 +18,6 @@ public class MoonIOReal implements MoonIO {
   private final SparkFlex motor;
   private final RelativeEncoder encoder;
   private final SparkLimitSwitch reverseLimitSwitch;
-  private final SparkLimitSwitch forwardLimitSwitch;
 
   public MoonIOReal() {
     motor = new SparkFlex(kCanID, MotorType.kBrushless);
@@ -53,7 +52,6 @@ public class MoonIOReal implements MoonIO {
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
     reverseLimitSwitch = motor.getReverseLimitSwitch();
-    forwardLimitSwitch = motor.getForwardLimitSwitch();
   }
 
   @Override
@@ -63,5 +61,9 @@ public class MoonIOReal implements MoonIO {
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionRadians = encoder.getPosition();
     inputs.rpm = encoder.getVelocity();
+
+    if (reverseLimitSwitch.isPressed()) {
+      encoder.setPosition(0);
+    }
   }
 }

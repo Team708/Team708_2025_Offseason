@@ -40,6 +40,7 @@ public class IntakeCommands {
               System.out.println("Intake outakeCoral");
             },
             intake)
-        .until(() -> intake.getIntakeCtrl().hasCoral());
+        .until(() -> intake.getIntakeCtrl().hasCoral())
+        .finallyDo(() -> intake.getIntakeCtrl().setMode(IntakeMode.STOP));
   }
 }

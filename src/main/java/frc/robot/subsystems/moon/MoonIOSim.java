@@ -32,6 +32,7 @@ public class MoonIOSim implements MoonIO {
     if (inputs.positionRadians <= 0) {
       moonSim.setState(VecBuilder.fill(0.0, 0.0));
       inputs.reverseLimitReached = true;
+      setVoltage(0.0);
     } else {
       inputs.reverseLimitReached = false;
     }
