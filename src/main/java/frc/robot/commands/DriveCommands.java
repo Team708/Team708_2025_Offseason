@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import java.text.DecimalFormat;
@@ -296,7 +297,7 @@ public class DriveCommands {
     Command c =
         AutoBuilder.pathfindToPose(pose, new PathConstraints(2.0, 2.0, Math.PI, Math.PI), 0.0);
     c.addRequirements(drive);
-    return c;
+    return Commands.parallel(new InstantCommand(() -> System.out.println("Drive: driveToPose")), c);
   }
 
   private static class WheelRadiusCharacterizationState {

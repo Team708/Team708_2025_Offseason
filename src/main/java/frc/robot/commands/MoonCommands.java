@@ -5,6 +5,7 @@ import static frc.robot.subsystems.moon.MoonConstants.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.moon.Moon;
+import frc.robot.subsystems.moon.MoonConstants.MoonTarget;
 import frc.robot.subsystems.moon.MoonCtrl;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
@@ -27,9 +28,10 @@ public class MoonCommands {
     return Commands.run(
             () -> {
               moon.getMoonCtrl().setTargetPosition(target);
-              System.out.println("Moon moveToPosition");
             },
             moon)
-        .until(() -> moon.getMoonCtrl().atTargetPosition());
+        .until(() -> moon.getMoonCtrl().atTargetPosition())
+        .beforeStarting(
+            () -> System.out.println("Moon: moveToPosition " + target.toString() + " started"));
   }
 }

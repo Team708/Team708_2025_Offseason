@@ -48,7 +48,6 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
 
     // Scale PID to voltage output
     double rawPID = controller.calculate(inputs.positionRadians, targetRadians);
-    System.out.println(inputs.positionRadians);
     double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
     io.setVoltage(scaledVoltage);
   }

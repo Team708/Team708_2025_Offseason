@@ -219,9 +219,7 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    controller
-        .b()
-        .onTrue(IntakeCommands.intakeCoral(intake));
+    controller.b().onTrue(IntakeCommands.intakeCoral(intake));
 
     controller.x().onTrue(IntakeCommands.setMode(intake, IntakeMode.CORAL_INTAKE));
     controller.y().onTrue(IntakeCommands.setHold(intake, true));

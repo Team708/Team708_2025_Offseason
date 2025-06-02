@@ -9,26 +9,28 @@ import frc.robot.subsystems.intake.IntakeCtrlSystem.IntakeMode;
 public class IntakeCommands {
   public static Command setMode(Intake intake, IntakeMode mode) {
     return Commands.runOnce(
-        () -> {
-          IntakeCtrlSystem control = intake.getIntakeCtrl();
-          control.setMode(mode);
-          control.disableHold();
-        },
-        intake);
+            () -> {
+              IntakeCtrlSystem control = intake.getIntakeCtrl();
+              control.setMode(mode);
+              control.disableHold();
+            },
+            intake)
+        .beforeStarting(() -> System.out.println("Intake: setMode started"));
   }
 
   public static Command setHold(Intake intake, boolean hold) {
     return Commands.runOnce(
-        () -> {
-          IntakeCtrlSystem control = intake.getIntakeCtrl();
-          if (hold) {
-            control.holdCurrentPosition();
-          } else {
-            control.setMode(IntakeMode.STOP);
-            control.disableHold();
-          }
-        },
-        intake);
+            () -> {
+              IntakeCtrlSystem control = intake.getIntakeCtrl();
+              if (hold) {
+                control.holdCurrentPosition();
+              } else {
+                control.setMode(IntakeMode.STOP);
+                control.disableHold();
+              }
+            },
+            intake)
+        .beforeStarting(() -> System.out.println("Intake: setHold started"));
   }
 
   public static Command intakeCoral(Intake intake) {
@@ -39,7 +41,10 @@ public class IntakeCommands {
             },
             intake)
         .until(() -> intake.getIntakeCtrl().hasCoral())
-        .finallyDo(() -> IntakeCommands.setHold(intake, true));
+        .finallyDo(
+            () ->
+                IntakeCommands.setHold(intake, true)
+                    .beforeStarting(() -> System.out.println("Intake: intakeCoral started")));
   }
 
   public static Command outakeCoral(Intake intake) {
@@ -48,10 +53,10 @@ public class IntakeCommands {
               IntakeCtrlSystem control = intake.getIntakeCtrl();
               control.setMode(IntakeMode.CORAL_OUTAKE);
               control.disableHold();
-              System.out.println("Intake outakeCoral");
             },
             intake)
         .until(() -> intake.getIntakeCtrl().hasCoral())
-        .finallyDo(() -> intake.getIntakeCtrl().setMode(IntakeMode.STOP));
+        .finallyDo(() -> intake.getIntakeCtrl().setMode(IntakeMode.STOP))
+        .beforeStarting(() -> System.out.println("Intake: outakeCoral started"));
   }
 }

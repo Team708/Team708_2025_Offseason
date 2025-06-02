@@ -5,6 +5,7 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorTarget;
 import frc.robot.subsystems.elevator.ElevatorCtrl;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
@@ -31,6 +32,8 @@ public class ElevatorCommands {
               elevator.getElevatorCtrl().setTargetPosition(target);
             },
             elevator)
-        .until(() -> elevator.getElevatorCtrl().atTargetPosition());
+        .until(() -> elevator.getElevatorCtrl().atTargetPosition())
+        .beforeStarting(
+            () -> System.out.println("Elevator: moveToLevel " + target.toString() + " started"));
   }
 }
