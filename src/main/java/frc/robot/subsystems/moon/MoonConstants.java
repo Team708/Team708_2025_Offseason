@@ -18,6 +18,7 @@ public class MoonConstants {
   public static final double kEncoderPositionFactor = (2 * Math.PI) / kMotorReduction;
   public static final double kEncoderVelocityFactor = kEncoderPositionFactor / 60.0;
   public static final double kDeadband = 0.05;
+  public static final double kZeroingVoltage = 1.0;
 
   public enum MoonTarget {
     CORAL_LOW(0),

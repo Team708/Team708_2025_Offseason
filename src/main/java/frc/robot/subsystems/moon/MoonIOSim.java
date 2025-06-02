@@ -29,12 +29,12 @@ public class MoonIOSim implements MoonIO {
     inputs.currentAmps = moonSim.getCurrentDrawAmps();
     inputs.rpm = moonSim.getAngularVelocityRPM();
 
-    if (inputs.positionRadians <= 0) {
+    if (inputs.positionRadians <= 0.001 && inputs.appliedVolts < 0) {
       moonSim.setState(VecBuilder.fill(0.0, 0.0));
+    }
+
+    if (inputs.positionRadians == 0) {
       inputs.reverseLimitReached = true;
-      setVoltage(0.0);
-    } else {
-      inputs.reverseLimitReached = false;
     }
 
     if (inputs.positionRadians >= kMaxRadians) {

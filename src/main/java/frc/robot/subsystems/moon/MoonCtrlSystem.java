@@ -12,6 +12,8 @@ import org.littletonrobotics.junction.Logger;
 public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
   private LoggedTunableNumber maxVoltage = new LoggedTunableNumber("Moon/MaxVoltage", kMaxVoltage);
   private LoggedTunableNumber pGain = new LoggedTunableNumber("Moon/PGain", kP);
+  private LoggedTunableNumber zeroingVoltage =
+      new LoggedTunableNumber("Elevator/ZeroingVoltage", kZeroingVoltage);
   private final MoonIO io;
   private final MoonIOInputsAutoLogged inputs;
   private final PIDController controller;
@@ -36,9 +38,17 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
       controller.setP(kP);
     }
 
+    // Zeroing logic
+    if (!inputs.reverseLimitReached
+        && targetRadians == 0
+        && inputs.appliedVolts < zeroingVoltage.get()) {
+      io.setVoltage(zeroingVoltage.get());
+      return;
+    }
+
     // Scale PID to voltage output
     double rawPID = controller.calculate(inputs.positionRadians, targetRadians);
-    Logger.recordOutput("Elevator/rawPID", rawPID);
+    System.out.println(inputs.positionRadians);
     double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
     io.setVoltage(scaledVoltage);
   }
