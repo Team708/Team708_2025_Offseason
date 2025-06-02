@@ -31,6 +31,17 @@ public class IntakeCommands {
         intake);
   }
 
+  public static Command intakeCoral(Intake intake) {
+    return Commands.run(
+            () -> {
+              IntakeCtrlSystem control = intake.getIntakeCtrl();
+              control.setMode(IntakeMode.CORAL_INTAKE);
+            },
+            intake)
+        .until(() -> intake.getIntakeCtrl().hasCoral())
+        .finallyDo(() -> IntakeCommands.setHold(intake, true));
+  }
+
   public static Command outakeCoral(Intake intake) {
     return Commands.runOnce(
             () -> {

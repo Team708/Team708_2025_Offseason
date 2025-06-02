@@ -23,9 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.IntakeCommands;
-import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
@@ -43,7 +41,6 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.elevator.ElevatorCtrl;
 import frc.robot.subsystems.elevator.ElevatorCtrlManual;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
@@ -224,16 +221,10 @@ public class RobotContainer {
 
     controller
         .b()
-        .onTrue(ElevatorCommands.moveToLevel(elevator, ElevatorConstants.ElevatorTarget.CORAL_L0));
-    controller
-        .a()
-        .onTrue(ElevatorCommands.moveToLevel(elevator, ElevatorConstants.ElevatorTarget.CORAL_L1));
+        .onTrue(IntakeCommands.intakeCoral(intake));
 
     controller.x().onTrue(IntakeCommands.setMode(intake, IntakeMode.CORAL_INTAKE));
     controller.y().onTrue(IntakeCommands.setHold(intake, true));
-
-    moon.setDefaultCommand(
-        MoonCommands.manualControl(moon, () -> deadBand(controller.getLeftY(), 0.1)));
 
     for (int i = 1; i < 13; i++) {
       new JoystickButton(reefController, i)
@@ -248,13 +239,5 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.get();
-  }
-
-  private double deadBand(double input, double limit) {
-    if (Math.abs(input) > Math.abs(limit)) {
-      return input = input * Math.abs(input) * 1.0;
-    } else {
-      return 0.0;
-    }
   }
 }
