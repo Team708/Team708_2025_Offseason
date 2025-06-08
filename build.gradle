@@ -216,3 +216,11 @@ spotless {
         endWithNewline()
     }
 }
+
+sourceSets {
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
+}
