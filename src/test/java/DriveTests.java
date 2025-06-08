@@ -5,6 +5,5 @@ public class DriveTests {
   private Drive drive;
 
   @BeforeEach
-  void setup() {
-  }
+  void setup() {}
 }
