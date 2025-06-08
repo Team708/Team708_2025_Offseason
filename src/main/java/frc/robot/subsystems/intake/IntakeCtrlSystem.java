@@ -86,7 +86,6 @@ public class IntakeCtrlSystem extends SubsystemBase {
 
   public void holdCurrentPosition() {
     targetHoldPosRad = inputs.positionRad;
-    System.out.println("HOLD CALL");
     holdingEnabled = true;
   }
 
@@ -96,6 +95,10 @@ public class IntakeCtrlSystem extends SubsystemBase {
 
   public void setMode(IntakeMode mode) {
     this.mode = mode;
+  }
+
+  public IntakeMode getMode() {
+    return this.mode;
   }
 
   public boolean hasCoral() {
