@@ -1,6 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeCtrlSystem;
 import frc.robot.subsystems.intake.IntakeCtrlSystem.IntakeMode;
 import frc.robot.subsystems.intake.IntakeIOSim;
