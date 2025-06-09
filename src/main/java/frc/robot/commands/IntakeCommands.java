@@ -55,7 +55,7 @@ public class IntakeCommands {
               control.disableHold();
             },
             intake)
-        .until(() -> intake.getIntakeCtrl().hasCoral())
+        .until(() -> !intake.getIntakeCtrl().hasCoral())
         .finallyDo(() -> intake.getIntakeCtrl().setMode(IntakeMode.STOP))
         .beforeStarting(() -> System.out.println("Intake: outakeCoral started"));
   }
