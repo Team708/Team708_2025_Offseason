@@ -48,7 +48,6 @@ import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeCtrlSystem;
-import frc.robot.subsystems.intake.IntakeCtrlSystem.IntakeMode;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.moon.Moon;
@@ -81,7 +80,9 @@ public class RobotContainer {
   private final Intake intake;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driverController = new CommandXboxController(0);
+  private final XboxController operatorController = new XboxController(1);
+
   private final Joystick reefController = new Joystick(1);
 
   // Dashboard inputs
@@ -215,18 +216,29 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
 
-    controller.b().onTrue(IntakeCommands.intakeCoral(intake));
+    driverController.b().onTrue(IntakeCommands.intakeCoral(intake));
 
-    controller.x().onTrue(IntakeCommands.setMode(intake, IntakeMode.CORAL_INTAKE));
-    controller.y().onTrue(IntakeCommands.setHold(intake, true));
+    // new JoystickButton(operatorController,
+    // Button.kY.value).onTrue(CompositeCommands.moveToLevel(elevator, moon, ElevatorLevel.L0));
+    // new JoystickButton(operatorController,
+    // Button.kRightBumper.value).onTrue(CompositeCommands.moveToLevel(elevator, moon,
+    // ElevatorLevel.L1));
+    // new JoystickButton(operatorController,
+    // Button.kX.value).onTrue(CompositeCommands.moveToLevel(elevator, moon, ElevatorLevel.L2));
+    // new JoystickButton(operatorController,
+    // Button.kLeftBumper.value).onTrue(CompositeCommands.moveToLevel(elevator, moon,
+    // ElevatorLevel.L3));
+    // new JoystickButton(operatorController,
+    // Button.kRightStick.value).onTrue(CompositeCommands.moveToLevel(elevator, moon,
+    // ElevatorLevel.L4));
 
     for (int i = 1; i < 13; i++) {
       new JoystickButton(reefController, i)
-          .onTrue(CompositeCommands.score(drive, elevator, moon, intake, i));
+          .onTrue(CompositeCommands.scoreCoral(drive, elevator, moon, intake, i));
     }
   }
 

@@ -27,6 +27,14 @@ public class ElevatorConstants {
   public static final double kPositionFactor = 0.0;
   public static final double kVelocityFactor = 0.0;
 
+  public enum ElevatorLevel {
+    L0,
+    L1,
+    L2,
+    L3,
+    L4
+  }
+
   public enum ElevatorTarget {
     ALGAE_L0(8),
     ALGAE_L1(16),

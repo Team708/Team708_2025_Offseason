@@ -26,7 +26,7 @@ public class ElevatorCommands {
         elevator);
   }
 
-  public static Command moveToLevel(Elevator elevator, ElevatorTarget target) {
+  public static Command moveToTarget(Elevator elevator, ElevatorTarget target) {
     return Commands.run(
             () -> {
               elevator.getElevatorCtrl().setTargetPosition(target);

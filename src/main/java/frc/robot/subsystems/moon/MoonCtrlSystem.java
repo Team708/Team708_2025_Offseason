@@ -17,6 +17,7 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
   private final MoonIO io;
   private final MoonIOInputsAutoLogged inputs;
   private final PIDController controller;
+  private boolean isCoralMode;
   private double targetRadians;
 
   public MoonCtrlSystem(MoonIO io) {
@@ -24,6 +25,7 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
     inputs = new MoonIOInputsAutoLogged();
     controller = new PIDController(pGain.get(), kI, kD);
     targetRadians = 0.0;
+    isCoralMode = true;
     Logger.recordOutput("Moon/TargetPosition", "Unknown");
   }
 
@@ -61,5 +63,15 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
   @Override
   public boolean atTargetPosition() {
     return Math.abs(inputs.positionRadians - targetRadians) <= kDeadband;
+  }
+
+  @Override
+  public boolean getIsCoralMode() {
+    return isCoralMode;
+  }
+
+  @Override
+  public void setIsCoralMode(boolean isCoralMode) {
+    this.isCoralMode = isCoralMode;
   }
 }

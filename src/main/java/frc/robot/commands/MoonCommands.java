@@ -24,7 +24,7 @@ public class MoonCommands {
         moon);
   }
 
-  public static Command moveToPosition(Moon moon, MoonTarget target) {
+  public static Command moveToTarget(Moon moon, MoonTarget target) {
     return Commands.run(
             () -> {
               moon.getMoonCtrl().setTargetPosition(target);
