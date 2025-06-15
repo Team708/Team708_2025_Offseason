@@ -24,8 +24,8 @@ public class ElevatorConstants {
   public static final int kCanIDMotor2 = 22;
   public static final int kCurrentLimit = 60;
   public static final int kSprocketTeeth = 15;
-  public static final double kPositionFactor = 0.0;
-  public static final double kVelocityFactor = 0.0;
+  public static final double kPositionFactor = 1.0;
+  public static final double kVelocityFactor = 1.0;
 
   public enum ElevatorLevel {
     L0,

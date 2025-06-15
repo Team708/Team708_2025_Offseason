@@ -21,41 +21,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.IntakeCommands;
-import frc.robot.subsystems.chute.Chute;
-import frc.robot.subsystems.chute.ChuteCtrl;
-import frc.robot.subsystems.chute.ChuteCtrlManual;
-import frc.robot.subsystems.chute.ChuteCtrlSystem;
-import frc.robot.subsystems.chute.ChuteIOReal;
-import frc.robot.subsystems.chute.ChuteIOSim;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSim;
-import frc.robot.subsystems.climber.ClimberIOSpark;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
-import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorCtrl;
-import frc.robot.subsystems.elevator.ElevatorCtrlManual;
-import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
-import frc.robot.subsystems.elevator.ElevatorIOReal;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeCtrlSystem;
-import frc.robot.subsystems.intake.IntakeIOReal;
-import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.moon.Moon;
-import frc.robot.subsystems.moon.MoonCtrl;
-import frc.robot.subsystems.moon.MoonCtrlManual;
-import frc.robot.subsystems.moon.MoonCtrlSystem;
-import frc.robot.subsystems.moon.MoonIOReal;
-import frc.robot.subsystems.moon.MoonIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
@@ -73,16 +46,14 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Vision vision;
-  private final Chute chute;
-  private final Elevator elevator;
-  private final Climber climber;
-  private final Moon moon;
-  private final Intake intake;
+  // private final Chute chute;
+  // private final Elevator elevator;
+  // private final Climber climber;
+  // private final Moon moon;
+  // private final Intake intake;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final XboxController operatorController = new XboxController(1);
-
   private final Joystick reefController = new Joystick(1);
 
   // Dashboard inputs
@@ -105,20 +76,20 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
                 new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
-        chute =
-            Constants.chuteManualMode
-                ? new Chute(new ChuteCtrlManual(new ChuteIOReal()))
-                : new Chute(new ChuteCtrlSystem(new ChuteIOReal()));
-        elevator =
-            Constants.elevatorManualMode
-                ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
-                : new Elevator(new ElevatorCtrlSystem(new ElevatorIOReal()));
-        climber = new Climber(new ClimberIOSpark());
-        moon =
-            Constants.moonManualMode
-                ? new Moon(new MoonCtrlManual(new MoonIOReal()))
-                : new Moon(new MoonCtrlSystem(new MoonIOReal()));
-        intake = new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
+        // chute =
+        //     Constants.chuteManualMode
+        //         ? new Chute(new ChuteCtrlManual(new ChuteIOReal()))
+        //         : new Chute(new ChuteCtrlSystem(new ChuteIOReal()));
+        // elevator =
+        //     Constants.elevatorManualMode
+        //         ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
+        //         : new Elevator(new ElevatorCtrlSystem(new ElevatorIOReal()));
+        // climber = new Climber(new ClimberIOSpark());
+        // moon =
+        //     Constants.moonManualMode
+        //         ? new Moon(new MoonCtrlManual(new MoonIOReal()))
+        //         : new Moon(new MoonCtrlSystem(new MoonIOReal()));
+        // intake = new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
 
         break;
 
@@ -138,20 +109,20 @@ public class RobotContainer {
                     VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(
                     VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
-        chute =
-            Constants.chuteManualMode
-                ? new Chute(new ChuteCtrlManual(new ChuteIOSim()))
-                : new Chute(new ChuteCtrlSystem(new ChuteIOSim()));
-        elevator =
-            Constants.elevatorManualMode
-                ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
-                : new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
-        climber = new Climber(new ClimberIOSim());
-        moon =
-            Constants.moonManualMode
-                ? new Moon(new MoonCtrlManual(new MoonIOSim()))
-                : new Moon(new MoonCtrlSystem(new MoonIOSim()));
-        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
+        // chute =
+        //     Constants.chuteManualMode
+        //         ? new Chute(new ChuteCtrlManual(new ChuteIOSim()))
+        //         : new Chute(new ChuteCtrlSystem(new ChuteIOSim()));
+        // elevator =
+        //     Constants.elevatorManualMode
+        //         ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
+        //         : new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
+        // climber = new Climber(new ClimberIOSim());
+        // moon =
+        //     Constants.moonManualMode
+        //         ? new Moon(new MoonCtrlManual(new MoonIOSim()))
+        //         : new Moon(new MoonCtrlSystem(new MoonIOSim()));
+        // intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
         break;
       default:
         // Replayed robot, disable IO implementations
@@ -163,23 +134,23 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        chute =
-            new Chute(
-                new ChuteCtrl() {
-                  public void periodic() {}
-                });
-        elevator =
-            new Elevator(
-                new ElevatorCtrl() {
-                  public void periodic() {}
-                });
-        climber = new Climber(new ClimberIO() {});
-        moon =
-            new Moon(
-                new MoonCtrl() {
-                  public void periodic() {}
-                });
-        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
+        // chute =
+        //     new Chute(
+        //         new ChuteCtrl() {
+        //           public void periodic() {}
+        //         });
+        // elevator =
+        //     new Elevator(
+        //         new ElevatorCtrl() {
+        //           public void periodic() {}
+        //         });
+        // climber = new Climber(new ClimberIO() {});
+        // moon =
+        //     new Moon(
+        //         new MoonCtrl() {
+        //           public void periodic() {}
+        //         });
+        // intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
         break;
     }
 
@@ -220,7 +191,7 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
-    driverController.b().onTrue(IntakeCommands.intakeCoral(intake));
+    // driverController.b().onTrue(IntakeCommands.intakeCoral(intake));
 
     // new JoystickButton(operatorController,
     // Button.kY.value).onTrue(CompositeCommands.moveToLevel(elevator, moon, ElevatorLevel.L0));
@@ -236,9 +207,22 @@ public class RobotContainer {
     // Button.kRightStick.value).onTrue(CompositeCommands.moveToLevel(elevator, moon,
     // ElevatorLevel.L4));
 
+    // new JoystickButton(reefController, 1)
+    //     .onTrue(
+    //         Commands.runOnce(
+    //             () -> {
+    //               DriveCommands.driveToPose(DriveConstants.poseMapBlue.get(1), drive).schedule();
+    //             }));
+
     for (int i = 1; i < 13; i++) {
       new JoystickButton(reefController, i)
-          .onTrue(CompositeCommands.scoreCoral(drive, elevator, moon, intake, i));
+          .onTrue(
+              DriveCommands.driveToPose(DriveConstants.poseMapBlue.get(i), drive)
+                  .until(
+                      () ->
+                          Math.abs(driverController.getLeftY()) > 0.1
+                              || Math.abs(driverController.getLeftX()) > 0.1
+                              || Math.abs(driverController.getRightX()) > 0.1));
     }
   }
 
