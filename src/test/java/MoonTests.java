@@ -28,7 +28,7 @@ public class MoonTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      moon.periodic();
+      moonCtrl.periodic();
     }
 
     assertTrue(moonCtrl.atTargetPosition());

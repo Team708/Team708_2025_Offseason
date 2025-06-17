@@ -27,7 +27,7 @@ public class ElevatorTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      elevator.periodic();
+      elevatorCtrl.periodic();
     }
 
     assertTrue(elevatorCtrl.atTargetPosition());

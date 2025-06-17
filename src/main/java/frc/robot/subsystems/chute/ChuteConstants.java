@@ -1,7 +1,5 @@
 package frc.robot.subsystems.chute;
 
-import edu.wpi.first.math.system.plant.DCMotor;
-
 public class ChuteConstants {
   public static final int kCanID = 51;
   public static final int kCurrentLimit = 40;
@@ -20,5 +18,4 @@ public class ChuteConstants {
   public static final double kTolerance = 0.005;
   public static final double kMaxVoltage = 6.0;
   public static final double kZeroingVoltage = 1.0;
-  public static final DCMotor kMotor = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 1);
 }

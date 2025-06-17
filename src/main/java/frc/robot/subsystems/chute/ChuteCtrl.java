@@ -8,4 +8,8 @@ public interface ChuteCtrl {
   public default void retract() {}
 
   public default void setVoltage(double volts) {}
+
+  public default double getPosition() {
+    return 0.0;
+  }
 }

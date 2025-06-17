@@ -3,6 +3,7 @@ package frc.robot.subsystems.chute;
 import static frc.robot.subsystems.chute.ChuteConstants.*;
 
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.Constants;
 import frc.robot.util.UnitUtil;
 
 public class ChuteIOSim implements ChuteIO {
@@ -12,7 +13,7 @@ public class ChuteIOSim implements ChuteIO {
   public ChuteIOSim() {
     chuteSim =
         new ElevatorSim(
-            kMotor,
+            Constants.k1Vortex,
             kMotorReduction,
             UnitUtil.poundsToKilograms(kMassLbs),
             kEffectiveRadius,

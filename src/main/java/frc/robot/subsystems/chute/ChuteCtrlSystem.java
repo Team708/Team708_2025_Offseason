@@ -95,4 +95,8 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
   public boolean isRetracted() {
     return inputs.isFullyRetracted;
   }
+
+  public double getPosition() {
+    return inputs.positionInches;
+  }
 }

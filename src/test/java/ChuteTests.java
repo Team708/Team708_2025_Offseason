@@ -27,7 +27,7 @@ public class ChuteTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      chute.periodic();
+      chuteCtrl.periodic();
     }
 
     assertTrue(chuteCtrl.isExtended());
@@ -41,7 +41,7 @@ public class ChuteTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      chute.periodic();
+      chuteCtrl.periodic();
     }
 
     if (!chuteCtrl.isExtended()) {
@@ -50,7 +50,7 @@ public class ChuteTests {
 
     chuteCtrl.retract();
     for (int i = 0; i < iterations; i++) {
-      chute.periodic();
+      chuteCtrl.periodic();
     }
     assertTrue(chuteCtrl.isRetracted());
   }

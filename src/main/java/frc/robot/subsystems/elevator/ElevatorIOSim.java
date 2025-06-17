@@ -4,6 +4,7 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.Constants;
 import frc.robot.util.UnitUtil;
 
 public class ElevatorIOSim implements ElevatorIO {
@@ -13,7 +14,7 @@ public class ElevatorIOSim implements ElevatorIO {
   public ElevatorIOSim() {
     elevatorSim =
         new ElevatorSim(
-            kMotors,
+            Constants.k2Vortex,
             kMotorReduction,
             UnitUtil.poundsToKilograms(kCarriageMassLbs),
             UnitUtil.inchesToMeters(kEffectiveDrumRadiusInches),

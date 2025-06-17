@@ -8,6 +8,7 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.robot.Constants;
 
 public class MoonIOSim implements MoonIO {
   private final LinearSystem<N2, N1, N2> linearSystem;
@@ -15,8 +16,9 @@ public class MoonIOSim implements MoonIO {
   private double appliedVolts;
 
   public MoonIOSim() {
-    linearSystem = LinearSystemId.createDCMotorSystem(kMotor, kJKgMetersSquared, kMotorReduction);
-    moonSim = new DCMotorSim(linearSystem, kMotor);
+    linearSystem =
+        LinearSystemId.createDCMotorSystem(Constants.k1Vortex, kJKgMetersSquared, kMotorReduction);
+    moonSim = new DCMotorSim(linearSystem, Constants.k1Vortex);
     appliedVolts = 0.0;
   }
 
