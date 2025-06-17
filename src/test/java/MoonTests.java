@@ -1,6 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import frc.robot.subsystems.moon.Moon;
 import frc.robot.subsystems.moon.MoonConstants.MoonTarget;
 import frc.robot.subsystems.moon.MoonCtrl;
 import frc.robot.subsystems.moon.MoonCtrlSystem;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class MoonTests {
-  private Moon moon;
   private MoonCtrl moonCtrl;
   private MoonIOSim moonSim;
 
@@ -17,7 +15,6 @@ public class MoonTests {
   void setup() {
     moonSim = new MoonIOSim();
     moonCtrl = new MoonCtrlSystem(moonSim);
-    moon = new Moon(moonCtrl);
   }
 
   @Test

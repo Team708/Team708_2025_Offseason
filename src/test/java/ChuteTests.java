@@ -1,14 +1,12 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrlSystem;
 import frc.robot.subsystems.chute.ChuteIOSim;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ChuteTests {
-  private Chute chute;
   private ChuteCtrlSystem chuteCtrl;
   private ChuteIOSim chuteSim;
 
@@ -16,7 +14,6 @@ public class ChuteTests {
   void setup() {
     chuteSim = new ChuteIOSim();
     chuteCtrl = new ChuteCtrlSystem(chuteSim);
-    chute = new Chute(chuteCtrl);
   }
 
   @Test

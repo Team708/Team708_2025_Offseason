@@ -1,6 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorTarget;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
@@ -8,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ElevatorTests {
-  private Elevator elevator;
   private ElevatorCtrlSystem elevatorCtrl;
   private ElevatorIOSim elevatorSim;
 
@@ -16,7 +14,6 @@ public class ElevatorTests {
   void setup() {
     elevatorSim = new ElevatorIOSim();
     elevatorCtrl = new ElevatorCtrlSystem(elevatorSim);
-    elevator = new Elevator(elevatorCtrl);
   }
 
   @Test
