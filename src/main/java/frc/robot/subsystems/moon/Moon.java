@@ -10,9 +10,7 @@ public class Moon extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    moonCtrl.periodic();
-  }
+  public void periodic() {}
 
   public MoonCtrl getMoonCtrl() {
     return this.moonCtrl;

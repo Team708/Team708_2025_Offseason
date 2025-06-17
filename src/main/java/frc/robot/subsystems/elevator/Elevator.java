@@ -10,9 +10,7 @@ public class Elevator extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    elevatorCtrl.periodic();
-  }
+  public void periodic() {}
 
   public ElevatorCtrl getElevatorCtrl() {
     return this.elevatorCtrl;

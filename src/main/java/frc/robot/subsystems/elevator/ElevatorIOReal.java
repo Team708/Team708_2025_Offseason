@@ -29,6 +29,7 @@ public class ElevatorIOReal implements ElevatorIO {
     var leaderConfig = new SparkFlexConfig();
     leaderConfig
         .idleMode(IdleMode.kBrake)
+        .inverted(true)
         .smartCurrentLimit(kCurrentLimit)
         .voltageCompensation(12.0);
     leaderConfig
@@ -57,7 +58,8 @@ public class ElevatorIOReal implements ElevatorIO {
 
     // Follower
     var followerConfig = new SparkFlexConfig();
-    followerConfig.follow(kCanIDMotor1);
+    followerConfig.inverted(false);
+    followerConfig.follow(kCanIDMotor1, true);
     tryUntilOk(
         motorFollower,
         5,

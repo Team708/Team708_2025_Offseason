@@ -10,9 +10,7 @@ public class Chute extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    chuteCtrl.periodic();
-  }
+  public void periodic() {}
 
   public ChuteCtrl getChuteCtrl() {
     return this.chuteCtrl;

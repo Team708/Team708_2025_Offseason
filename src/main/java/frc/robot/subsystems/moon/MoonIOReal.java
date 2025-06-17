@@ -66,4 +66,9 @@ public class MoonIOReal implements MoonIO {
       encoder.setPosition(0);
     }
   }
+
+  @Override
+  public void setVoltage(double voltage) {
+    motor.setVoltage(voltage);
+  }
 }

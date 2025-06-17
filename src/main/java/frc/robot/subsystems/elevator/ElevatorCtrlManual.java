@@ -41,7 +41,7 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
   }
 
   @Override
-  public void manualAdjustPosition(double meters) {
-    targetInches = MathUtil.clamp(targetInches + meters, 0, kMaxHeightInches);
+  public void manualAdjustPosition(double inches) {
+    targetInches = MathUtil.clamp(targetInches + inches, 0, kMaxHeightInches);
   }
 }

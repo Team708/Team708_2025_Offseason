@@ -10,9 +10,7 @@ public class Template extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    templateCtrl.periodic();
-  }
+  public void periodic() {}
 
   public TemplateCtrl getTemplateCtrl() {
     return this.templateCtrl;

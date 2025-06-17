@@ -5,9 +5,9 @@ import edu.wpi.first.math.system.plant.DCMotor;
 public class ChuteConstants {
   public static final int kCanID = 51;
   public static final int kCurrentLimit = 40;
-  public static final double kMotorReduction = 20.0;
-  public static final double kScrewInchesPerRev = 0.25;
-  public static final double kEncoderPositionFactor = kScrewInchesPerRev / kMotorReduction;
+  public static final double kMotorReduction = 5;
+  public static final double kScrewInchesPerRev = 0.2;
+  public static final double kEncoderPositionFactor = 0.2;
   public static final double kEncoderVelocityFactor = kEncoderPositionFactor / 60.0;
   public static final double kP = 12.0;
   public static final double kI = 0.0;

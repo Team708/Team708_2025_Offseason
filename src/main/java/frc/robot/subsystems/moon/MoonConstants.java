@@ -3,8 +3,8 @@ package frc.robot.subsystems.moon;
 import edu.wpi.first.math.system.plant.DCMotor;
 
 public class MoonConstants {
-  public static final double kMaxVoltage = 6.0;
-  public static final double kP = 0.1;
+  public static final double kMaxVoltage = 12.0;
+  public static final double kP = 1.0;
   public static final double kI = 0.0;
   public static final double kD = 0.0;
   public static final double kMotorReduction = 4.0;
@@ -15,7 +15,7 @@ public class MoonConstants {
   public static final int kCanID = 31;
   public static final DCMotor kMotor = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 1);
   public static final int kCurrentLimit = 80;
-  public static final double kEncoderPositionFactor = (2 * Math.PI) / kMotorReduction;
+  public static final double kEncoderPositionFactor = 0.0815;
   public static final double kEncoderVelocityFactor = kEncoderPositionFactor / 60.0;
   public static final double kDeadband = 0.05;
   public static final double kZeroingVoltage = 1.0;

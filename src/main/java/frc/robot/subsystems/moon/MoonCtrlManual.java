@@ -27,7 +27,6 @@ public class MoonCtrlManual extends SubsystemBase implements MoonCtrl {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Moon", inputs);
-    Logger.recordOutput("Moon/TargetRadians", targetRadians);
 
     // PID change
     if (pGain.hasChanged(pGain.hashCode())) {
@@ -35,7 +34,7 @@ public class MoonCtrlManual extends SubsystemBase implements MoonCtrl {
     }
 
     // Scale PID to voltage output
-    double rawPID = controller.calculate(inputs.positionRadians, targetRadians);
+    double rawPID = controller.calculate(inputs.positionRadians * 12, targetRadians * 12);
     double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
     io.setVoltage(scaledVoltage);
   }
