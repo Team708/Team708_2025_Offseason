@@ -12,7 +12,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {}
 
-  public ClimberCtrl getChuteCtrl() {
+  public ClimberCtrl getClimberCtrl() {
     return this.climberCtrl;
   }
 }

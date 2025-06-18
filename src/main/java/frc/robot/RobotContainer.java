@@ -18,16 +18,25 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
 import frc.robot.subsystems.chute.ChuteCtrlSystem;
 import frc.robot.subsystems.chute.ChuteIOReal;
 import frc.robot.subsystems.chute.ChuteIOSim;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberCtrl;
+import frc.robot.subsystems.climber.ClimberCtrlManual;
+import frc.robot.subsystems.climber.ClimberCtrlSystem;
+import frc.robot.subsystems.climber.ClimberIOReal;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.GyroIO;
@@ -66,7 +75,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Chute chute;
   private final Elevator elevator;
-  // private final Climber climber;
+  private final Climber climber;
   private final Moon moon;
   // private final Intake intake;
 
@@ -102,7 +111,10 @@ public class RobotContainer {
             Constants.elevatorManualMode
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
                 : new Elevator(new ElevatorCtrlSystem(new ElevatorIOReal()));
-        // climber = new Climber(new ClimberIOSpark());
+        climber =
+            Constants.climberManualMode
+                ? new Climber(new ClimberCtrlManual(new ClimberIOReal()))
+                : new Climber(new ClimberCtrlSystem(new ClimberIOReal()));
         moon =
             Constants.moonManualMode
                 ? new Moon(new MoonCtrlManual(new MoonIOReal()))
@@ -135,7 +147,10 @@ public class RobotContainer {
             Constants.elevatorManualMode
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
                 : new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
-        // climber = new Climber(new ClimberIOSim());
+        climber =
+            Constants.climberManualMode
+                ? new Climber(new ClimberCtrlManual(new ClimberIOSim()))
+                : new Climber(new ClimberCtrlSystem(new ClimberIOSim()));
         moon =
             Constants.moonManualMode
                 ? new Moon(new MoonCtrlManual(new MoonIOSim()))
@@ -162,7 +177,11 @@ public class RobotContainer {
                 new ElevatorCtrl() {
                   public void periodic() {}
                 });
-        // climber = new Climber(new ClimberIO() {});
+        climber =
+            new Climber(
+                new ClimberCtrl() {
+                  public void periodic() {}
+                });
         moon =
             new Moon(
                 new MoonCtrl() {
@@ -209,11 +228,15 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
+    driverController.a().onTrue(new InstantCommand(() -> climber.getClimberCtrl().setServo(false)));
+    driverController.b().onTrue(new InstantCommand(() -> climber.getClimberCtrl().setServo(true)));
+
     // elevator.setDefaultCommand(
     //     ElevatorCommands.manualControl(elevator, () -> -driverController.getRightY()));
+    // climber.setDefaultCommand(
+    //     ClimberCommands.manualControl(climber, () -> -driverController.getRightY()));
     // chute.setDefaultCommand(ChuteCommands.manualControl(chute, () ->
-    // moon.setDefaultCommand(MoonCommands.manualControl(moon, () ->
-    // -driverController.getRightY()));
+    moon.setDefaultCommand(MoonCommands.manualControl(moon, () -> -driverController.getRightY()));
     // driverController.getRightY()));
 
     // driverController.b().onTrue(IntakeCommands.intakeCoral(intake));

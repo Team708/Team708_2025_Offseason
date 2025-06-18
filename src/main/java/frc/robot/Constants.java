@@ -29,6 +29,7 @@ public final class Constants {
   public static final boolean chuteManualMode = true;
   public static final boolean elevatorManualMode = true;
   public static final boolean moonManualMode = true;
+  public static final boolean climberManualMode = true;
   public static final DCMotor k1Vortex = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 1);
   public static final DCMotor k2Vortex = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 2);
 
