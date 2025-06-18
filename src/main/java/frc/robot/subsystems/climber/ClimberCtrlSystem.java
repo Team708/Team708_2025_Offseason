@@ -40,12 +40,15 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
+    Logger.recordOutput("Climber/CurrentState", currentState.name());
+    Logger.recordOutput("Climber/DesiredState", desiredState.name());
     // State changes
     if (inputs.reverseLimitReached && currentState == State.UNKNOWN) {
       currentState = State.RETRACTED;
     }
     if (inputs.forwardLimitReached && currentState == State.RETRACTED) {
       currentState = State.EXTENDED;
+      desiredState = State.ENGAGED;
     }
     if (!inputs.beamBreak1
         && !inputs.beamBreak2
@@ -54,11 +57,15 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
         && desiredState == State.ENGAGED
         && currentState == State.EXTENDED) {
       currentState = State.ENGAGED;
+      desiredState = State.CLIMBED;
     }
-    if (desiredState == State.CLIMBED && currentState == State.ENGAGED && inputs.reverseLimitReached) {
+    if (desiredState == State.CLIMBED
+        && currentState == State.ENGAGED
+        && inputs.reverseLimitReached) {
       currentState = State.CLIMBED;
     }
 
+    double outputVolts;
     // What to do in each state
     switch (currentState) {
       case UNKNOWN:
@@ -69,20 +76,23 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
         return;
       case RETRACTED:
         if (desiredState == State.EXTENDED) {
-          double outputVolts = controller.calculate(inputs.positionRadians, kExtendedRadians);
+          outputVolts = controller.calculate(inputs.positionRadians, kExtendedRadians);
           io.setVoltage(MathUtil.clamp(outputVolts, -kMaxVoltage, kMaxVoltage));
         } else {
-          double outputVolts = controller.calculate(inputs.positionRadians, -1.0);
+          outputVolts = controller.calculate(inputs.positionRadians, -1.0);
           io.setVoltage(MathUtil.clamp(outputVolts, -kMaxVoltage, kMaxVoltage));
         }
         return;
       case EXTENDED:
-        double outputVolts = controller.calculate(inputs.positionRadians, kExtendedRadians);
+        outputVolts = controller.calculate(inputs.positionRadians, kExtendedRadians);
         io.setVoltage(MathUtil.clamp(outputVolts, -kMaxVoltage, kMaxVoltage));
         return;
       case ENGAGED:
         if (desiredState == State.ENGAGED) {
           io.setVoltage(0.0);
+        } else if (desiredState == State.CLIMBED) {
+          outputVolts = controller.calculate(inputs.positionRadians, -1.0);
+          io.setVoltage(MathUtil.clamp(outputVolts, -kMaxVoltage, kMaxVoltage));
         }
         return;
       case CLIMBED:
@@ -93,9 +103,18 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
   }
 
   public void startClimb() {
-    io.setServo(true);
     if (currentState == State.RETRACTED && desiredState == State.RETRACTED) {
+      io.setServo(true);
       desiredState = State.EXTENDED;
+    }
+  }
+
+  @Override
+  public boolean isAtDesiredState() {
+    if (currentState == desiredState) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

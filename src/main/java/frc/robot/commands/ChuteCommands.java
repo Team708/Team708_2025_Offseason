@@ -25,11 +25,13 @@ public class ChuteCommands {
 
   public static Command extend(Chute chute) {
     return Commands.run(
-        () -> {
-          ChuteCtrl control = chute.getChuteCtrl();
-          control.extend();
-        },
-        chute);
+            () -> {
+              ChuteCtrl control = chute.getChuteCtrl();
+              control.extend();
+            },
+            chute)
+        .until(() -> chute.getChuteCtrl().isExtended())
+        .beforeStarting(() -> System.out.println("Chute: extend starting"));
   }
 
   public static Command retract(Chute chute) {

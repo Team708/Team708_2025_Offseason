@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.chute.Chute;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.elevator.Elevator;
@@ -106,5 +108,14 @@ public class CompositeCommands {
         IntakeCommands.outakeCoral(intake),
         MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW),
         ElevatorCommands.moveToTarget(elevator, ElevatorTarget.CORAL_L0));
+  }
+
+  public static Command climb(Elevator elevator, Moon moon, Chute chute, Climber climber) {
+    return Commands.sequence(
+            moveToLevel(elevator, moon, ElevatorLevel.L0),
+            MoonCommands.moveToTarget(moon, MoonTarget.CORAL_HIGH),
+            ChuteCommands.extend(chute),
+            ClimberCommands.deployClimber(climber))
+        .onlyIf(() -> moon.getMoonCtrl().getIsCoralMode());
   }
 }

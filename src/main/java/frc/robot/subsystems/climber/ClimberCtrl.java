@@ -8,4 +8,8 @@ public interface ClimberCtrl {
   public default void setVoltage(double voltage) {}
 
   public default void setServo(boolean isUnlocked) {}
+
+  public default boolean isAtDesiredState() {
+    return true;
+  }
 }

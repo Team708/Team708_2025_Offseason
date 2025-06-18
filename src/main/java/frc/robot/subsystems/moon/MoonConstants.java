@@ -14,7 +14,7 @@ public class MoonConstants {
   public static final int kCurrentLimit = 80;
   public static final double kEncoderPositionFactor = 0.0815;
   public static final double kEncoderVelocityFactor = kEncoderPositionFactor / 60.0;
-  public static final double kDeadband = 0.05;
+  public static final double kDeadband = 0.1;
   public static final double kZeroingVoltage = 1.0;
 
   public enum MoonTarget {

@@ -20,4 +20,15 @@ public class ClimberCommands {
         },
         climber);
   }
+
+  public static Command deployClimber(Climber climber) {
+    return Commands.run(
+            () -> {
+              ClimberCtrl control = climber.getClimberCtrl();
+              control.startClimb();
+            },
+            climber)
+        .until(() -> climber.getClimberCtrl().isAtDesiredState())
+        .beforeStarting(() -> System.out.println("Climber: deployClimber started"));
+  }
 }

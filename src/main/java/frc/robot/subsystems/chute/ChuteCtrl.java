@@ -12,4 +12,12 @@ public interface ChuteCtrl {
   public default double getPosition() {
     return 0.0;
   }
+
+  public default boolean isExtended() {
+    return false;
+  }
+
+  public default boolean isRetracted() {
+    return false;
+  }
 }

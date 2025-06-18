@@ -88,10 +88,12 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
     }
   }
 
+  @Override
   public boolean isExtended() {
     return inputs.isFullyExtended;
   }
 
+  @Override
   public boolean isRetracted() {
     return inputs.isFullyRetracted;
   }

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.climber;
 
 import static frc.robot.subsystems.climber.ClimberConstants.*;
-import static frc.robot.subsystems.moon.MoonConstants.kMaxRadians;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
@@ -47,11 +46,13 @@ public class ClimberIOSim implements ClimberIO {
       climberSim.setState(VecBuilder.fill(0.0, 0.0));
     }
 
-    if (inputs.positionRadians == 0) {
+    if (inputs.positionRadians <= 0) {
       inputs.reverseLimitReached = true;
+    } else {
+      inputs.reverseLimitReached = false;
     }
 
-    if (inputs.positionRadians >= kMaxRadians) {
+    if (inputs.positionRadians >= (kExtendedRadians - 0.1)) {
       inputs.forwardLimitReached = true;
     } else {
       inputs.forwardLimitReached = false;
