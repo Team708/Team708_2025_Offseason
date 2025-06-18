@@ -27,6 +27,7 @@ public class MoonIOSim implements MoonIO {
     moonSim.update(kSimUpdateInterval);
     inputs.connected = true;
     inputs.positionRadians = moonSim.getAngularPositionRad();
+    inputs.positionDegrees = Math.toDegrees(inputs.positionRadians);
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = moonSim.getCurrentDrawAmps();
     inputs.rpm = moonSim.getAngularVelocityRPM();

@@ -60,6 +60,7 @@ public class MoonIOReal implements MoonIO {
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionRadians = encoder.getPosition();
+    inputs.positionDegrees = Math.toDegrees(inputs.positionRadians);
     inputs.rpm = encoder.getVelocity();
 
     if (reverseLimitSwitch.isPressed()) {

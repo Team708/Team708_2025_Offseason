@@ -18,10 +18,10 @@ public class MoonConstants {
   public static final double kZeroingVoltage = 1.0;
 
   public enum MoonTarget {
-    CORAL_LOW(0),
-    CORAL_HIGH(0.3),
-    ALGAE_LOW(1.7),
-    ALGAE_HIGH(3.0);
+    CORAL_LOW(Math.toRadians(0)),
+    CORAL_HIGH(Math.toRadians(10)),
+    ALGAE_LOW(Math.toRadians(20)),
+    ALGAE_HIGH(Math.toRadians(30));
 
     public final double radians;
 

@@ -33,6 +33,7 @@ public class ClimberIOSim implements ClimberIO {
     climberSim.update(kSimUpdateInterval);
     inputs.connected = true;
     inputs.positionRadians = climberSim.getAngularPositionRad();
+    inputs.positionDegrees = Math.toDegrees(inputs.positionRadians);
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = climberSim.getCurrentDrawAmps();
     inputs.rpm = climberSim.getAngularVelocityRPM();

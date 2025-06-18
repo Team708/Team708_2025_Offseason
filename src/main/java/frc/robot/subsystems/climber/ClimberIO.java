@@ -9,6 +9,7 @@ public interface ClimberIO {
     public double appliedVolts = 0.0;
     public double currentAmps = 0.0;
     public double positionRadians = 0.0;
+    public double positionDegrees = 0.0;
     public double rpm = 0.0;
     public boolean reverseLimitReached = false;
     public boolean forwardLimitReached = false;

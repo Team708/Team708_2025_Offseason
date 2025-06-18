@@ -18,7 +18,7 @@ public class ClimberConstants {
   public static final double kP = 6.0;
   public static final double kI = 0.0;
   public static final double kD = 0.0;
-  public static final double kExtendedRadians = Math.PI;
+  public static final double kExtendedRadians = Math.toRadians(90);
   public static final double kServoReleasePosition = 0.5;
   public static final double kServoBrakePosition = 0.75;
 
