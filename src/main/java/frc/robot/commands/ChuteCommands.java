@@ -40,6 +40,8 @@ public class ChuteCommands {
           ChuteCtrl control = chute.getChuteCtrl();
           control.retract();
         },
-        chute);
+        chute)
+        .until(()->chute.getChuteCtrl().isRetracted())
+        .beforeStarting(()->System.out.println("Chute: retract starting"));
   }
 }

@@ -102,12 +102,24 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
     }
   }
 
+  @Override
   public void startClimb() {
     if (currentState == State.RETRACTED && desiredState == State.RETRACTED) {
       io.setServo(true);
       desiredState = State.EXTENDED;
     }
   }
+
+  @Override
+  public boolean readyToClimb() { 
+    if (currentState == State.RETRACTED && desiredState == State.RETRACTED) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
 
   @Override
   public boolean isAtDesiredState() {
