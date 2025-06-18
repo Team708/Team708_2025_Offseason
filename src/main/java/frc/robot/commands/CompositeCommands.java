@@ -116,15 +116,16 @@ public class CompositeCommands {
             MoonCommands.moveToTarget(moon, MoonTarget.CORAL_HIGH),
             ChuteCommands.extend(chute),
             ClimberCommands.deployClimber(climber))
-        .onlyIf(() -> moon.getMoonCtrl().getIsCoralMode() && climber.getClimberCtrl().readyToClimb());
+        .onlyIf(
+            () -> moon.getMoonCtrl().getIsCoralMode() && climber.getClimberCtrl().readyToClimb());
   }
 
   public static Command resetRobot(Elevator elevator, Moon moon, Chute chute, Climber climber) {
     return Commands.sequence(
-      moveToLevel(elevator, moon, ElevatorLevel.L0),
-      MoonCommands.moveToTarget(moon, MoonTarget.CORAL_HIGH),
-      ChuteCommands.retract(chute),
-      MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW)
-    ).onlyIf(()->climber.getClimberCtrl().readyToClimb());
+            moveToLevel(elevator, moon, ElevatorLevel.L0),
+            MoonCommands.moveToTarget(moon, MoonTarget.CORAL_HIGH),
+            ChuteCommands.retract(chute),
+            MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW))
+        .onlyIf(() -> climber.getClimberCtrl().readyToClimb());
   }
 }

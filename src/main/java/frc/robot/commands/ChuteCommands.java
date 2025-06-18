@@ -36,12 +36,12 @@ public class ChuteCommands {
 
   public static Command retract(Chute chute) {
     return Commands.run(
-        () -> {
-          ChuteCtrl control = chute.getChuteCtrl();
-          control.retract();
-        },
-        chute)
-        .until(()->chute.getChuteCtrl().isRetracted())
-        .beforeStarting(()->System.out.println("Chute: retract starting"));
+            () -> {
+              ChuteCtrl control = chute.getChuteCtrl();
+              control.retract();
+            },
+            chute)
+        .until(() -> chute.getChuteCtrl().isRetracted())
+        .beforeStarting(() -> System.out.println("Chute: retract starting"));
   }
 }

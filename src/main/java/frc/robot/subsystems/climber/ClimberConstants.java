@@ -21,4 +21,12 @@ public class ClimberConstants {
   public static final double kExtendedRadians = Math.PI;
   public static final double kServoReleasePosition = 0.5;
   public static final double kServoBrakePosition = 0.75;
+
+  public enum ClimberState {
+    UNKNOWN,
+    RETRACTED,
+    EXTENDED,
+    ENGAGED,
+    CLIMBED
+  }
 }
