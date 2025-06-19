@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import static frc.robot.subsystems.climber.ClimberConstants.kEncoderVelocityFactor;
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 import static frc.robot.util.SparkUtil.*;
 
@@ -32,6 +33,7 @@ public class IntakeIOReal implements IntakeIO {
     motorConfig
         .encoder
         .positionConversionFactor(kEncoderPositionFactor)
+        .velocityConversionFactor(kEncoderVelocityFactor)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
     motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
@@ -61,7 +63,7 @@ public class IntakeIOReal implements IntakeIO {
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.rpm = encoder.getVelocity();
     inputs.positionRad = encoder.getPosition();
-    inputs.beamTriggered = beamBreak.get();
+    inputs.beamTriggered = !beamBreak.get();
   }
 
   @Override

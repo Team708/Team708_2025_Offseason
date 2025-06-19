@@ -32,6 +32,7 @@ public class MoonIOReal implements MoonIO {
     motorConfig
         .encoder
         .positionConversionFactor(kEncoderPositionFactor)
+        .velocityConversionFactor(kEncoderVelocityFactor)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
     motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);

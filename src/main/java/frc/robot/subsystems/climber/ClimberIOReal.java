@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Servo;
 
@@ -21,6 +22,10 @@ public class ClimberIOReal implements ClimberIO {
   private final SparkFlex motor;
   private final SparkLimitSwitch reverseLimitSwitch;
   private final RelativeEncoder encoder;
+  private final DigitalInput cageLimit1;
+  private final DigitalInput cageLimit2;
+  private final DigitalInput beamBreak1;
+  private final DigitalInput beamBreak2;
 
   public ClimberIOReal() {
     servo = new Servo(kServoChannel);
@@ -33,11 +38,13 @@ public class ClimberIOReal implements ClimberIO {
     var motorConfig = new SparkFlexConfig();
     motorConfig
         .idleMode(IdleMode.kBrake)
+        .inverted(true)
         .smartCurrentLimit(kCurrentLimit)
         .voltageCompensation(12.0);
     motorConfig
         .encoder
         .positionConversionFactor(kEncoderPositionFactor)
+        .velocityConversionFactor(kEncoderVelocityFactor)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
     motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
@@ -58,6 +65,10 @@ public class ClimberIOReal implements ClimberIO {
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
     reverseLimitSwitch = motor.getReverseLimitSwitch();
+    cageLimit1 = new DigitalInput(kCageLimitSwitch1);
+    cageLimit2 = new DigitalInput(kCageLimitSwitch2);
+    beamBreak1 = new DigitalInput(kBeamBreak1);
+    beamBreak2 = new DigitalInput(kBeamBreak2);
   }
 
   @Override
@@ -69,11 +80,18 @@ public class ClimberIOReal implements ClimberIO {
     inputs.positionRadians = encoder.getPosition();
     inputs.positionDegrees = Math.toDegrees(inputs.positionRadians);
     inputs.rpm = encoder.getVelocity();
+    inputs.cageLimit1 = cageLimit1.get();
+    inputs.cageLimit2 = cageLimit2.get();
+    inputs.beamBreak1 = beamBreak1.get();
+    inputs.beamBreak2 = beamBreak2.get();
 
     if (reverseLimitSwitch.isPressed()) {
+      inputs.reverseLimitReached = true;
       encoder.setPosition(0);
+    } else {
+      inputs.reverseLimitReached = false;
     }
-    if (inputs.positionRadians >= kExtendedRadians) {
+    if (inputs.positionRadians >= (kExtendedRadians - kDeadband)) {
       inputs.forwardLimitReached = true;
     } else {
       inputs.forwardLimitReached = false;

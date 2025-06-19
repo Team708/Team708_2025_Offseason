@@ -21,9 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.MoonCommands;
+import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
@@ -49,6 +48,10 @@ import frc.robot.subsystems.elevator.ElevatorCtrlManual;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeCtrlSystem;
+import frc.robot.subsystems.intake.IntakeIOReal;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.moon.Moon;
 import frc.robot.subsystems.moon.MoonCtrl;
 import frc.robot.subsystems.moon.MoonCtrlManual;
@@ -76,7 +79,7 @@ public class RobotContainer {
   private final Elevator elevator;
   private final Climber climber;
   private final Moon moon;
-  // private final Intake intake;
+  private final Intake intake;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -118,7 +121,7 @@ public class RobotContainer {
             Constants.moonManualMode
                 ? new Moon(new MoonCtrlManual(new MoonIOReal()))
                 : new Moon(new MoonCtrlSystem(new MoonIOReal()));
-        // intake = new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
+        intake = new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
 
         break;
 
@@ -154,7 +157,7 @@ public class RobotContainer {
             Constants.moonManualMode
                 ? new Moon(new MoonCtrlManual(new MoonIOSim()))
                 : new Moon(new MoonCtrlSystem(new MoonIOSim()));
-        // intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
+        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
         break;
       default:
         // Replayed robot, disable IO implementations
@@ -186,7 +189,7 @@ public class RobotContainer {
                 new MoonCtrl() {
                   public void periodic() {}
                 });
-        // intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
+        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
         break;
     }
 
@@ -227,14 +230,18 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
-    driverController.a().onTrue(CompositeCommands.climb(elevator, moon, chute, climber));
+    // driverController.a().onTrue(IntakeCommands.intakeCoral(intake));
+    // driverController.b().onTrue(IntakeCommands.outakeCoral(intake));
+    // driverController.x().onTrue(CompositeCommands.moveToLevel(elevator, moon, ElevatorLevel.L1));
+    // driverController.y().onTrue(CompositeCommands.moveToLevel(elevator, moon, ElevatorLevel.L0));
 
-    // elevator.setDefaultCommand(
-    //     ElevatorCommands.manualControl(elevator, () -> -driverController.getRightY()));
+    elevator.setDefaultCommand(
+        ElevatorCommands.manualControl(elevator, () -> -driverController.getRightY()));
     // climber.setDefaultCommand(
     //     ClimberCommands.manualControl(climber, () -> -driverController.getRightY()));
     // chute.setDefaultCommand(ChuteCommands.manualControl(chute, () ->
-    moon.setDefaultCommand(MoonCommands.manualControl(moon, () -> -driverController.getRightY()));
+    // moon.setDefaultCommand(MoonCommands.manualControl(moon, () ->
+    // -driverController.getRightY()));
     // driverController.getRightY()));
 
     // driverController.b().onTrue(IntakeCommands.intakeCoral(intake));

@@ -13,7 +13,7 @@ public class ElevatorConstants {
   public static final double kP = 0.55;
   public static final double kI = 0.0;
   public static final double kD = 0.0;
-  public static final double kMaxVoltage = 12.0;
+  public static final double kMaxVoltage = 4.0;
   public static final double kManualAdjustInches = 2;
   public static final double kDeadband = 1;
   public static final double kZeroingVoltage = -1.0;

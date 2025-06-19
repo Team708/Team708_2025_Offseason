@@ -3,11 +3,13 @@ package frc.robot.subsystems.elevator;
 import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.Constants;
 import frc.robot.util.UnitUtil;
 
 public class ElevatorIOSim implements ElevatorIO {
+  private PIDController controller;
   private ElevatorSim elevatorSim;
   private double appliedVolts;
 
@@ -23,6 +25,7 @@ public class ElevatorIOSim implements ElevatorIO {
             kSimulateGravity,
             UnitUtil.inchesToMeters(kStartingHeightInches));
     appliedVolts = 0.0;
+    controller = new PIDController(kP, kI, kD);
   }
 
   @Override
@@ -58,5 +61,10 @@ public class ElevatorIOSim implements ElevatorIO {
   public void setVoltage(double volts) {
     appliedVolts = volts;
     elevatorSim.setInputVoltage(volts);
+  }
+
+  @Override
+  public void setTarget(double inches) {
+
   }
 }

@@ -119,14 +119,14 @@ public class DriveConstants {
   public static HashMap<Integer, Pose2d> poseMapRed = new HashMap<Integer, Pose2d>();
 
   static {
-    poseMapBlue.put(1, new Pose2d(3.12, 4.18, new Rotation2d(0)));
+    poseMapBlue.put(1, new Pose2d(3.12, 4.20, new Rotation2d(0)));
     poseMapBlue.put(2, new Pose2d(3.12, 3.84, new Rotation2d(0)));
     poseMapBlue.put(3, new Pose2d(3.63, 2.92, new Rotation2d(Math.PI / 3)));
     poseMapBlue.put(4, new Pose2d(3.96, 2.73, new Rotation2d(Math.PI / 3)));
     poseMapBlue.put(5, new Pose2d(5.04, 2.76, new Rotation2d((2 * Math.PI) / 3)));
     poseMapBlue.put(6, new Pose2d(5.32, 2.90, new Rotation2d((2 * Math.PI) / 3)));
     poseMapBlue.put(7, new Pose2d(5.88, 3.84, new Rotation2d(-Math.PI)));
-    poseMapBlue.put(8, new Pose2d(5.88, 4.18, new Rotation2d(-Math.PI)));
+    poseMapBlue.put(8, new Pose2d(5.88, 4.20, new Rotation2d(-Math.PI)));
     poseMapBlue.put(9, new Pose2d(5.32, 5.198, new Rotation2d(-(2 * Math.PI) / 3)));
     poseMapBlue.put(10, new Pose2d(5.04, 5.407, new Rotation2d(-(2 * Math.PI) / 3)));
     poseMapBlue.put(11, new Pose2d(3.96, 5.407, new Rotation2d(-Math.PI / 3)));

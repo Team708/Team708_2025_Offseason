@@ -85,7 +85,7 @@ public class IntakeCtrlSystem extends SubsystemBase {
   }
 
   public void holdCurrentPosition() {
-    targetHoldPosRad = inputs.positionRad;
+    targetHoldPosRad = inputs.positionRad - 1;
     holdingEnabled = true;
   }
 
@@ -102,6 +102,7 @@ public class IntakeCtrlSystem extends SubsystemBase {
   }
 
   public boolean hasCoral() {
+    System.out.println(inputs.beamTriggered);
     return inputs.beamTriggered;
   }
 }
