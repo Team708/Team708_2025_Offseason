@@ -2,6 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -31,6 +32,8 @@ public class ElevatorIOSim implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     elevatorSim.update(kSimUpdateInterval);
+    double setPoint = controller.calculate(inputs.positionInches, inputs.targetInches);
+    elevatorSim.setInputVoltage(MathUtil.clamp(setPoint, -kMaxVoltage, kMaxVoltage));
     inputs.motor1Connected = true;
     inputs.motor2Connected = true;
     inputs.appliedVolts = appliedVolts;
@@ -55,16 +58,5 @@ public class ElevatorIOSim implements ElevatorIO {
     } else {
       inputs.reverseLimitTriggered = false;
     }
-  }
-
-  @Override
-  public void setVoltage(double volts) {
-    appliedVolts = volts;
-    elevatorSim.setInputVoltage(volts);
-  }
-
-  @Override
-  public void setTarget(double inches) {
-
   }
 }

@@ -2,28 +2,18 @@ package frc.robot.subsystems.elevator;
 
 import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
-  private LoggedTunableNumber maxVoltage =
-      new LoggedTunableNumber("Elevator/MaxVoltage", kMaxVoltage);
-  private LoggedTunableNumber pGain = new LoggedTunableNumber("Elevator/PGain", kP);
-  private LoggedTunableNumber zeroingVoltage =
-      new LoggedTunableNumber("Elevator/ZeroingVoltage", kZeroingVoltage);
   private final ElevatorIO io;
   private final ElevatorIOInputsAutoLogged inputs;
-  private final PIDController controller;
-  private double targetMeters;
+  private double targetInches;
 
   public ElevatorCtrlSystem(ElevatorIO io) {
     this.io = io;
     inputs = new ElevatorIOInputsAutoLogged();
-    controller = new PIDController(pGain.get(), kI, kD);
-    targetMeters = 0.0;
+    targetInches = 0.0;
     Logger.recordOutput("Elevator/TargetLevel", "Unknown");
   }
 
@@ -33,34 +23,22 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
     Logger.processInputs("Elevator", inputs);
     Logger.recordOutput("Elevator/IsAtTarget", atTargetPosition());
 
-    // PID change
-    if (pGain.hasChanged(pGain.hashCode())) {
-      controller.setP(kP);
-    }
-
     // Zeroing logic
-    if (!inputs.reverseLimitTriggered
-        && targetMeters == 0
-        && inputs.appliedVolts < zeroingVoltage.get()) {
-      io.setVoltage(zeroingVoltage.get());
-      return;
+    if (!inputs.reverseLimitTriggered && targetInches <= 0) {
+      targetInches -= 1;
     }
 
-    // Scale PID to voltage output
-    double rawPID = controller.calculate(inputs.positionInches, targetMeters);
-    Logger.recordOutput("Elevator/rawPID", rawPID);
-    double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
-    io.setVoltage(scaledVoltage);
+    inputs.targetInches = targetInches;
   }
 
   @Override
   public void setTargetPosition(ElevatorTarget target) {
     Logger.recordOutput("Elevator/TargetLevel", target.name());
-    targetMeters = target.heightInches;
+    targetInches = target.heightInches;
   }
 
   @Override
   public boolean atTargetPosition() {
-    return Math.abs(inputs.positionInches - targetMeters) <= kDeadband;
+    return Math.abs(inputs.positionInches - targetInches) <= kDeadband;
   }
 }

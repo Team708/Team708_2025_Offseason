@@ -44,7 +44,7 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
     if (!inputs.reverseLimitReached
         && targetRadians == 0
         && inputs.appliedVolts < zeroingVoltage.get()) {
-      io.setVoltage(zeroingVoltage.get());
+      io.setVoltage(-zeroingVoltage.get());
       return;
     }
 

@@ -13,7 +13,9 @@ public class ElevatorConstants {
   public static final double kP = 0.55;
   public static final double kI = 0.0;
   public static final double kD = 0.0;
-  public static final double kMaxVoltage = 4.0;
+  public static final double kMaxVoltage = 3.0;
+  public static final double kMinClosedLoopOutput = -1 * (kMaxVoltage / 12);
+  public static final double kMaxClosedLoopOutput = (kMaxVoltage / 12);
   public static final double kManualAdjustInches = 2;
   public static final double kDeadband = 1;
   public static final double kZeroingVoltage = -1.0;

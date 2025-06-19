@@ -4,8 +4,10 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 import static frc.robot.util.SparkUtil.*;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -19,6 +21,7 @@ public class ElevatorIOReal implements ElevatorIO {
   private final SparkFlex motorFollower;
   private final RelativeEncoder encoder;
   private final SparkLimitSwitch reverseLimitSwitch;
+  private final SparkClosedLoopController controller;
 
   public ElevatorIOReal() {
     motorLeader = new SparkFlex(kCanIDMotor1, MotorType.kBrushless);
@@ -38,7 +41,13 @@ public class ElevatorIOReal implements ElevatorIO {
         .velocityConversionFactor(kVelocityFactor)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
-    leaderConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    leaderConfig
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .p(kP)
+        .d(kD)
+        .i(kI)
+        .outputRange(kMinClosedLoopOutput, kMaxClosedLoopOutput);
     leaderConfig
         .signals
         .primaryEncoderPositionAlwaysOn(true)
@@ -68,6 +77,7 @@ public class ElevatorIOReal implements ElevatorIO {
                 followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     reverseLimitSwitch = motorLeader.getReverseLimitSwitch();
+    controller = motorLeader.getClosedLoopController();
   }
 
   @Override
@@ -79,6 +89,7 @@ public class ElevatorIOReal implements ElevatorIO {
     inputs.currentAmps = motorLeader.getOutputCurrent();
     inputs.positionInches = encoder.getPosition();
     inputs.velocityInchesPerSecond = encoder.getVelocity();
+    controller.setReference(inputs.targetInches, ControlType.kPosition);
   }
 
   @Override
