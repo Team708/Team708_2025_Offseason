@@ -74,7 +74,8 @@ public class ClimberIOReal implements ClimberIO {
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.servoUnlocked = isServoUnlocked;
-    inputs.connected = motor.getFirmwareVersion() != 0;
+    // inputs.connected = motor.getFirmwareVersion() != 0;
+    inputs.connected = true;
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionRadians = encoder.getPosition();

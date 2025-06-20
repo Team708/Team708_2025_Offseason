@@ -23,8 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ElevatorCommands;
-import frc.robot.commands.IntakeCommands;
+import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
@@ -45,7 +44,6 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.elevator.ElevatorCtrl;
 import frc.robot.subsystems.elevator.ElevatorCtrlManual;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
@@ -233,18 +231,18 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
-    driverController.a().onTrue(IntakeCommands.intakeCoral(intake));
-    driverController.b().onTrue(IntakeCommands.outakeCoral(intake));
-    driverController.x().onTrue(CompositeCommands.moveToLevel(elevator, moon, ElevatorLevel.L1));
-    driverController.y().onTrue(CompositeCommands.moveToLevel(elevator, moon, ElevatorLevel.L0));
+    driverController.a().onTrue(CompositeCommands.intakePiece(intake, moon));
+    driverController.b().onTrue(CompositeCommands.outtakePiece(intake, moon));
+    driverController.x().onTrue(CompositeCommands.changeMode(elevator, moon));
+    //  driverController.y().onTrue(ElevatorCommands.moveToTarget(elevator,
+    // ElevatorTarget.CORAL_L0));
 
-    elevator.setDefaultCommand(
-        ElevatorCommands.manualControl(elevator, () -> -driverController.getRightY()));
+    // elevator.setDefaultCommand(-
+    //     ElevatorCommands.manualControl(elevator, () -> -driverController.getRightY()));
     // climber.setDefaultCommand(
     //     ClimberCommands.manualControl(climber, () -> -driverController.getRightY()));
     // chute.setDefaultCommand(ChuteCommands.manualControl(chute, () ->
-    // moon.setDefaultCommand(MoonCommands.manualControl(moon, () ->
-    // -driverController.getRightY()));
+    moon.setDefaultCommand(MoonCommands.manualControl(moon, () -> -driverController.getRightY()));
     // driverController.getRightY()));
 
     // driverController.b().onTrue(IntakeCommands.intakeCoral(intake));

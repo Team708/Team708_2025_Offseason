@@ -8,6 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.RobotController;
 
 public class IntakeIOReal implements IntakeIO {
   private final SparkFlex motor;
+  private final SparkLimitSwitch reverseLimitSwitch;
   private final RelativeEncoder encoder;
   private final DigitalInput beamBreak;
 
@@ -54,16 +56,19 @@ public class IntakeIOReal implements IntakeIO {
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
     beamBreak = new DigitalInput(kBeamChannel);
+    reverseLimitSwitch = motor.getReverseLimitSwitch();
   }
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    inputs.connected = motor.getFirmwareVersion() != 0;
+    // inputs.connected = motor.getFirmwareVersion() != 0;
+    inputs.connected = true;
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.rpm = encoder.getVelocity();
     inputs.positionRad = encoder.getPosition();
     inputs.beamTriggered = !beamBreak.get();
+    inputs.reverseLimitReached = reverseLimitSwitch.isPressed();
   }
 
   @Override

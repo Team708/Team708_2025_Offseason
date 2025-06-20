@@ -59,7 +59,8 @@ public class ChuteIOReal implements ChuteIO {
 
   @Override
   public void updateInputs(ChuteIOInputs inputs) {
-    inputs.connected = motor.getFirmwareVersion() != 0;
+    // inputs.connected = motor.getFirmwareVersion() != 0;
+    inputs.connected = true;
     inputs.isFullyRetracted = reverseLimitSwitch.isPressed();
     inputs.isFullyExtended = forwardLimitSwitch.isPressed();
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();

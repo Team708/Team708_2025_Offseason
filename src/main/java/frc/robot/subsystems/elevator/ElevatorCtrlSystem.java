@@ -21,7 +21,7 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
-    Logger.recordOutput("Elevator/IsAtTarget", atTargetPosition());
+    // Logger.recordOutput("Elevator/IsAtTarget", atTargetPosition());
 
     // Zeroing logic
     if (!inputs.reverseLimitTriggered && targetInches <= 0) {

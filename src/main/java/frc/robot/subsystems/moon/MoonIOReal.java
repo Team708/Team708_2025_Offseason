@@ -4,8 +4,10 @@ import static frc.robot.subsystems.moon.MoonConstants.*;
 import static frc.robot.util.SparkUtil.tryUntilOk;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -16,8 +18,10 @@ import edu.wpi.first.wpilibj.RobotController;
 
 public class MoonIOReal implements MoonIO {
   private final SparkFlex motor;
+  private final SparkClosedLoopController controller;
   private final RelativeEncoder encoder;
   private final SparkLimitSwitch reverseLimitSwitch;
+  private final SparkLimitSwitch forwardLimitSwitch;
 
   public MoonIOReal() {
     motor = new SparkFlex(kCanID, MotorType.kBrushless);
@@ -35,7 +39,13 @@ public class MoonIOReal implements MoonIO {
         .velocityConversionFactor(kEncoderVelocityFactor)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
-    motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    motorConfig
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .p(kP)
+        .i(kI)
+        .d(kD)
+        .outputRange(kMinClosedLoopOutput, kMaxClosedLoopOutput);
     motorConfig
         .signals
         .primaryEncoderPositionAlwaysOn(true)
@@ -53,24 +63,26 @@ public class MoonIOReal implements MoonIO {
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
     reverseLimitSwitch = motor.getReverseLimitSwitch();
+    forwardLimitSwitch = motor.getForwardLimitSwitch();
+    controller = motor.getClosedLoopController();
   }
 
   @Override
   public void updateInputs(MoonIOInputs inputs) {
-    inputs.connected = motor.getFirmwareVersion() != 0;
+    // inputs.connected = motor.getFirmwareVersion() != 0;
+    inputs.connected = true;
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionRadians = encoder.getPosition();
     inputs.positionDegrees = Math.toDegrees(inputs.positionRadians);
     inputs.rpm = encoder.getVelocity();
+    inputs.forwardLimitReached = forwardLimitSwitch.isPressed();
+    inputs.reverseLimitReached = reverseLimitSwitch.isPressed();
 
     if (reverseLimitSwitch.isPressed()) {
       encoder.setPosition(0);
     }
-  }
 
-  @Override
-  public void setVoltage(double voltage) {
-    motor.setVoltage(voltage);
+    controller.setReference(inputs.targetRadians, ControlType.kPosition);
   }
 }

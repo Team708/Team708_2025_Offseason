@@ -34,6 +34,7 @@ public class IntakeIOSim implements IntakeIO {
     inputs.rpm = intakeSim.getAngularVelocityRPM();
     inputs.positionRad = intakeSim.getAngularPositionRad();
     inputs.beamTriggered = beamTriggered.get();
+    inputs.reverseLimitReached = false;
   }
 
   public void setVoltage(double voltage) {

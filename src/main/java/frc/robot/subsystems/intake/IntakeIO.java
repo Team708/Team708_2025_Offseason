@@ -11,6 +11,7 @@ public interface IntakeIO {
     public double rpm = 0.0;
     public double positionRad = 0.0;
     public boolean beamTriggered = false;
+    public boolean reverseLimitReached = false;
   }
 
   public default void updateInputs(IntakeIOInputs inputs) {}

@@ -19,23 +19,23 @@ import frc.robot.subsystems.moon.MoonConstants.MoonTarget;
 
 public class CompositeCommands {
   public static Command changeMode(Elevator elevator, Moon moon) {
-    if (moon.getMoonCtrl().getIsCoralMode()) {
-      return Commands.sequence(
-          moveToLevel(elevator, moon, ElevatorLevel.L2),
-          MoonCommands.moveToTarget(moon, MoonTarget.ALGAE_LOW),
-          new InstantCommand(
-              () -> {
-                moon.getMoonCtrl().setIsCoralMode(false);
-              }));
-    } else {
-      return Commands.sequence(
-          moveToLevel(elevator, moon, ElevatorLevel.L2),
-          MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW),
-          new InstantCommand(
-              () -> {
-                moon.getMoonCtrl().setIsCoralMode(true);
-              }));
-    }
+    return Commands.either(
+            Commands.sequence(
+                moveToLevel(elevator, moon, ElevatorLevel.L1),
+                MoonCommands.moveToTarget(moon, MoonTarget.ALGAE_LOW),
+                new InstantCommand(
+                    () -> {
+                      moon.getMoonCtrl().setIsCoralMode(false);
+                    })),
+            Commands.sequence(
+                moveToLevel(elevator, moon, ElevatorLevel.L1),
+                MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW),
+                new InstantCommand(
+                    () -> {
+                      moon.getMoonCtrl().setIsCoralMode(true);
+                    })),
+            () -> moon.getMoonCtrl().getIsCoralMode())
+        .beforeStarting(() -> System.out.println("Composites: changeMode start"));
   }
 
   public static Command moveToLevel(Elevator elevator, Moon moon, ElevatorLevel level) {
@@ -127,5 +127,19 @@ public class CompositeCommands {
             ChuteCommands.retract(chute),
             MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW))
         .onlyIf(() -> climber.getClimberCtrl().readyToClimb());
+  }
+
+  public static Command intakePiece(Intake intake, Moon moon) {
+    return Commands.either(
+        IntakeCommands.intakeCoral(intake),
+        IntakeCommands.intakeAlgae(intake),
+        () -> moon.getMoonCtrl().getIsCoralMode());
+  }
+
+  public static Command outtakePiece(Intake intake, Moon moon) {
+    return Commands.either(
+        IntakeCommands.outakeCoral(intake),
+        IntakeCommands.outtakeAlgae(intake),
+        () -> moon.getMoonCtrl().getIsCoralMode());
   }
 }

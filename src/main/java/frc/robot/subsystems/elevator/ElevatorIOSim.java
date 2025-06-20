@@ -36,7 +36,7 @@ public class ElevatorIOSim implements ElevatorIO {
     elevatorSim.setInputVoltage(MathUtil.clamp(setPoint, -kMaxVoltage, kMaxVoltage));
     inputs.motor1Connected = true;
     inputs.motor2Connected = true;
-    inputs.appliedVolts = appliedVolts;
+    inputs.appliedVolts = MathUtil.clamp(setPoint, -kMaxVoltage, kMaxVoltage);
     inputs.currentAmps = elevatorSim.getCurrentDrawAmps();
     inputs.positionInches = UnitUtil.metersToInches(elevatorSim.getPositionMeters());
     inputs.velocityInchesPerSecond =

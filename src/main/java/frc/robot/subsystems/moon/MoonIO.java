@@ -13,9 +13,12 @@ public interface MoonIO {
     public double rpm = 0.0;
     public boolean reverseLimitReached = false;
     public boolean forwardLimitReached = false;
+    public double targetRadians = 0.0;
   }
 
   public default void updateInputs(MoonIOInputs inputs) {}
 
   public default void setVoltage(double voltage) {}
+
+  public default void setTarget(double radians) {}
 }

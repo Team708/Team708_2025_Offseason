@@ -2,28 +2,19 @@ package frc.robot.subsystems.moon;
 
 import static frc.robot.subsystems.moon.MoonConstants.*;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.moon.MoonConstants.MoonTarget;
-import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
-  private LoggedTunableNumber maxVoltage = new LoggedTunableNumber("Moon/MaxVoltage", kMaxVoltage);
-  private LoggedTunableNumber pGain = new LoggedTunableNumber("Moon/PGain", kP);
-  private LoggedTunableNumber zeroingVoltage =
-      new LoggedTunableNumber("Elevator/ZeroingVoltage", kZeroingVoltage);
   private final MoonIO io;
   private final MoonIOInputsAutoLogged inputs;
-  private final PIDController controller;
   private boolean isCoralMode;
   private double targetRadians;
 
   public MoonCtrlSystem(MoonIO io) {
     this.io = io;
     inputs = new MoonIOInputsAutoLogged();
-    controller = new PIDController(pGain.get(), kI, kD);
     targetRadians = 0.0;
     isCoralMode = true;
     Logger.recordOutput("Moon/TargetPosition", "Unknown");
@@ -35,23 +26,11 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
     Logger.processInputs("Moon", inputs);
     Logger.recordOutput("Moon/IsAtTarget", atTargetPosition());
 
-    // PID change
-    if (pGain.hasChanged(pGain.hashCode())) {
-      controller.setP(kP);
+    if (!inputs.reverseLimitReached && targetRadians <= 0) {
+      targetRadians -= 1;
     }
 
-    // Zeroing logic
-    if (!inputs.reverseLimitReached
-        && targetRadians == 0
-        && inputs.appliedVolts < zeroingVoltage.get()) {
-      io.setVoltage(-zeroingVoltage.get());
-      return;
-    }
-
-    // Scale PID to voltage output
-    double rawPID = controller.calculate(inputs.positionRadians, targetRadians);
-    double scaledVoltage = MathUtil.clamp(rawPID, -maxVoltage.get(), maxVoltage.get());
-    io.setVoltage(scaledVoltage);
+    inputs.targetRadians = targetRadians;
   }
 
   @Override

@@ -1,8 +1,10 @@
 package frc.robot.subsystems.moon;
 
 public class MoonConstants {
-  public static final double kMaxVoltage = 12.0;
-  public static final double kP = 1.0;
+  public static final double kMaxVoltage = 4.0;
+  public static final double kMinClosedLoopOutput = -1 * (kMaxVoltage / 12);
+  public static final double kMaxClosedLoopOutput = (kMaxVoltage / 12);
+  public static final double kP = 2.0;
   public static final double kI = 0.0;
   public static final double kD = 0.0;
   public static final double kMotorReduction = 4.0;
@@ -15,13 +17,13 @@ public class MoonConstants {
   public static final double kEncoderPositionFactor = 0.0815;
   public static final double kEncoderVelocityFactor = kEncoderPositionFactor / 60.0;
   public static final double kDeadband = 0.1;
-  public static final double kZeroingVoltage = 1.0;
+  public static final double kZeroingVoltage = 2.0;
 
   public enum MoonTarget {
     CORAL_LOW(Math.toRadians(0)),
-    CORAL_HIGH(Math.toRadians(10)),
-    ALGAE_LOW(Math.toRadians(20)),
-    ALGAE_HIGH(Math.toRadians(30));
+    CORAL_HIGH(Math.toRadians(15)),
+    ALGAE_LOW(Math.toRadians(160)),
+    ALGAE_HIGH(Math.toRadians(45));
 
     public final double radians;
 

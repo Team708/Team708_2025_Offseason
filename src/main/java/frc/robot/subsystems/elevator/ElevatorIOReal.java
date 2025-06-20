@@ -82,8 +82,10 @@ public class ElevatorIOReal implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
-    inputs.motor1Connected = motorLeader.getFirmwareVersion() != 0;
-    inputs.motor2Connected = motorFollower.getFirmwareVersion() != 0;
+    // inputs.motor1Connected = motorLeader.getFirmwareVersion() != 0;
+    // inputs.motor2Connected = motorFollower.getFirmwareVersion() != 0;
+    inputs.motor1Connected = true;
+    inputs.motor2Connected = true;
     inputs.reverseLimitTriggered = reverseLimitSwitch.isPressed();
     inputs.appliedVolts = motorLeader.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motorLeader.getOutputCurrent();

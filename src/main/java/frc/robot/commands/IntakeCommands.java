@@ -58,4 +58,30 @@ public class IntakeCommands {
         .finallyDo(() -> intake.getIntakeCtrl().setMode(IntakeMode.STOP))
         .beforeStarting(() -> System.out.println("Intake: outakeCoral started"));
   }
+
+  public static Command intakeAlgae(Intake intake) {
+    return Commands.run(
+            () -> {
+              IntakeCtrlSystem control = intake.getIntakeCtrl();
+              control.disableHold();
+              control.setMode(IntakeMode.ALGAE_INTAKE);
+            },
+            intake)
+        .until(() -> intake.getIntakeCtrl().hasAlgae())
+        .finallyDo(() -> IntakeCommands.setHold(intake, true).schedule())
+        .beforeStarting(() -> System.out.println("Intake: intakeAlgae started"));
+  }
+
+  public static Command outtakeAlgae(Intake intake) {
+    return Commands.run(
+            () -> {
+              IntakeCtrlSystem control = intake.getIntakeCtrl();
+              control.setMode(IntakeMode.CORAL_OUTAKE);
+              control.disableHold();
+            },
+            intake)
+        .withTimeout(1.5)
+        .finallyDo(() -> intake.getIntakeCtrl().setMode(IntakeMode.STOP))
+        .beforeStarting(() -> System.out.println("Intake: outtakeAlgae started"));
+  }
 }

@@ -17,23 +17,16 @@ public class IntakeCtrlSystem extends SubsystemBase {
     ALGAE_OUTAKE
   }
 
-  private LoggedTunableNumber pGain = new LoggedTunableNumber("Intake/PGain", kP);
   private LoggedTunableNumber holdingVoltage =
       new LoggedTunableNumber("Intake/HoldingVoltage", kHoldingVoltage);
-  private LoggedTunableNumber coralIntakeVoltage =
-      new LoggedTunableNumber("Intake/CoralIntakeVoltage", kCoralIntakeVoltage);
-  private LoggedTunableNumber coralOutakeVoltage =
-      new LoggedTunableNumber("Intake/CoralOutakeVoltage", kCoralOutakeVoltage);
-  private LoggedTunableNumber algaeIntakeVoltage =
-      new LoggedTunableNumber("Intake/AlgaeIntakeVoltage", kAlgaeIntakeVoltage);
-  private LoggedTunableNumber algaeOutakeVoltage =
-      new LoggedTunableNumber("Intake/AlgaeOutakeVoltage", kAlgaeOutakeVoltage);
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs;
   public PIDController controller;
   private IntakeMode mode;
   private boolean holdingEnabled;
   private double targetHoldPosRad;
+  private double rawPID;
+  private double scaledVoltage;
 
   public IntakeCtrlSystem(IntakeIO io) {
     this.io = io;
@@ -42,18 +35,14 @@ public class IntakeCtrlSystem extends SubsystemBase {
     controller = new PIDController(kP, kI, kD);
     holdingEnabled = false;
     targetHoldPosRad = 0.0;
+    rawPID = 0.0;
+    scaledVoltage = 0.0;
   }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
-    Logger.recordOutput("Intake/TargetHold", targetHoldPosRad);
-
-    // PID change
-    if (pGain.hasChanged(pGain.hashCode())) {
-      controller.setP(kP);
-    }
 
     if (!holdingEnabled) {
       switch (mode) {
@@ -61,16 +50,16 @@ public class IntakeCtrlSystem extends SubsystemBase {
           io.setVoltage(0.0);
           break;
         case CORAL_INTAKE:
-          io.setVoltage(coralIntakeVoltage.get());
+          io.setVoltage(kCoralIntakeVoltage);
           break;
         case CORAL_OUTAKE:
-          io.setVoltage(coralOutakeVoltage.get());
+          io.setVoltage(kCoralOutakeVoltage);
           break;
         case ALGAE_INTAKE:
-          io.setVoltage(algaeIntakeVoltage.get());
+          io.setVoltage(kAlgaeIntakeVoltage);
           break;
         case ALGAE_OUTAKE:
-          io.setVoltage(algaeOutakeVoltage.get());
+          io.setVoltage(kAlgaeOutakeVoltage);
           break;
         default:
           io.setVoltage(0.0);
@@ -78,14 +67,14 @@ public class IntakeCtrlSystem extends SubsystemBase {
       }
     } else {
       // Scale PID to voltage output
-      double rawPID = controller.calculate(inputs.positionRad, targetHoldPosRad);
-      double scaledVoltage = MathUtil.clamp(rawPID, -holdingVoltage.get(), holdingVoltage.get());
+      rawPID = controller.calculate(inputs.positionRad, targetHoldPosRad);
+      scaledVoltage = MathUtil.clamp(rawPID, -holdingVoltage.get(), holdingVoltage.get());
       io.setVoltage(scaledVoltage);
     }
   }
 
   public void holdCurrentPosition() {
-    targetHoldPosRad = inputs.positionRad - 1;
+    targetHoldPosRad = inputs.positionRad - 0.5;
     holdingEnabled = true;
   }
 
@@ -102,7 +91,10 @@ public class IntakeCtrlSystem extends SubsystemBase {
   }
 
   public boolean hasCoral() {
-    System.out.println(inputs.beamTriggered);
     return inputs.beamTriggered;
+  }
+
+  public boolean hasAlgae() {
+    return inputs.reverseLimitReached;
   }
 }
