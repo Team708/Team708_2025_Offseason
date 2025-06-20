@@ -23,6 +23,7 @@ public class AutoCommands {
     if (DriverStation.getAlliance().get() == Alliance.Red) {
       startingPose = DriveConstants.startingPoseLeftRed;
       feederPose = feederLeftRed;
+
     } else {
       startingPose = DriveConstants.startingPoseLeftBlue;
       feederPose = feederLeftBlue;
