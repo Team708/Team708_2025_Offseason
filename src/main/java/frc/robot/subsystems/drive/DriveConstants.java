@@ -114,7 +114,26 @@ public class DriveConstants {
           moduleTranslations);
   public static final double startupPeriodicDelay = 2.0;
 
-  // Pose maps
+  // Poses
+  public static Pose2d startingPoseLeftRed = new Pose2d(10.42, 5.4, new Rotation2d(0));
+  public static Pose2d startingPoseLeftBlue =
+      new Pose2d(7.121, 5.4, new Rotation2d(Math.toRadians(180)));
+  public static Pose2d startingPoseCenterRed = new Pose2d(10.42, 4.0, new Rotation2d(0));
+  public static Pose2d startingPoseCenterBlue =
+      new Pose2d(7.121, 4.0, new Rotation2d(Math.toRadians(180)));
+  public static Pose2d startingPoseRightRed = new Pose2d(10.42, 2.6, new Rotation2d(0));
+  public static Pose2d startingPoseRightBlue =
+      new Pose2d(7.121, 2.6, new Rotation2d(Math.toRadians(180)));
+  public static Pose2d feederLeftRed =
+      new Pose2d(16.147, 0.84, new Rotation2d(Math.toRadians(125.0)));
+  ;
+  public static Pose2d feederRightRed =
+      new Pose2d(16.147, 7.16, new Rotation2d(Math.toRadians(-125.0)));
+  public static Pose2d feederLeftBlue =
+      new Pose2d(1.353, 7.16, new Rotation2d(Math.toRadians(-55.0)));
+  public static Pose2d feederRightBlue =
+      new Pose2d(1.353, 0.84, new Rotation2d(Math.toRadians(55.0)));
+
   public static HashMap<Integer, Pose2d> poseMapBlue = new HashMap<Integer, Pose2d>();
   public static HashMap<Integer, Pose2d> poseMapRed = new HashMap<Integer, Pose2d>();
 

@@ -21,7 +21,7 @@ public class IntakeIOSim implements IntakeIO {
         LinearSystemId.createDCMotorSystem(Constants.k1Vortex, kJKgMetersSquared, kMotorReduction);
     intakeSim = new DCMotorSim(linearSystem, Constants.k1Vortex);
     appliedVolts = 0.0;
-    beamTriggered = new LoggedTunableBoolean("Intake/BeamTriggered", false);
+    beamTriggered = new LoggedTunableBoolean("Intake/BeamTriggered", true);
   }
 
   @Override

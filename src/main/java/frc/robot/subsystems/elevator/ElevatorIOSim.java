@@ -12,7 +12,6 @@ import frc.robot.util.UnitUtil;
 public class ElevatorIOSim implements ElevatorIO {
   private PIDController controller;
   private ElevatorSim elevatorSim;
-  private double appliedVolts;
 
   public ElevatorIOSim() {
     elevatorSim =
@@ -25,7 +24,6 @@ public class ElevatorIOSim implements ElevatorIO {
             UnitUtil.inchesToMeters(kMaxHeightInches),
             kSimulateGravity,
             UnitUtil.inchesToMeters(kStartingHeightInches));
-    appliedVolts = 0.0;
     controller = new PIDController(kP, kI, kD);
   }
 
@@ -33,10 +31,10 @@ public class ElevatorIOSim implements ElevatorIO {
   public void updateInputs(ElevatorIOInputs inputs) {
     elevatorSim.update(kSimUpdateInterval);
     double setPoint = controller.calculate(inputs.positionInches, inputs.targetInches);
-    elevatorSim.setInputVoltage(MathUtil.clamp(setPoint, -kMaxVoltage, kMaxVoltage));
+    elevatorSim.setInputVoltage(MathUtil.clamp(setPoint, -kMaxVoltageSim, kMaxVoltageSim));
     inputs.motor1Connected = true;
     inputs.motor2Connected = true;
-    inputs.appliedVolts = MathUtil.clamp(setPoint, -kMaxVoltage, kMaxVoltage);
+    inputs.appliedVolts = MathUtil.clamp(setPoint, -kMaxVoltageSim, kMaxVoltageSim);
     inputs.currentAmps = elevatorSim.getCurrentDrawAmps();
     inputs.positionInches = UnitUtil.metersToInches(elevatorSim.getPositionMeters());
     inputs.velocityInchesPerSecond =

@@ -13,8 +13,10 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Servo;
+import frc.robot.Constants;
 
 public class ClimberIOReal implements ClimberIO {
   private final Servo servo;
@@ -26,6 +28,10 @@ public class ClimberIOReal implements ClimberIO {
   private final DigitalInput cageLimit2;
   private final DigitalInput beamBreak1;
   private final DigitalInput beamBreak2;
+
+  // Backgrounded operations
+  private final Notifier backgroundThread;
+  private boolean isMotorConnected;
 
   public ClimberIOReal() {
     servo = new Servo(kServoChannel);
@@ -69,13 +75,18 @@ public class ClimberIOReal implements ClimberIO {
     cageLimit2 = new DigitalInput(kCageLimitSwitch2);
     beamBreak1 = new DigitalInput(kBeamBreak1);
     beamBreak2 = new DigitalInput(kBeamBreak2);
+    backgroundThread = new Notifier(this::updateBackground);
+    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+  }
+
+  private void updateBackground() {
+    isMotorConnected = motor.getFirmwareVersion() != 0;
   }
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.servoUnlocked = isServoUnlocked;
-    // inputs.connected = motor.getFirmwareVersion() != 0;
-    inputs.connected = true;
+    inputs.connected = isMotorConnected;
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionRadians = encoder.getPosition();

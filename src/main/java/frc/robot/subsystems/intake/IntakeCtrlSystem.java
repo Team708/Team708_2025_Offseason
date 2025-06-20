@@ -43,6 +43,7 @@ public class IntakeCtrlSystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
+    Logger.recordOutput("Intake/hasCoral", hasCoral());
 
     if (!holdingEnabled) {
       switch (mode) {

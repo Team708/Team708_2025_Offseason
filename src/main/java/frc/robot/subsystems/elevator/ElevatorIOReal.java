@@ -14,7 +14,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.Constants;
 
 public class ElevatorIOReal implements ElevatorIO {
   private final SparkFlex motorLeader;
@@ -22,6 +24,11 @@ public class ElevatorIOReal implements ElevatorIO {
   private final RelativeEncoder encoder;
   private final SparkLimitSwitch reverseLimitSwitch;
   private final SparkClosedLoopController controller;
+
+  // Backgrounded operations
+  private final Notifier backgroundThread;
+  private boolean isLeaderConnected;
+  private boolean isFollowerConnected;
 
   public ElevatorIOReal() {
     motorLeader = new SparkFlex(kCanIDMotor1, MotorType.kBrushless);
@@ -78,14 +85,21 @@ public class ElevatorIOReal implements ElevatorIO {
 
     reverseLimitSwitch = motorLeader.getReverseLimitSwitch();
     controller = motorLeader.getClosedLoopController();
+    backgroundThread = new Notifier(this::updateBackground);
+    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+  }
+
+  private void updateBackground() {
+    isLeaderConnected = motorLeader.getFirmwareVersion() != 0;
+    isFollowerConnected = motorFollower.getFirmwareVersion() != 0;
   }
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     // inputs.motor1Connected = motorLeader.getFirmwareVersion() != 0;
     // inputs.motor2Connected = motorFollower.getFirmwareVersion() != 0;
-    inputs.motor1Connected = true;
-    inputs.motor2Connected = true;
+    inputs.motor1Connected = isLeaderConnected;
+    inputs.motor2Connected = isFollowerConnected;
     inputs.reverseLimitTriggered = reverseLimitSwitch.isPressed();
     inputs.appliedVolts = motorLeader.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motorLeader.getOutputCurrent();

@@ -18,31 +18,17 @@ public class IntakeCommands {
         .beforeStarting(() -> System.out.println("Intake: setMode started"));
   }
 
-  public static Command setHold(Intake intake, boolean hold) {
-    return Commands.runOnce(
-            () -> {
-              IntakeCtrlSystem control = intake.getIntakeCtrl();
-              if (hold) {
-                control.holdCurrentPosition();
-              } else {
-                control.setMode(IntakeMode.STOP);
-                control.disableHold();
-              }
-            },
-            intake)
-        .beforeStarting(() -> System.out.println("Intake: setHold started"));
-  }
-
   public static Command intakeCoral(Intake intake) {
     return Commands.run(
             () -> {
               IntakeCtrlSystem control = intake.getIntakeCtrl();
               control.disableHold();
               control.setMode(IntakeMode.CORAL_INTAKE);
+              System.out.println("Running loop intakeCoral");
             },
             intake)
+        .finallyDo(() -> intake.getIntakeCtrl().holdCurrentPosition())
         .until(() -> intake.getIntakeCtrl().hasCoral())
-        .finallyDo(() -> IntakeCommands.setHold(intake, true).schedule())
         .beforeStarting(() -> System.out.println("Intake: intakeCoral started"));
   }
 
@@ -68,7 +54,7 @@ public class IntakeCommands {
             },
             intake)
         .until(() -> intake.getIntakeCtrl().hasAlgae())
-        .finallyDo(() -> IntakeCommands.setHold(intake, true).schedule())
+        .finallyDo(() -> intake.getIntakeCtrl().holdCurrentPosition())
         .beforeStarting(() -> System.out.println("Intake: intakeAlgae started"));
   }
 

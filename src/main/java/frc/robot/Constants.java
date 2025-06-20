@@ -32,6 +32,7 @@ public final class Constants {
   public static final boolean climberManualMode = false;
   public static final DCMotor k1Vortex = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 1);
   public static final DCMotor k2Vortex = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 2);
+  public static final double backgroundThreadPeriod = 2;
 
   public static enum Mode {
     /** Running on a real robot. */

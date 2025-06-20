@@ -14,13 +14,19 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.Constants;
 
 public class IntakeIOReal implements IntakeIO {
   private final SparkFlex motor;
   private final SparkLimitSwitch reverseLimitSwitch;
   private final RelativeEncoder encoder;
   private final DigitalInput beamBreak;
+
+  // Backgrounded operations
+  private final Notifier backgroundThread;
+  private boolean isMotorConnected;
 
   public IntakeIOReal() {
     motor = new SparkFlex(kCanID, MotorType.kBrushless);
@@ -57,12 +63,17 @@ public class IntakeIOReal implements IntakeIO {
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
     beamBreak = new DigitalInput(kBeamChannel);
     reverseLimitSwitch = motor.getReverseLimitSwitch();
+    backgroundThread = new Notifier(this::updateBackground);
+    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+  }
+
+  private void updateBackground() {
+    isMotorConnected = motor.getFirmwareVersion() != 0;
   }
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    // inputs.connected = motor.getFirmwareVersion() != 0;
-    inputs.connected = true;
+    inputs.connected = isMotorConnected;
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.rpm = encoder.getVelocity();

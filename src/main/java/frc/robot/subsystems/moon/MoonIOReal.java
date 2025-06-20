@@ -14,7 +14,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.Constants;
 
 public class MoonIOReal implements MoonIO {
   private final SparkFlex motor;
@@ -22,6 +24,10 @@ public class MoonIOReal implements MoonIO {
   private final RelativeEncoder encoder;
   private final SparkLimitSwitch reverseLimitSwitch;
   private final SparkLimitSwitch forwardLimitSwitch;
+
+  // Backgrounded operations
+  private final Notifier backgroundThread;
+  private boolean isMotorConnected;
 
   public MoonIOReal() {
     motor = new SparkFlex(kCanID, MotorType.kBrushless);
@@ -65,12 +71,18 @@ public class MoonIOReal implements MoonIO {
     reverseLimitSwitch = motor.getReverseLimitSwitch();
     forwardLimitSwitch = motor.getForwardLimitSwitch();
     controller = motor.getClosedLoopController();
+    backgroundThread = new Notifier(this::updateBackground);
+    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+  }
+
+  private void updateBackground() {
+    isMotorConnected = motor.getFirmwareVersion() != 0;
   }
 
   @Override
   public void updateInputs(MoonIOInputs inputs) {
     // inputs.connected = motor.getFirmwareVersion() != 0;
-    inputs.connected = true;
+    inputs.connected = isMotorConnected;
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionRadians = encoder.getPosition();

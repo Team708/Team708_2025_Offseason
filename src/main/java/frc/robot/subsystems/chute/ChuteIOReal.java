@@ -12,13 +12,19 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.Constants;
 
 public class ChuteIOReal implements ChuteIO {
   private final SparkFlex motor;
   private final RelativeEncoder encoder;
   private final SparkLimitSwitch reverseLimitSwitch;
   private final SparkLimitSwitch forwardLimitSwitch;
+
+  // Backgrounded operations
+  private final Notifier backgroundThread;
+  private boolean isMotorConnected;
 
   public ChuteIOReal() {
     motor = new SparkFlex(ChuteConstants.kCanID, MotorType.kBrushless);
@@ -55,12 +61,18 @@ public class ChuteIOReal implements ChuteIO {
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
     reverseLimitSwitch = motor.getReverseLimitSwitch();
     forwardLimitSwitch = motor.getForwardLimitSwitch();
+    backgroundThread = new Notifier(this::updateBackground);
+    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+  }
+
+  private void updateBackground() {
+    isMotorConnected = motor.getFirmwareVersion() != 0;
   }
 
   @Override
   public void updateInputs(ChuteIOInputs inputs) {
     // inputs.connected = motor.getFirmwareVersion() != 0;
-    inputs.connected = true;
+    inputs.connected = isMotorConnected;
     inputs.isFullyRetracted = reverseLimitSwitch.isPressed();
     inputs.isFullyExtended = forwardLimitSwitch.isPressed();
     inputs.appliedVolts = motor.getAppliedOutput() * RobotController.getBatteryVoltage();

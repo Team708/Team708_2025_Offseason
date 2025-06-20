@@ -14,13 +14,15 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorTarget;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeCtrlSystem.IntakeMode;
 import frc.robot.subsystems.moon.Moon;
 import frc.robot.subsystems.moon.MoonConstants.MoonTarget;
 
 public class CompositeCommands {
-  public static Command changeMode(Elevator elevator, Moon moon) {
+  public static Command changeMode(Elevator elevator, Moon moon, Intake intake) {
     return Commands.either(
             Commands.sequence(
+                IntakeCommands.setMode(intake, IntakeMode.STOP),
                 moveToLevel(elevator, moon, ElevatorLevel.L1),
                 MoonCommands.moveToTarget(moon, MoonTarget.ALGAE_LOW),
                 new InstantCommand(
@@ -28,6 +30,7 @@ public class CompositeCommands {
                       moon.getMoonCtrl().setIsCoralMode(false);
                     })),
             Commands.sequence(
+                IntakeCommands.setMode(intake, IntakeMode.STOP),
                 moveToLevel(elevator, moon, ElevatorLevel.L1),
                 MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW),
                 new InstantCommand(
@@ -35,7 +38,8 @@ public class CompositeCommands {
                       moon.getMoonCtrl().setIsCoralMode(true);
                     })),
             () -> moon.getMoonCtrl().getIsCoralMode())
-        .beforeStarting(() -> System.out.println("Composites: changeMode start"));
+        .beforeStarting(() -> System.out.println("Composites: changeMode start"))
+        .onlyIf(() -> !intake.getIntakeCtrl().hasCoral() && !intake.getIntakeCtrl().hasAlgae());
   }
 
   public static Command moveToLevel(Elevator elevator, Moon moon, ElevatorLevel level) {
@@ -91,9 +95,9 @@ public class CompositeCommands {
 
   public static Command scoreCoral(
       Drive drive, Elevator elevator, Moon moon, Intake intake, int LocationID) {
-    if (!moon.getMoonCtrl().getIsCoralMode() || !intake.getIntakeCtrl().hasCoral()) {
-      return new InstantCommand();
-    }
+    // if (!moon.getMoonCtrl().getIsCoralMode() || !intake.getIntakeCtrl().hasCoral()) {
+    //   return new InstantCommand();
+    // }
     Pose2d targetPose;
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
     if (alliance == Alliance.Blue) {
@@ -102,12 +106,14 @@ public class CompositeCommands {
       targetPose = DriveConstants.poseMapRed.get(LocationID);
     }
     return Commands.sequence(
-        Commands.parallel(
-            DriveCommands.driveToPose(targetPose, drive),
-            moveToLevel(elevator, moon, ElevatorLevel.L4)),
-        IntakeCommands.outakeCoral(intake),
-        MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW),
-        ElevatorCommands.moveToTarget(elevator, ElevatorTarget.CORAL_L0));
+            Commands.parallel(
+                DriveCommands.driveToPose(targetPose, drive),
+                moveToLevel(elevator, moon, ElevatorLevel.L4)),
+            IntakeCommands.outakeCoral(intake),
+            MoonCommands.moveToTarget(moon, MoonTarget.CORAL_LOW),
+            ElevatorCommands.moveToTarget(elevator, ElevatorTarget.CORAL_L0))
+        .beforeStarting(() -> System.out.println("Composite: scoreCoral started"))
+        .onlyIf(() -> moon.getMoonCtrl().getIsCoralMode() && intake.getIntakeCtrl().hasCoral());
   }
 
   public static Command climb(Elevator elevator, Moon moon, Chute chute, Climber climber) {

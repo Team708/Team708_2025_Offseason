@@ -295,8 +295,7 @@ public class DriveCommands {
 
   public static Command driveToPose(Pose2d pose, Drive drive) {
     Command c =
-        AutoBuilder.pathfindToPose(
-            pose, new PathConstraints(0.3, 0.3, 2 * Math.PI, 2 * Math.PI), 0.0);
+        AutoBuilder.pathfindToPose(pose, new PathConstraints(1, 1, 2 * Math.PI, 2 * Math.PI), 0.0);
     c.addRequirements(drive);
     return Commands.parallel(new InstantCommand(() -> System.out.println("Drive: driveToPose")), c);
   }

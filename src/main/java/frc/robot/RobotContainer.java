@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MoonCommands;
@@ -212,6 +213,10 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption("Left 3 Coral", AutoCommands.left3Coral(drive, elevator, moon, intake));
+    autoChooser.addOption("Right 3 Coral", AutoCommands.right3Coral(drive, elevator, moon, intake));
+    autoChooser.addOption(
+        "Center 1 Coral", AutoCommands.center1Coral(drive, elevator, moon, intake));
 
     configureButtonBindings();
   }
@@ -233,7 +238,7 @@ public class RobotContainer {
 
     driverController.a().onTrue(CompositeCommands.intakePiece(intake, moon));
     driverController.b().onTrue(CompositeCommands.outtakePiece(intake, moon));
-    driverController.x().onTrue(CompositeCommands.changeMode(elevator, moon));
+    driverController.x().onTrue(CompositeCommands.changeMode(elevator, moon, intake));
     //  driverController.y().onTrue(ElevatorCommands.moveToTarget(elevator,
     // ElevatorTarget.CORAL_L0));
 
