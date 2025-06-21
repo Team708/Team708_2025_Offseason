@@ -1,15 +1,11 @@
 package frc.robot.subsystems.climber;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class ClimberCtrlManual extends SubsystemBase implements ClimberCtrl {
-  private final ClimberIO io;
-  private final ClimberIOInputsAutoLogged inputs;
+public class ClimberCtrlManual extends ClimberCtrlBase implements ClimberCtrl {
 
-  public ClimberCtrlManual(ClimberIO io) {
-    this.io = io;
-    inputs = new ClimberIOInputsAutoLogged();
+  @Override
+  protected void init() {
     io.setServo(true);
   }
 
@@ -22,10 +18,5 @@ public class ClimberCtrlManual extends SubsystemBase implements ClimberCtrl {
   @Override
   public void setVoltage(double voltage) {
     io.setVoltage(voltage);
-  }
-
-  @Override
-  public void setServo(boolean isUnlocked) {
-    io.setServo(isUnlocked);
   }
 }

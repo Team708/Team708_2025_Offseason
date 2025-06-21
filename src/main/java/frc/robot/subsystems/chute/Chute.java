@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableBoolean;
 
 public class Chute extends SubsystemBase {
-  LoggedTunableBoolean manualMode = new LoggedTunableBoolean("Chute/ManualMode", false);
+  private LoggedTunableBoolean manualMode = new LoggedTunableBoolean("Chute/ManualMode", false);
   private ChuteCtrl chuteCtrl;
 
   public Chute(ChuteCtrl chuteCtrl) {

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
 
-public class ChuteIOReal implements IChuteIO {
+public class ChuteIOReal implements ChuteIO {
   private final SparkFlex motor;
   private final RelativeEncoder encoder;
   private final SparkLimitSwitch reverseLimitSwitch;

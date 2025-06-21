@@ -2,17 +2,13 @@ package frc.robot.subsystems.elevator;
 
 import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
-  private final ElevatorIO io;
-  private final ElevatorIOInputsAutoLogged inputs;
+public class ElevatorCtrlSystem extends ElevatorCtrlBase implements ElevatorCtrl {
   private double targetInches;
 
-  public ElevatorCtrlSystem(ElevatorIO io) {
-    this.io = io;
-    inputs = new ElevatorIOInputsAutoLogged();
+  @Override
+  protected void init() {
     targetInches = 0.0;
     Logger.recordOutput("Elevator/TargetLevel", "Unknown");
   }

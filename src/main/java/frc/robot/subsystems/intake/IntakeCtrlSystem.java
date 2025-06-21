@@ -4,11 +4,10 @@ import static frc.robot.subsystems.intake.IntakeConstants.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
-public class IntakeCtrlSystem extends SubsystemBase {
+public class IntakeCtrlSystem extends IntakeCtrlBase {
   public enum IntakeMode {
     STOP,
     CORAL_INTAKE,
@@ -19,20 +18,15 @@ public class IntakeCtrlSystem extends SubsystemBase {
 
   private LoggedTunableNumber holdingVoltage =
       new LoggedTunableNumber("Intake/HoldingVoltage", kHoldingVoltage);
-  private final IntakeIO io;
-  private final IntakeIOInputsAutoLogged inputs;
-  public PIDController controller;
+  public PIDController controller = new PIDController(kP, kI, kD);
   private IntakeMode mode;
   private boolean holdingEnabled;
   private double targetHoldPosRad;
   private double rawPID;
   private double scaledVoltage;
 
-  public IntakeCtrlSystem(IntakeIO io) {
-    this.io = io;
-    inputs = new IntakeIOInputsAutoLogged();
+  protected void init() {
     mode = IntakeMode.STOP;
-    controller = new PIDController(kP, kI, kD);
     holdingEnabled = false;
     targetHoldPosRad = 0.0;
     rawPID = 0.0;

@@ -1,20 +1,20 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberConstants.ClimberState;
 import frc.robot.subsystems.climber.ClimberCtrl;
 import frc.robot.subsystems.climber.ClimberCtrlSystem;
-import frc.robot.subsystems.climber.ClimberIOSim;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ClimberTests {
+  private Climber climber;
   private ClimberCtrl climberCtrl;
-  private ClimberIOSim climberSim;
 
   @BeforeEach
   void setup() {
-    climberSim = new ClimberIOSim();
-    climberCtrl = new ClimberCtrlSystem(climberSim);
+    climberCtrl = new ClimberCtrlSystem();
+    climber = new Climber(climberCtrl);
   }
 
   @Test
@@ -24,7 +24,7 @@ public class ClimberTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      climberCtrl.periodic();
+      climber.periodic();
     }
     assertTrue(
         climberCtrl.getClimberState() == ClimberState.RETRACTED

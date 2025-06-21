@@ -1,20 +1,20 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import frc.robot.subsystems.moon.Moon;
 import frc.robot.subsystems.moon.MoonConstants.MoonTarget;
 import frc.robot.subsystems.moon.MoonCtrl;
 import frc.robot.subsystems.moon.MoonCtrlSystem;
-import frc.robot.subsystems.moon.MoonIOSim;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class MoonTests {
+  private Moon moon;
   private MoonCtrl moonCtrl;
-  private MoonIOSim moonSim;
 
   @BeforeEach
   void setup() {
-    moonSim = new MoonIOSim();
-    moonCtrl = new MoonCtrlSystem(moonSim);
+    moonCtrl = new MoonCtrlSystem();
+    moon = new Moon(moonCtrl);
   }
 
   @Test
@@ -25,7 +25,7 @@ public class MoonTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      moonCtrl.periodic();
+      moon.periodic();
     }
 
     assertTrue(moonCtrl.atTargetPosition());

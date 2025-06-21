@@ -9,7 +9,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ChuteCtrlSystem extends ChuteCtrlBase implements ChuteCtrl {
-
   private enum State {
     UNKNOWN,
     MOVING,
@@ -26,6 +25,12 @@ public class ChuteCtrlSystem extends ChuteCtrlBase implements ChuteCtrl {
   private static final LoggedTunableNumber pGain = new LoggedTunableNumber("Chute/P", kP);
   private static final LoggedTunableNumber zeroingVolts =
       new LoggedTunableNumber("Chute/ZeroingVolts", kZeroingVoltage);
+
+  @Override
+  protected void init() {
+    state = State.UNKNOWN;
+    desiredState = State.RETRACTED;
+  }
 
   public void retract() {
     desiredState = State.RETRACTED;
@@ -87,11 +92,5 @@ public class ChuteCtrlSystem extends ChuteCtrlBase implements ChuteCtrl {
 
   public double getPosition() {
     return inputs.positionInches;
-  }
-
-  @Override
-  protected void init() {
-    state = State.UNKNOWN;
-    desiredState = State.RETRACTED;
   }
 }

@@ -4,23 +4,19 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
-public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
+public class ElevatorCtrlManual extends ElevatorCtrlBase implements ElevatorCtrl {
   private LoggedTunableNumber maxVoltage =
       new LoggedTunableNumber("Elevator/MaxVoltage", kMaxVoltage);
   private LoggedTunableNumber pGain = new LoggedTunableNumber("Elevator/PGain", kP);
-  private final ElevatorIO io;
-  private final ElevatorIOInputsAutoLogged inputs;
-  private final PIDController controller;
+
+  private final PIDController controller = new PIDController(pGain.get(), kI, kD);
   private double targetInches;
 
-  public ElevatorCtrlManual(ElevatorIO io) {
-    this.io = io;
-    inputs = new ElevatorIOInputsAutoLogged();
-    controller = new PIDController(pGain.get(), kI, kD);
+  @Override
+  protected void init() {
     targetInches = 0.0;
   }
 

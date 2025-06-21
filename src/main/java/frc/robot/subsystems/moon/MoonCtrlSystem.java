@@ -2,19 +2,14 @@ package frc.robot.subsystems.moon;
 
 import static frc.robot.subsystems.moon.MoonConstants.*;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.moon.MoonConstants.MoonTarget;
 import org.littletonrobotics.junction.Logger;
 
-public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
-  private final MoonIO io;
-  private final MoonIOInputsAutoLogged inputs;
+public class MoonCtrlSystem extends MoonCtrlBase implements MoonCtrl {
   private boolean isCoralMode;
   private double targetRadians;
 
-  public MoonCtrlSystem(MoonIO io) {
-    this.io = io;
-    inputs = new MoonIOInputsAutoLogged();
+  protected void init() {
     targetRadians = 0.0;
     isCoralMode = true;
     Logger.recordOutput("Moon/TargetPosition", "Unknown");

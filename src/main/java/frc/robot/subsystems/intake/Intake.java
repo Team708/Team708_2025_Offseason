@@ -10,7 +10,9 @@ public class Intake extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    intakeCtrl.periodic();
+  }
 
   public IntakeCtrlSystem getIntakeCtrl() {
     return this.intakeCtrl;

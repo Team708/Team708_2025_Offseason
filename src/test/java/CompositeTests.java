@@ -1,9 +1,7 @@
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.moon.Moon;
 import frc.robot.subsystems.moon.MoonCtrlSystem;
-import frc.robot.subsystems.moon.MoonIOSim;
 import org.junit.jupiter.api.BeforeEach;
 
 public class CompositeTests {
@@ -12,7 +10,7 @@ public class CompositeTests {
 
   @BeforeEach
   void setup() {
-    elevator = new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
-    moon = new Moon(new MoonCtrlSystem(new MoonIOSim()));
+    elevator = new Elevator(new ElevatorCtrlSystem());
+    moon = new Moon(new MoonCtrlSystem());
   }
 }

@@ -6,25 +6,21 @@ import static frc.robot.subsystems.climber.ClimberConstants.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.climber.ClimberConstants.ClimberState;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
-public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
-  private final ClimberIO io;
-  private final ClimberIOInputsAutoLogged inputs;
+public class ClimberCtrlSystem extends ClimberCtrlBase implements ClimberCtrl {
   private static final LoggedTunableNumber zeroingVolts =
       new LoggedTunableNumber("Climber/ZeroingVolts", kZeroingVoltage);
-  private final PIDController controller;
+  private final PIDController controller = new PIDController(kP, kI, kD);
+  ;
   private ClimberState currentState;
   private ClimberState desiredState;
 
-  public ClimberCtrlSystem(ClimberIO io) {
-    this.io = io;
-    inputs = new ClimberIOInputsAutoLogged();
-    controller = new PIDController(kP, kI, kD);
-    this.io.setServo(true);
+  @Override
+  protected void init() {
+    io.setServo(true);
     currentState = ClimberState.UNKNOWN;
     desiredState = ClimberState.RETRACTED;
   }

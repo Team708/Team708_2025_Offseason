@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.Mode;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
@@ -28,41 +29,26 @@ import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
 import frc.robot.subsystems.chute.ChuteCtrlSystem;
-import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberCtrl;
 import frc.robot.subsystems.climber.ClimberCtrlManual;
 import frc.robot.subsystems.climber.ClimberCtrlSystem;
-import frc.robot.subsystems.climber.ClimberIOReal;
-import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
-import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorCtrl;
 import frc.robot.subsystems.elevator.ElevatorCtrlManual;
 import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
-import frc.robot.subsystems.elevator.ElevatorIOReal;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeCtrlSystem;
-import frc.robot.subsystems.intake.IntakeIOReal;
-import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.moon.Moon;
-import frc.robot.subsystems.moon.MoonCtrl;
 import frc.robot.subsystems.moon.MoonCtrlManual;
 import frc.robot.subsystems.moon.MoonCtrlSystem;
-import frc.robot.subsystems.moon.MoonIOReal;
-import frc.robot.subsystems.moon.MoonIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
-import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -90,108 +76,43 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    switch (Constants.currentMode) {
-      case REAL:
-        // Real robot, instantiate hardware IO implementations
-        drive =
-            new Drive(
-                new GyroIOPigeon2(),
-                new ModuleIOSpark(0),
-                new ModuleIOSpark(1),
-                new ModuleIOSpark(2),
-                new ModuleIOSpark(3));
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
-                new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
-        chute =
-            Constants.chuteManualMode
-                ? new Chute(new ChuteCtrlManual())
-                : new Chute(new ChuteCtrlSystem());
-        elevator =
-            Constants.elevatorManualMode
-                ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
-                : new Elevator(new ElevatorCtrlSystem(new ElevatorIOReal()));
-        climber =
-            Constants.climberManualMode
-                ? new Climber(new ClimberCtrlManual(new ClimberIOReal()))
-                : new Climber(new ClimberCtrlSystem(new ClimberIOReal()));
-        moon =
-            Constants.moonManualMode
-                ? new Moon(new MoonCtrlManual(new MoonIOReal()))
-                : new Moon(new MoonCtrlSystem(new MoonIOReal()));
-        intake = new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
-
-        break;
-
-      case SIM:
-        // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim());
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(
-                    VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
-                new VisionIOPhotonVisionSim(
-                    VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
-        chute =
-            Constants.chuteManualMode
-                ? new Chute(new ChuteCtrlManual())
-                : new Chute(new ChuteCtrlSystem());
-        elevator =
-            Constants.elevatorManualMode
-                ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
-                : new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
-        climber =
-            Constants.climberManualMode
-                ? new Climber(new ClimberCtrlManual(new ClimberIOSim()))
-                : new Climber(new ClimberCtrlSystem(new ClimberIOSim()));
-        moon =
-            Constants.moonManualMode
-                ? new Moon(new MoonCtrlManual(new MoonIOSim()))
-                : new Moon(new MoonCtrlSystem(new MoonIOSim()));
-        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
-        break;
-      default:
-        // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        chute =
-            new Chute(
-                new ChuteCtrl() {
-                  public void periodic() {}
-                });
-        elevator =
-            new Elevator(
-                new ElevatorCtrl() {
-                  public void periodic() {}
-                });
-        climber =
-            new Climber(
-                new ClimberCtrl() {
-                  public void periodic() {}
-                });
-        moon =
-            new Moon(
-                new MoonCtrl() {
-                  public void periodic() {}
-                });
-        intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));
-        break;
+    if (Constants.currentMode == Mode.REAL) {
+      drive =
+          new Drive(
+              new GyroIOPigeon2(),
+              new ModuleIOSpark(0),
+              new ModuleIOSpark(1),
+              new ModuleIOSpark(2),
+              new ModuleIOSpark(3));
+    } else {
+      drive =
+          new Drive(
+              new GyroIO() {},
+              new ModuleIOSim(),
+              new ModuleIOSim(),
+              new ModuleIOSim(),
+              new ModuleIOSim());
     }
+    vision =
+        new Vision(
+            drive::addVisionMeasurement,
+            new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
+            new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
+    chute =
+        Constants.chuteManualMode
+            ? new Chute(new ChuteCtrlManual())
+            : new Chute(new ChuteCtrlSystem());
+    elevator =
+        Constants.elevatorManualMode
+            ? new Elevator(new ElevatorCtrlManual())
+            : new Elevator(new ElevatorCtrlSystem());
+    climber =
+        Constants.climberManualMode
+            ? new Climber(new ClimberCtrlManual())
+            : new Climber(new ClimberCtrlSystem());
+    moon =
+        Constants.moonManualMode ? new Moon(new MoonCtrlManual()) : new Moon(new MoonCtrlSystem());
+    intake = new Intake(new IntakeCtrlSystem());
 
     // fSet up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

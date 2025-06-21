@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.chute.Chute;
-import frc.robot.subsystems.chute.IChuteCtrl;
+import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 
@@ -16,7 +16,7 @@ public class ChuteCommands {
   public static Command manualControl(Chute chute, DoubleSupplier joystickValue) {
     return Commands.run(
         () -> {
-          IChuteCtrl control = chute.getChuteCtrl();
+          ChuteCtrl control = chute.getChuteCtrl();
           Double voltage = joystickValue.getAsDouble() * manualVolts.getAsDouble();
           control.setVoltage(voltage);
         },
@@ -26,7 +26,7 @@ public class ChuteCommands {
   public static Command extend(Chute chute) {
     return Commands.run(
             () -> {
-              IChuteCtrl control = chute.getChuteCtrl();
+              ChuteCtrl control = chute.getChuteCtrl();
               control.extend();
             },
             chute)
@@ -37,7 +37,7 @@ public class ChuteCommands {
   public static Command retract(Chute chute) {
     return Commands.run(
             () -> {
-              IChuteCtrl control = chute.getChuteCtrl();
+              ChuteCtrl control = chute.getChuteCtrl();
               control.retract();
             },
             chute)
