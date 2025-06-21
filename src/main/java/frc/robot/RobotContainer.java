@@ -26,11 +26,9 @@ import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
-import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
 import frc.robot.subsystems.chute.ChuteCtrlSystem;
-import frc.robot.subsystems.chute.ChuteIOReal;
-import frc.robot.subsystems.chute.ChuteIOSim;
+import frc.robot.subsystems.chute.IChuteCtrl;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberCtrl;
 import frc.robot.subsystems.climber.ClimberCtrlManual;
@@ -109,8 +107,8 @@ public class RobotContainer {
                 new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
         chute =
             Constants.chuteManualMode
-                ? new Chute(new ChuteCtrlManual(new ChuteIOReal()))
-                : new Chute(new ChuteCtrlSystem(new ChuteIOReal()));
+                ? new Chute(new ChuteCtrlManual())
+                : new Chute(new ChuteCtrlSystem());
         elevator =
             Constants.elevatorManualMode
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
@@ -145,8 +143,8 @@ public class RobotContainer {
                     VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
         chute =
             Constants.chuteManualMode
-                ? new Chute(new ChuteCtrlManual(new ChuteIOSim()))
-                : new Chute(new ChuteCtrlSystem(new ChuteIOSim()));
+                ? new Chute(new ChuteCtrlManual())
+                : new Chute(new ChuteCtrlSystem());
         elevator =
             Constants.elevatorManualMode
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
@@ -173,7 +171,7 @@ public class RobotContainer {
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         chute =
             new Chute(
-                new ChuteCtrl() {
+                new IChuteCtrl() {
                   public void periodic() {}
                 });
         elevator =

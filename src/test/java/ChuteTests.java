@@ -1,19 +1,21 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrlSystem;
 import frc.robot.subsystems.chute.ChuteIOSim;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ChuteTests {
+  private Chute chute;
   private ChuteCtrlSystem chuteCtrl;
   private ChuteIOSim chuteSim;
 
   @BeforeEach
   void setup() {
-    chuteSim = new ChuteIOSim();
-    chuteCtrl = new ChuteCtrlSystem(chuteSim);
+    chuteCtrl = new ChuteCtrlSystem();
+    chute = new Chute(chuteCtrl);
   }
 
   @Test
@@ -24,7 +26,7 @@ public class ChuteTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      chuteCtrl.periodic();
+      chute.periodic();
     }
 
     assertTrue(chuteCtrl.isExtended());
@@ -38,7 +40,7 @@ public class ChuteTests {
     int iterations = (int) (totalTime / dt);
 
     for (int i = 0; i < iterations; i++) {
-      chuteCtrl.periodic();
+      chute.periodic();
     }
 
     if (!chuteCtrl.isExtended()) {

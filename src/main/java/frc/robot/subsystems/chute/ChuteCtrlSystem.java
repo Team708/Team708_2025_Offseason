@@ -4,12 +4,11 @@ import static frc.robot.subsystems.chute.ChuteConstants.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
+public class ChuteCtrlSystem extends ChuteCtrlBase implements IChuteCtrl {
 
   private enum State {
     UNKNOWN,
@@ -20,24 +19,13 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
 
   @AutoLogOutput private State state;
   @AutoLogOutput private State desiredState;
-  private final ChuteIO io;
-  private final ChuteIOInputsAutoLogged inputs;
-  private final PIDController controller;
-  @AutoLogOutput private boolean manualOverride;
-  @AutoLogOutput private double manualVoltage;
+  private final PIDController controller = new PIDController(pGain.get(), kI, kD);
+  ;
   private static final LoggedTunableNumber maxVolts =
       new LoggedTunableNumber("Chute/Volts", kMaxVoltage);
   private static final LoggedTunableNumber pGain = new LoggedTunableNumber("Chute/P", kP);
   private static final LoggedTunableNumber zeroingVolts =
       new LoggedTunableNumber("Chute/ZeroingVolts", kZeroingVoltage);
-
-  public ChuteCtrlSystem(ChuteIO io) {
-    this.io = io;
-    inputs = new ChuteIOInputsAutoLogged();
-    controller = new PIDController(pGain.get(), kI, kD);
-    state = State.UNKNOWN;
-    desiredState = State.RETRACTED;
-  }
 
   public void retract() {
     desiredState = State.RETRACTED;
@@ -47,7 +35,6 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
     desiredState = State.EXTENDED;
   }
 
-  @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Chute", inputs);
@@ -100,5 +87,11 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
 
   public double getPosition() {
     return inputs.positionInches;
+  }
+
+  @Override
+  protected void init() {
+    state = State.UNKNOWN;
+    desiredState = State.RETRACTED;
   }
 }

@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.Constants;
 import frc.robot.util.UnitUtil;
 
-public class ChuteIOSim implements ChuteIO {
+public class ChuteIOSim implements IChuteIO {
   private final ElevatorSim chuteSim;
   private double appliedVolts;
 
