@@ -1,27 +1,28 @@
 package frc.robot.subsystems.chute;
 
-public class Chute extends TunableSubsystemBase {
-  private IChuteCtrl chuteCtrl;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.LoggedTunableBoolean;
 
-  public Chute(IChuteCtrl chuteCtrl) {
+public class Chute extends SubsystemBase {
+  LoggedTunableBoolean manualMode = new LoggedTunableBoolean("Chute/ManualMode", false);
+  private ChuteCtrl chuteCtrl;
+
+  public Chute(ChuteCtrl chuteCtrl) {
     this.chuteCtrl = chuteCtrl;
   }
 
   @Override
-  public void periodicTunable(boolean manualMode) {
-    if (manualMode) {
-      if (chuteCtrl instanceof ChuteCtrlSystem) {
-        chuteCtrl = new ChuteCtrlManual();
-      }
-    } else {
-      if (chuteCtrl instanceof ChuteCtrlManual) {
-        chuteCtrl = new ChuteCtrlSystem();
-      }
+  public void periodic() {
+    if (manualMode.get() && chuteCtrl instanceof ChuteCtrlSystem) {
+      chuteCtrl = new ChuteCtrlManual();
+    } else if (chuteCtrl instanceof ChuteCtrlManual) {
+      chuteCtrl = new ChuteCtrlSystem();
     }
+
     chuteCtrl.periodic();
   }
 
-  public IChuteCtrl getChuteCtrl() {
+  public ChuteCtrl getChuteCtrl() {
     return this.chuteCtrl;
   }
 }

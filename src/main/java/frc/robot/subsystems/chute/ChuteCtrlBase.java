@@ -5,7 +5,7 @@ import frc.robot.Constants.Mode;
 
 public abstract class ChuteCtrlBase {
   protected final ChuteIOInputsAutoLogged inputs;
-  protected final IChuteIO io;
+  protected final ChuteIO io;
 
   public ChuteCtrlBase() {
     this.io = Constants.currentMode == Mode.REAL ? new ChuteIOReal() : new ChuteIOSim();
@@ -13,7 +13,7 @@ public abstract class ChuteCtrlBase {
     init();
   }
 
-  public ChuteCtrlBase(IChuteIO io) {
+  public ChuteCtrlBase(ChuteIO io) {
     this.io = io;
     inputs = new ChuteIOInputsAutoLogged();
     init();

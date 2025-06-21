@@ -28,7 +28,7 @@ import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
 import frc.robot.subsystems.chute.ChuteCtrlManual;
 import frc.robot.subsystems.chute.ChuteCtrlSystem;
-import frc.robot.subsystems.chute.IChuteCtrl;
+import frc.robot.subsystems.chute.ChuteCtrl;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberCtrl;
 import frc.robot.subsystems.climber.ClimberCtrlManual;
@@ -171,7 +171,7 @@ public class RobotContainer {
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         chute =
             new Chute(
-                new IChuteCtrl() {
+                new ChuteCtrl() {
                   public void periodic() {}
                 });
         elevator =

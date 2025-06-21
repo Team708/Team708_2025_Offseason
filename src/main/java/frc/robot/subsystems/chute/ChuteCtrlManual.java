@@ -2,7 +2,7 @@ package frc.robot.subsystems.chute;
 
 import org.littletonrobotics.junction.Logger;
 
-public class ChuteCtrlManual extends ChuteCtrlBase implements IChuteCtrl {
+public class ChuteCtrlManual extends ChuteCtrlBase implements ChuteCtrl {
   @Override
   public void periodic() {
     io.updateInputs(inputs);

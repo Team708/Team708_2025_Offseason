@@ -1,6 +1,6 @@
 package frc.robot.subsystems.chute;
 
-public interface IChuteCtrl {
+public interface ChuteCtrl {
   public void periodic();
 
   public default void extend() {}

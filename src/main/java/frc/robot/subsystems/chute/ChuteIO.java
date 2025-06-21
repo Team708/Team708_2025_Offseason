@@ -2,7 +2,7 @@ package frc.robot.subsystems.chute;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface IChuteIO {
+public interface ChuteIO {
   @AutoLog
   public static class ChuteIOInputs {
     public boolean connected = false;

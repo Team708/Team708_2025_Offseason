@@ -8,7 +8,7 @@ import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ChuteCtrlSystem extends ChuteCtrlBase implements IChuteCtrl {
+public class ChuteCtrlSystem extends ChuteCtrlBase implements ChuteCtrl {
 
   private enum State {
     UNKNOWN,
