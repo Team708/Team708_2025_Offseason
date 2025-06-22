@@ -2,23 +2,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorTarget;
-import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ElevatorTests {
   private Elevator elevator;
-  private ElevatorCtrlSystem elevatorCtrl;
 
   @BeforeEach
   void setup() {
-    elevatorCtrl = new ElevatorCtrlSystem();
-    elevator = new Elevator(elevatorCtrl);
+    elevator = new Elevator();
   }
 
   @Test
   void testMoveToPosition() {
-    elevatorCtrl.setTargetPosition(ElevatorTarget.CORAL_L4);
+    elevator.getElevatorCtrl().setTargetPosition(ElevatorTarget.CORAL_L4);
     double totalTime = 10.0; // seconds
     double dt = 0.02; // 20ms loop
     int iterations = (int) (totalTime / dt);
@@ -27,6 +24,6 @@ public class ElevatorTests {
       elevator.periodic();
     }
 
-    assertTrue(elevatorCtrl.atTargetPosition());
+    assertTrue(elevator.getElevatorCtrl().atTargetPosition());
   }
 }

@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
   private IntakeCtrlSystem intakeCtrl;
 
-  public Intake(IntakeCtrlSystem intakeCtrl) {
-    this.intakeCtrl = intakeCtrl;
+  public Intake() {
+    this.intakeCtrl = new IntakeCtrlSystem();
   }
 
   @Override

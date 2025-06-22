@@ -2,24 +2,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import frc.robot.subsystems.chute.Chute;
-import frc.robot.subsystems.chute.ChuteCtrlSystem;
-import frc.robot.subsystems.chute.ChuteIOSim;
+import frc.robot.subsystems.chute.ChuteCtrl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ChuteTests {
   private Chute chute;
-  private ChuteCtrlSystem chuteCtrl;
-  private ChuteIOSim chuteSim;
 
   @BeforeEach
   void setup() {
-    chuteCtrl = new ChuteCtrlSystem();
-    chute = new Chute(chuteCtrl);
+    chute = new Chute();
   }
 
   @Test
   void testExtend() {
+    ChuteCtrl chuteCtrl = chute.getChuteCtrl();
     chuteCtrl.extend();
     double totalTime = 10.0; // seconds
     double dt = 0.02; // 20ms loop
@@ -34,6 +31,7 @@ public class ChuteTests {
 
   @Test
   void testRetract() {
+    ChuteCtrl chuteCtrl = chute.getChuteCtrl();
     chuteCtrl.extend();
     double totalTime = 10.0; // seconds
     double dt = 0.02; // 20ms loop

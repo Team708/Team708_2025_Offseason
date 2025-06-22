@@ -7,8 +7,8 @@ public class Elevator extends SubsystemBase {
   private LoggedTunableBoolean manualMode = new LoggedTunableBoolean("Elevator/ManualMode", false);
   private ElevatorCtrl elevatorCtrl;
 
-  public Elevator(ElevatorCtrl elevatorCtrl) {
-    this.elevatorCtrl = elevatorCtrl;
+  public Elevator() {
+    elevatorCtrl = manualMode.get() ? new ElevatorCtrlManual() : new ElevatorCtrlSystem();
   }
 
   @Override

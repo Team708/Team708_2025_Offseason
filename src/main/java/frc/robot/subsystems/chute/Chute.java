@@ -7,8 +7,8 @@ public class Chute extends SubsystemBase {
   private LoggedTunableBoolean manualMode = new LoggedTunableBoolean("Chute/ManualMode", false);
   private ChuteCtrl chuteCtrl;
 
-  public Chute(ChuteCtrl chuteCtrl) {
-    this.chuteCtrl = chuteCtrl;
+  public Chute() {
+    chuteCtrl = manualMode.get() ? new ChuteCtrlManual() : new ChuteCtrlSystem();
   }
 
   @Override

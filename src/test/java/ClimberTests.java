@@ -3,22 +3,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberConstants.ClimberState;
 import frc.robot.subsystems.climber.ClimberCtrl;
-import frc.robot.subsystems.climber.ClimberCtrlSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ClimberTests {
   private Climber climber;
-  private ClimberCtrl climberCtrl;
 
   @BeforeEach
   void setup() {
-    climberCtrl = new ClimberCtrlSystem();
-    climber = new Climber(climberCtrl);
+    climber = new Climber();
   }
 
   @Test
   void testInitialState() {
+    ClimberCtrl climberCtrl = climber.getClimberCtrl();
     double totalTime = 1.0; // seconds
     double dt = 0.02; // 20ms loop
     int iterations = (int) (totalTime / dt);
@@ -33,6 +31,7 @@ public class ClimberTests {
 
   @Test
   void testDeploy() {
+    ClimberCtrl climberCtrl = climber.getClimberCtrl();
     double totalTime = 1.0; // seconds
     double dt = 0.02; // 20ms loop
     int iterations = (int) (totalTime / dt);

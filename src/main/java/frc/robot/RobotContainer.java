@@ -27,11 +27,7 @@ import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MoonCommands;
 import frc.robot.subsystems.chute.Chute;
-import frc.robot.subsystems.chute.ChuteCtrlManual;
-import frc.robot.subsystems.chute.ChuteCtrlSystem;
 import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberCtrlManual;
-import frc.robot.subsystems.climber.ClimberCtrlSystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.GyroIO;
@@ -39,13 +35,8 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorCtrlManual;
-import frc.robot.subsystems.elevator.ElevatorCtrlSystem;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeCtrlSystem;
 import frc.robot.subsystems.moon.Moon;
-import frc.robot.subsystems.moon.MoonCtrlManual;
-import frc.robot.subsystems.moon.MoonCtrlSystem;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -98,21 +89,11 @@ public class RobotContainer {
             drive::addVisionMeasurement,
             new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
             new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
-    chute =
-        Constants.chuteManualMode
-            ? new Chute(new ChuteCtrlManual())
-            : new Chute(new ChuteCtrlSystem());
-    elevator =
-        Constants.elevatorManualMode
-            ? new Elevator(new ElevatorCtrlManual())
-            : new Elevator(new ElevatorCtrlSystem());
-    climber =
-        Constants.climberManualMode
-            ? new Climber(new ClimberCtrlManual())
-            : new Climber(new ClimberCtrlSystem());
-    moon =
-        Constants.moonManualMode ? new Moon(new MoonCtrlManual()) : new Moon(new MoonCtrlSystem());
-    intake = new Intake(new IntakeCtrlSystem());
+    chute = new Chute();
+    elevator = new Elevator();
+    climber = new Climber();
+    moon = new Moon();
+    intake = new Intake();
 
     // fSet up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

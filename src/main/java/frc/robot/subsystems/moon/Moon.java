@@ -7,15 +7,15 @@ public class Moon extends SubsystemBase {
   private LoggedTunableBoolean manualMode = new LoggedTunableBoolean("Moon/ManualMode", false);
   private MoonCtrl moonCtrl;
 
-  public Moon(MoonCtrl moonCtrl) {
-    this.moonCtrl = moonCtrl;
+  public Moon() {
+    moonCtrl = manualMode.get() ? new MoonCtrlManual() : new MoonCtrlSystem();
   }
 
   @Override
   public void periodic() {
     if (manualMode.get() && moonCtrl instanceof MoonCtrlSystem) {
       moonCtrl = new MoonCtrlManual();
-    } else if (moonCtrl instanceof MoonCtrlManual) {
+    } else if (!manualMode.get() && moonCtrl instanceof MoonCtrlManual) {
       moonCtrl = new MoonCtrlSystem();
     }
     moonCtrl.periodic();

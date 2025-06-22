@@ -7,8 +7,8 @@ public class Climber extends SubsystemBase {
   private LoggedTunableBoolean manualMode = new LoggedTunableBoolean("Climber/ManualMode", false);
   private ClimberCtrl climberCtrl;
 
-  public Climber(ClimberCtrl climberCtrl) {
-    this.climberCtrl = climberCtrl;
+  public Climber() {
+    climberCtrl = manualMode.get() ? new ClimberCtrlManual() : new ClimberCtrlSystem();
   }
 
   @Override
