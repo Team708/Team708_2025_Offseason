@@ -40,6 +40,7 @@ import frc.robot.subsystems.moon.Moon;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -75,6 +76,11 @@ public class RobotContainer {
               new ModuleIOSpark(1),
               new ModuleIOSpark(2),
               new ModuleIOSpark(3));
+      vision =
+          new Vision(
+              drive::addVisionMeasurement,
+              new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
+              new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
     } else {
       drive =
           new Drive(
@@ -83,12 +89,14 @@ public class RobotContainer {
               new ModuleIOSim(),
               new ModuleIOSim(),
               new ModuleIOSim());
+      vision =
+          new Vision(
+              drive::addVisionMeasurement,
+              new VisionIOPhotonVisionSim(
+                  VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
+              new VisionIOPhotonVisionSim(
+                  VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
     }
-    vision =
-        new Vision(
-            drive::addVisionMeasurement,
-            new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
-            new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
     chute = new Chute();
     elevator = new Elevator();
     climber = new Climber();
