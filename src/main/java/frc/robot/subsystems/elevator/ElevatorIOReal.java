@@ -31,8 +31,8 @@ public class ElevatorIOReal implements ElevatorIO {
   private boolean isFollowerConnected;
 
   public ElevatorIOReal() {
-    motorLeader = new SparkFlex(kCanIDMotor1, MotorType.kBrushless);
-    motorFollower = new SparkFlex(kCanIDMotor2, MotorType.kBrushless);
+    motorLeader = new SparkFlex(CAN_ID_MOTOR_1, MotorType.kBrushless);
+    motorFollower = new SparkFlex(CAN_ID_MOTOR_2, MotorType.kBrushless);
     encoder = motorLeader.getEncoder();
 
     // Leader
@@ -40,21 +40,21 @@ public class ElevatorIOReal implements ElevatorIO {
     leaderConfig
         .idleMode(IdleMode.kBrake)
         .inverted(true)
-        .smartCurrentLimit(kCurrentLimit)
+        .smartCurrentLimit(CURRENT_LIMIT)
         .voltageCompensation(12.0);
     leaderConfig
         .encoder
-        .positionConversionFactor(kPositionFactor)
-        .velocityConversionFactor(kVelocityFactor)
+        .positionConversionFactor(POSITION_FACTOR)
+        .velocityConversionFactor(VELOCITY_FACTOR)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
     leaderConfig
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .p(kP)
-        .d(kD)
-        .i(kI)
-        .outputRange(kMinClosedLoopOutput, kMaxClosedLoopOutput);
+        .p(KP)
+        .d(KD)
+        .i(KI)
+        .outputRange(MIN_CLOSED_LOOP_OUTPUT, MAX_CLOSED_LOOP_OUTPUT);
     leaderConfig
         .signals
         .primaryEncoderPositionAlwaysOn(true)
@@ -75,7 +75,7 @@ public class ElevatorIOReal implements ElevatorIO {
     // Follower
     var followerConfig = new SparkFlexConfig();
     followerConfig.inverted(false);
-    followerConfig.follow(kCanIDMotor1, true);
+    followerConfig.follow(CAN_ID_MOTOR_1, true);
     tryUntilOk(
         motorFollower,
         5,
@@ -86,7 +86,7 @@ public class ElevatorIOReal implements ElevatorIO {
     reverseLimitSwitch = motorLeader.getReverseLimitSwitch();
     controller = motorLeader.getClosedLoopController();
     backgroundThread = new Notifier(this::updateBackground);
-    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+    backgroundThread.startPeriodic(Constants.BACKGROUND_THREAD_PERIOD);
   }
 
   private void updateBackground() {

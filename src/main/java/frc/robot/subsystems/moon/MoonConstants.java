@@ -1,23 +1,23 @@
 package frc.robot.subsystems.moon;
 
 public class MoonConstants {
-  public static final double kMaxVoltage = 4.0;
-  public static final double kMinClosedLoopOutput = -1 * (kMaxVoltage / 12);
-  public static final double kMaxClosedLoopOutput = (kMaxVoltage / 12);
-  public static final double kP = 2.0;
-  public static final double kI = 0.0;
-  public static final double kD = 0.0;
-  public static final double kMotorReduction = 4.0;
-  public static final double kJKgMetersSquared = 0.025;
-  public static final double kSimUpdateInterval = 0.02;
-  public static final double kManualAdjustRadians = (2 * Math.PI) / 50;
-  public static final double kMaxRadians = 2 * Math.PI;
-  public static final int kCanID = 31;
-  public static final int kCurrentLimit = 80;
-  public static final double kEncoderPositionFactor = 0.0815;
-  public static final double kEncoderVelocityFactor = kEncoderPositionFactor / 60.0;
-  public static final double kDeadband = 0.1;
-  public static final double kZeroingVoltage = 2.0;
+  public static final double MAX_VOLTAGE = 4.0;
+  public static final double MIN_CLOSED_LOOP_OUTPUT = -1 * (MAX_VOLTAGE / 12);
+  public static final double MAX_CLOSED_LOOP_OUTPUT = (MAX_VOLTAGE / 12);
+  public static final double KP = 2.0;
+  public static final double KI = 0.0;
+  public static final double KD = 0.0;
+  public static final double MOTOR_REDUCTION = 4.0;
+  public static final double J_KG_METERS_SQUARED = 0.025;
+  public static final double SIM_UPDATE_INTERVAL = 0.02;
+  public static final double MANUAL_ADJUST_RADIANS = (2 * Math.PI) / 50;
+  public static final double MAX_RADIANS = 2 * Math.PI;
+  public static final int CAN_ID = 31;
+  public static final int CURRENT_LIMIT = 80;
+  public static final double ENCODER_POSITION_FACTOR = 0.0815;
+  public static final double ENCODER_VELOCITY_FACTOR = ENCODER_POSITION_FACTOR / 60.0;
+  public static final double DEADBAND = 0.1;
+  public static final double ZEROING_VOLTAGE = 2.0;
 
   public enum MoonTarget {
     CORAL_LOW(Math.toRadians(0)),

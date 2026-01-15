@@ -1,7 +1,7 @@
 package frc.robot.subsystems.climber;
 
-import static frc.robot.subsystems.chute.ChuteConstants.kI;
-import static frc.robot.subsystems.chute.ChuteConstants.kP;
+import static frc.robot.subsystems.chute.ChuteConstants.KI;
+import static frc.robot.subsystems.chute.ChuteConstants.KP;
 import static frc.robot.subsystems.climber.ClimberConstants.*;
 
 import edu.wpi.first.math.MathUtil;
@@ -15,7 +15,7 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
   private final ClimberIO io;
   private final ClimberIOInputsAutoLogged inputs;
   private static final LoggedTunableNumber zeroingVolts =
-      new LoggedTunableNumber("Climber/ZeroingVolts", kZeroingVoltage);
+      new LoggedTunableNumber("Climber/ZeroingVolts", ZEROING_VOLTAGE);
   private final PIDController controller;
   private ClimberState currentState;
   private ClimberState desiredState;
@@ -23,7 +23,7 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
   public ClimberCtrlSystem(ClimberIO io) {
     this.io = io;
     inputs = new ClimberIOInputsAutoLogged();
-    controller = new PIDController(kP, kI, kD);
+    controller = new PIDController(KP, KI, KD);
     this.io.setServo(true);
     currentState = ClimberState.UNKNOWN;
     desiredState = ClimberState.RETRACTED;
@@ -68,17 +68,17 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
         return;
       case RETRACTED:
         if (desiredState == ClimberState.EXTENDED) {
-          pidSetPoint(kExtendedRadians);
+          pidSetPoint(EXTENDED_RADIANS);
         } else {
           pidSetPoint(-1.0);
         }
         return;
       case EXTENDED:
-        pidSetPoint(kExtendedRadians);
+        pidSetPoint(EXTENDED_RADIANS);
         return;
       case ENGAGED:
         if (desiredState == ClimberState.ENGAGED) {
-          pidSetPoint(kExtendedRadians);
+          pidSetPoint(EXTENDED_RADIANS);
         } else if (desiredState == ClimberState.CLIMBED) {
           pidSetPoint(-1.0);
         }
@@ -92,7 +92,7 @@ public class ClimberCtrlSystem extends SubsystemBase implements ClimberCtrl {
 
   private void pidSetPoint(double targetSetpoint) {
     double outputVolts = controller.calculate(inputs.positionRadians, targetSetpoint);
-    io.setVoltage(MathUtil.clamp(outputVolts, -kMaxVoltage, kMaxVoltage));
+    io.setVoltage(MathUtil.clamp(outputVolts, -MAX_VOLTAGE, MAX_VOLTAGE));
   }
 
   @Override

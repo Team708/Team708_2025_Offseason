@@ -9,8 +9,8 @@ import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class MoonCtrlManual extends SubsystemBase implements MoonCtrl {
-  private LoggedTunableNumber maxVoltage = new LoggedTunableNumber("Moon/MaxVoltage", kMaxVoltage);
-  private LoggedTunableNumber pGain = new LoggedTunableNumber("Moon/PGain", kP);
+  private LoggedTunableNumber maxVoltage = new LoggedTunableNumber("Moon/MaxVoltage", MAX_VOLTAGE);
+  private LoggedTunableNumber pGain = new LoggedTunableNumber("Moon/PGain", KP);
   private final MoonIO io;
   private final MoonIOInputsAutoLogged inputs;
   private final PIDController controller;
@@ -19,7 +19,7 @@ public class MoonCtrlManual extends SubsystemBase implements MoonCtrl {
   public MoonCtrlManual(MoonIO io) {
     this.io = io;
     inputs = new MoonIOInputsAutoLogged();
-    controller = new PIDController(pGain.get(), kI, kD);
+    controller = new PIDController(pGain.get(), KI, KD);
     targetRadians = 0.0;
   }
 
@@ -30,7 +30,7 @@ public class MoonCtrlManual extends SubsystemBase implements MoonCtrl {
 
     // PID change
     if (pGain.hasChanged(pGain.hashCode())) {
-      controller.setP(kP);
+      controller.setP(KP);
     }
 
     // Scale PID to voltage output
@@ -46,6 +46,6 @@ public class MoonCtrlManual extends SubsystemBase implements MoonCtrl {
 
   @Override
   public void manualAdjust(double radians) {
-    targetRadians = MathUtil.clamp(targetRadians + radians, 0, kMaxRadians);
+    targetRadians = MathUtil.clamp(targetRadians + radians, 0, MAX_RADIANS);
   }
 }

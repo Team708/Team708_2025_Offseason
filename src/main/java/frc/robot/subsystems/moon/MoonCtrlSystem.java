@@ -41,7 +41,7 @@ public class MoonCtrlSystem extends SubsystemBase implements MoonCtrl {
 
   @Override
   public boolean atTargetPosition() {
-    return Math.abs(inputs.positionRadians - targetRadians) <= kDeadband;
+    return Math.abs(inputs.positionRadians - targetRadians) <= DEADBAND;
   }
 
   @Override

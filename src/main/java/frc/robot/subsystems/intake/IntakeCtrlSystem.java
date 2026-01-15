@@ -18,7 +18,7 @@ public class IntakeCtrlSystem extends SubsystemBase {
   }
 
   private LoggedTunableNumber holdingVoltage =
-      new LoggedTunableNumber("Intake/HoldingVoltage", kHoldingVoltage);
+      new LoggedTunableNumber("Intake/HoldingVoltage", HOLDING_VOLTAGE);
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs;
   public PIDController controller;
@@ -32,7 +32,7 @@ public class IntakeCtrlSystem extends SubsystemBase {
     this.io = io;
     inputs = new IntakeIOInputsAutoLogged();
     mode = IntakeMode.STOP;
-    controller = new PIDController(kP, kI, kD);
+    controller = new PIDController(KP, KI, KD);
     holdingEnabled = false;
     targetHoldPosRad = 0.0;
     rawPID = 0.0;
@@ -51,16 +51,16 @@ public class IntakeCtrlSystem extends SubsystemBase {
           io.setVoltage(0.0);
           break;
         case CORAL_INTAKE:
-          io.setVoltage(kCoralIntakeVoltage);
+          io.setVoltage(CORAL_INTAKE_VOLTAGE);
           break;
         case CORAL_OUTAKE:
-          io.setVoltage(kCoralOutakeVoltage);
+          io.setVoltage(CORAL_OUTTAKE_VOLTAGE);
           break;
         case ALGAE_INTAKE:
-          io.setVoltage(kAlgaeIntakeVoltage);
+          io.setVoltage(ALGAE_INTAKE_VOLTAGE);
           break;
         case ALGAE_OUTAKE:
-          io.setVoltage(kAlgaeOutakeVoltage);
+          io.setVoltage(ALGAE_OUTTAKE_VOLTAGE);
           break;
         default:
           io.setVoltage(0.0);

@@ -19,16 +19,17 @@ public class MoonIOSim implements MoonIO {
 
   public MoonIOSim() {
     linearSystem =
-        LinearSystemId.createDCMotorSystem(Constants.k1Vortex, kJKgMetersSquared, kMotorReduction);
-    moonSim = new DCMotorSim(linearSystem, Constants.k1Vortex);
-    controller = new PIDController(kP, kI, kD);
+        LinearSystemId.createDCMotorSystem(
+            Constants.K1_VORTEX, J_KG_METERS_SQUARED, MOTOR_REDUCTION);
+    moonSim = new DCMotorSim(linearSystem, Constants.K1_VORTEX);
+    controller = new PIDController(KP, KI, KD);
   }
 
   @Override
   public void updateInputs(MoonIOInputs inputs) {
     double setPoint = controller.calculate(inputs.positionRadians, inputs.targetRadians);
-    moonSim.setInputVoltage(MathUtil.clamp(setPoint, -kMaxVoltage, kMaxVoltage));
-    moonSim.update(kSimUpdateInterval);
+    moonSim.setInputVoltage(MathUtil.clamp(setPoint, -MAX_VOLTAGE, MAX_VOLTAGE));
+    moonSim.update(SIM_UPDATE_INTERVAL);
     inputs.connected = true;
     inputs.positionRadians = moonSim.getAngularPositionRad();
     inputs.positionDegrees = Math.toDegrees(inputs.positionRadians);
@@ -44,7 +45,7 @@ public class MoonIOSim implements MoonIO {
       inputs.reverseLimitReached = true;
     }
 
-    if (inputs.positionRadians >= kMaxRadians) {
+    if (inputs.positionRadians >= MAX_RADIANS) {
       inputs.forwardLimitReached = true;
     } else {
       inputs.forwardLimitReached = false;

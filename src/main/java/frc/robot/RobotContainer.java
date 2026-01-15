@@ -92,7 +92,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    switch (Constants.currentMode) {
+    switch (Constants.CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         drive =
@@ -105,22 +105,22 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
-                new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
+                new VisionIOLimelight(VisionConstants.CAMERA_0_NAME, drive::getRotation),
+                new VisionIOLimelight(VisionConstants.CAMERA_1_NAME, drive::getRotation));
         chute =
-            Constants.chuteManualMode
+            Constants.CHUTE_MANUAL_MODE
                 ? new Chute(new ChuteCtrlManual(new ChuteIOReal()))
                 : new Chute(new ChuteCtrlSystem(new ChuteIOReal()));
         elevator =
-            Constants.elevatorManualMode
+            Constants.ELEVATOR_MANUAL_MODE
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOReal()))
                 : new Elevator(new ElevatorCtrlSystem(new ElevatorIOReal()));
         climber =
-            Constants.climberManualMode
+            Constants.CLIMBER_MANUAL_MODE
                 ? new Climber(new ClimberCtrlManual(new ClimberIOReal()))
                 : new Climber(new ClimberCtrlSystem(new ClimberIOReal()));
         moon =
-            Constants.moonManualMode
+            Constants.MOON_MANUAL_MODE
                 ? new Moon(new MoonCtrlManual(new MoonIOReal()))
                 : new Moon(new MoonCtrlSystem(new MoonIOReal()));
         intake = new Intake(new IntakeCtrlSystem(new IntakeIOReal()));
@@ -140,23 +140,27 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
+                    VisionConstants.CAMERA_0_NAME,
+                    VisionConstants.ROBOT_TO_CAMERA_0,
+                    drive::getPose),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
+                    VisionConstants.CAMERA_1_NAME,
+                    VisionConstants.ROBOT_TO_CAMERA_1,
+                    drive::getPose));
         chute =
-            Constants.chuteManualMode
+            Constants.CHUTE_MANUAL_MODE
                 ? new Chute(new ChuteCtrlManual(new ChuteIOSim()))
                 : new Chute(new ChuteCtrlSystem(new ChuteIOSim()));
         elevator =
-            Constants.elevatorManualMode
+            Constants.ELEVATOR_MANUAL_MODE
                 ? new Elevator(new ElevatorCtrlManual(new ElevatorIOSim()))
                 : new Elevator(new ElevatorCtrlSystem(new ElevatorIOSim()));
         climber =
-            Constants.climberManualMode
+            Constants.CLIMBER_MANUAL_MODE
                 ? new Climber(new ClimberCtrlManual(new ClimberIOSim()))
                 : new Climber(new ClimberCtrlSystem(new ClimberIOSim()));
         moon =
-            Constants.moonManualMode
+            Constants.MOON_MANUAL_MODE
                 ? new Moon(new MoonCtrlManual(new MoonIOSim()))
                 : new Moon(new MoonCtrlSystem(new MoonIOSim()));
         intake = new Intake(new IntakeCtrlSystem(new IntakeIOSim()));

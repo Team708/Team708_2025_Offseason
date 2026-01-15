@@ -23,14 +23,15 @@ public class ClimberIOSim implements ClimberIO {
 
   public ClimberIOSim() {
     linearSystem =
-        LinearSystemId.createDCMotorSystem(Constants.k1Vortex, kJKgMetersSquared, kMotorReduction);
-    climberSim = new DCMotorSim(linearSystem, Constants.k1Vortex);
+        LinearSystemId.createDCMotorSystem(
+            Constants.K1_VORTEX, J_KG_METERS_SQUARED, MOTOR_REDUCTION);
+    climberSim = new DCMotorSim(linearSystem, Constants.K1_VORTEX);
     appliedVolts = 0.0;
   }
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    climberSim.update(kSimUpdateInterval);
+    climberSim.update(SIM_UPDATE_INTERVAL);
     inputs.connected = true;
     inputs.positionRadians = climberSim.getAngularPositionRad();
     inputs.positionDegrees = Math.toDegrees(inputs.positionRadians);
@@ -53,7 +54,7 @@ public class ClimberIOSim implements ClimberIO {
       inputs.reverseLimitReached = false;
     }
 
-    if (inputs.positionRadians >= (kExtendedRadians - 0.1)) {
+    if (inputs.positionRadians >= (EXTENDED_RADIANS - 0.1)) {
       inputs.forwardLimitReached = true;
     } else {
       inputs.forwardLimitReached = false;

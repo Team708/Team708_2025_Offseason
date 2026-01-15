@@ -49,7 +49,7 @@ public class VisionIOPhotonVisionSim extends VisionIOPhotonVision {
     // Add sim camera
     var cameraProperties = new SimCameraProperties();
     cameraSim = new PhotonCameraSim(camera, cameraProperties, aprilTagLayout);
-    cameraSim.setMaxSightRange(VisionConstants.simMaxSightRange);
+    cameraSim.setMaxSightRange(VisionConstants.SIM_MAX_SIGHT_RANGE);
     visionSim.addCamera(cameraSim, robotToCamera);
     visionSim.update(new Pose2d());
   }

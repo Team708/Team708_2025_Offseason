@@ -1,31 +1,31 @@
 package frc.robot.subsystems.elevator;
 
 public class ElevatorConstants {
-  public static final int kNumMotors = 2;
-  public static final double kMotorReduction = 10.0;
-  public static final double kCarriageMassLbs = 5.0;
-  public static final double kEffectiveDrumRadiusInches = 0.75;
-  public static final double kMinHeightInches = 0.0;
-  public static final double kMaxHeightInches = 80.0;
-  public static final boolean kSimulateGravity = true;
-  public static final double kStartingHeightInches = 0.0;
-  public static final double kSimUpdateInterval = 0.02;
-  public static final double kP = 0.55;
-  public static final double kI = 0.0;
-  public static final double kD = 0.0;
-  public static final double kMaxVoltage = 3.0;
-  public static final double kMaxVoltageSim = 12.0;
-  public static final double kMinClosedLoopOutput = -1 * (kMaxVoltage / 12);
-  public static final double kMaxClosedLoopOutput = (kMaxVoltage / 12);
-  public static final double kManualAdjustInches = 2;
-  public static final double kDeadband = 1;
-  public static final double kZeroingVoltage = -1.0;
-  public static final int kCanIDMotor1 = 21;
-  public static final int kCanIDMotor2 = 22;
-  public static final int kCurrentLimit = 80;
-  public static final int kSprocketTeeth = 15;
-  public static final double kPositionFactor = 1.5185;
-  public static final double kVelocityFactor = kPositionFactor / 60;
+  public static final int MOTOR_COUNT = 2;
+  public static final double MOTOR_REDUCTION = 10.0;
+  public static final double CARRAIGE_MASS_LBS = 5.0;
+  public static final double EFFECTIVE_DRUM_RADIUS_INCHES = 0.75;
+  public static final double MIN_HEIGHT_INCHES = 0.0;
+  public static final double MAX_HEIGHT_INCHES = 80.0;
+  public static final boolean SIMULATE_GRAVITY = true;
+  public static final double STARTING_HEIGHT_INCHES = 0.0;
+  public static final double SIM_UPDATE_INTERVAL = 0.02;
+  public static final double KP = 0.55;
+  public static final double KI = 0.0;
+  public static final double KD = 0.0;
+  public static final double MAX_VOLTAGE = 3.0;
+  public static final double MAX_VOLTAGE_SIM = 12.0;
+  public static final double MIN_CLOSED_LOOP_OUTPUT = -1 * (MAX_VOLTAGE / 12);
+  public static final double MAX_CLOSED_LOOP_OUTPUT = (MAX_VOLTAGE / 12);
+  public static final double MANUAL_ADJUST_INCHES = 2;
+  public static final double DEADBAND = 1;
+  public static final double ZEROING_VOLTAGE = -1.0;
+  public static final int CAN_ID_MOTOR_1 = 21;
+  public static final int CAN_ID_MOTOR_2 = 22;
+  public static final int CURRENT_LIMIT = 80;
+  public static final int SPROCKET_TEETH = 15;
+  public static final double POSITION_FACTOR = 1.5185;
+  public static final double VELOCITY_FACTOR = POSITION_FACTOR / 60;
 
   public enum ElevatorLevel {
     L0,

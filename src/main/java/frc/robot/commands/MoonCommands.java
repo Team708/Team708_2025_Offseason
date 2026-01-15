@@ -12,7 +12,7 @@ import java.util.function.DoubleSupplier;
 
 public class MoonCommands {
   private static final LoggedTunableNumber manualChangeMoonRadians =
-      new LoggedTunableNumber("Elevator/ManualAdjustMoonRadians", kManualAdjustRadians);
+      new LoggedTunableNumber("Elevator/ManualAdjustMoonRadians", MANUAL_ADJUST_RADIANS);
 
   public static Command manualControl(Moon moon, DoubleSupplier joystickValue) {
     return Commands.run(

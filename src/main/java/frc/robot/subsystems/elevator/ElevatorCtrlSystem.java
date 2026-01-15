@@ -39,6 +39,6 @@ public class ElevatorCtrlSystem extends SubsystemBase implements ElevatorCtrl {
 
   @Override
   public boolean atTargetPosition() {
-    return Math.abs(inputs.positionInches - targetInches) <= kDeadband;
+    return Math.abs(inputs.positionInches - targetInches) <= DEADBAND;
   }
 }

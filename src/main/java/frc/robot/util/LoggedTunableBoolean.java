@@ -49,7 +49,7 @@ public class LoggedTunableBoolean implements BooleanSupplier {
     if (!hasDefault) {
       hasDefault = true;
       this.defaultValue = defaultValue;
-      if (Constants.tuningMode && !Constants.disableHAL) {
+      if (Constants.TUNING_MODE && !Constants.DISABLE_HAL) {
         dashboardNumber = new LoggedNetworkBoolean(key, defaultValue);
       }
     }
@@ -64,7 +64,7 @@ public class LoggedTunableBoolean implements BooleanSupplier {
     if (!hasDefault) {
       return false;
     } else {
-      return Constants.tuningMode && !Constants.disableHAL ? dashboardNumber.get() : defaultValue;
+      return Constants.TUNING_MODE && !Constants.DISABLE_HAL ? dashboardNumber.get() : defaultValue;
     }
   }
 

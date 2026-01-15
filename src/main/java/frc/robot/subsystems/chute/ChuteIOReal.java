@@ -27,19 +27,19 @@ public class ChuteIOReal implements ChuteIO {
   private boolean isMotorConnected;
 
   public ChuteIOReal() {
-    motor = new SparkFlex(ChuteConstants.kCanID, MotorType.kBrushless);
+    motor = new SparkFlex(ChuteConstants.CAN_ID, MotorType.kBrushless);
     encoder = motor.getEncoder();
 
     // Configure drive motor
     var motorConfig = new SparkFlexConfig();
     motorConfig
         .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(ChuteConstants.kCurrentLimit)
+        .smartCurrentLimit(ChuteConstants.CURRENT_LIMIT)
         .voltageCompensation(12.0);
     motorConfig
         .encoder
-        .positionConversionFactor(ChuteConstants.kEncoderPositionFactor)
-        .velocityConversionFactor(ChuteConstants.kEncoderVelocityFactor)
+        .positionConversionFactor(ChuteConstants.ENCODER_POSITION_FACTOR)
+        .velocityConversionFactor(ChuteConstants.ENCODER_VELOCITY_FACTOR)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
     motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
@@ -62,7 +62,7 @@ public class ChuteIOReal implements ChuteIO {
     reverseLimitSwitch = motor.getReverseLimitSwitch();
     forwardLimitSwitch = motor.getForwardLimitSwitch();
     backgroundThread = new Notifier(this::updateBackground);
-    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+    backgroundThread.startPeriodic(Constants.BACKGROUND_THREAD_PERIOD);
   }
 
   private void updateBackground() {
@@ -79,7 +79,7 @@ public class ChuteIOReal implements ChuteIO {
     inputs.currentAmps = motor.getOutputCurrent();
     inputs.positionInches = encoder.getPosition();
     inputs.velocityInchesPerSecond = encoder.getVelocity();
-    inputs.rpm = (encoder.getVelocity() / kScrewInchesPerRev) * 60;
+    inputs.rpm = (encoder.getVelocity() / SCREW_INCHES_PER_REV) * 60;
 
     if (inputs.isFullyRetracted) {
       encoder.setPosition(0.0);

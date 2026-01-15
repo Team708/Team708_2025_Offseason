@@ -18,15 +18,16 @@ public class IntakeIOSim implements IntakeIO {
 
   public IntakeIOSim() {
     linearSystem =
-        LinearSystemId.createDCMotorSystem(Constants.k1Vortex, kJKgMetersSquared, kMotorReduction);
-    intakeSim = new DCMotorSim(linearSystem, Constants.k1Vortex);
+        LinearSystemId.createDCMotorSystem(
+            Constants.K1_VORTEX, J_KG_METERS_SQUARED, MOTOR_REDUCTION);
+    intakeSim = new DCMotorSim(linearSystem, Constants.K1_VORTEX);
     appliedVolts = 0.0;
     beamTriggered = new LoggedTunableBoolean("Intake/BeamTriggered", true);
   }
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    intakeSim.update(kSimUpdateInterval);
+    intakeSim.update(SIM_UPDATE_INTERVAL);
     intakeSim.setInputVoltage(appliedVolts);
     inputs.connected = true;
     inputs.appliedVolts = appliedVolts;

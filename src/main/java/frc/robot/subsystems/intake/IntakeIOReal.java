@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake;
 
-import static frc.robot.subsystems.climber.ClimberConstants.kEncoderVelocityFactor;
+import static frc.robot.subsystems.climber.ClimberConstants.ENCODER_VELOCITY_FACTOR;
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 import static frc.robot.util.SparkUtil.*;
 
@@ -29,19 +29,19 @@ public class IntakeIOReal implements IntakeIO {
   private boolean isMotorConnected;
 
   public IntakeIOReal() {
-    motor = new SparkFlex(kCanID, MotorType.kBrushless);
+    motor = new SparkFlex(CAN_ID, MotorType.kBrushless);
     encoder = motor.getEncoder();
 
     // Configure drive motor
     var motorConfig = new SparkFlexConfig();
     motorConfig
         .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(kCurrentLimit)
+        .smartCurrentLimit(CURRENT_LIMIT)
         .voltageCompensation(12.0);
     motorConfig
         .encoder
-        .positionConversionFactor(kEncoderPositionFactor)
-        .velocityConversionFactor(kEncoderVelocityFactor)
+        .positionConversionFactor(ENCODER_POSITION_FACTOR)
+        .velocityConversionFactor(ENCODER_VELOCITY_FACTOR)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
     motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
@@ -61,10 +61,10 @@ public class IntakeIOReal implements IntakeIO {
             motor.configure(
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
-    beamBreak = new DigitalInput(kBeamChannel);
+    beamBreak = new DigitalInput(BEAM_CHANNEL);
     reverseLimitSwitch = motor.getReverseLimitSwitch();
     backgroundThread = new Notifier(this::updateBackground);
-    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+    backgroundThread.startPeriodic(Constants.BACKGROUND_THREAD_PERIOD);
   }
 
   private void updateBackground() {

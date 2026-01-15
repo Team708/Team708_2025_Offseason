@@ -24,24 +24,24 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
   // Camera names, must match names configured on coprocessor
-  public static String camera0Name = "limelight";
-  public static String camera1Name = "camera_1";
+  public static final String CAMERA_0_NAME = "limelight";
+  public static final String CAMERA_1_NAME = "camera_1";
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
-  public static Transform3d robotToCamera0 =
+  public static final Transform3d ROBOT_TO_CAMERA_0 =
       new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
-  public static Transform3d robotToCamera1 =
+  public static final Transform3d ROBOT_TO_CAMERA_1 =
       new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
 
   // Basic filtering thresholds
-  public static double maxAmbiguity = 0.4;
-  public static double maxZError = 0.75;
+  public static final double MAX_AMBIGUITY = 0.4;
+  public static final double MAX_Z_ERROR = 0.75;
 
   // Standard deviation baselines, for 1 meter distance and 1 tag
   // (Adjusted automatically based on distance and # of tags)
-  public static double linearStdDevBaseline = 0.02; // Meters
-  public static double angularStdDevBaseline = 0.06; // Radians
+  public static final double LINEAR_STD_DEV_BASELINE = 0.02; // Meters
+  public static final double ANGULAR_STD_DEV_BASELINE = 0.06; // Radians
 
   // Standard deviation multipliers for each camera
   // (Adjust to trust some cameras more than others)
@@ -52,11 +52,12 @@ public class VisionConstants {
       };
 
   // Multipliers to apply for MegaTag 2 observations
-  public static double linearStdDevMegatag2Factor = 0.5; // More stable than full 3D solve
-  public static double angularStdDevMegatag2Factor = Math.toRadians(15.0);
+  public static final double LINEAR_STD_DEV_MEGATAG_2_FACTOR =
+      0.5; // More stable than full 3D solve
+  public static final double ANGULAR_STD_DEV_MEGATAG_2_FACTOR = Math.toRadians(15.0);
 
   // Sim max sight range
-  public static double simMaxSightRange = 5;
+  public static final double SIM_MAX_SIGHT_RANGE = 5;
 
-  public static final double startupPeriodicDelay = 2.0;
+  public static final double STARTUP_PERIODIC_DELAY = 2.0;
 }

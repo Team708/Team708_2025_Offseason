@@ -10,8 +10,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
   private LoggedTunableNumber maxVoltage =
-      new LoggedTunableNumber("Elevator/MaxVoltage", kMaxVoltage);
-  private LoggedTunableNumber pGain = new LoggedTunableNumber("Elevator/PGain", kP);
+      new LoggedTunableNumber("Elevator/MaxVoltage", MAX_VOLTAGE);
+  private LoggedTunableNumber pGain = new LoggedTunableNumber("Elevator/PGain", KP);
   private final ElevatorIO io;
   private final ElevatorIOInputsAutoLogged inputs;
   private final PIDController controller;
@@ -20,7 +20,7 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
   public ElevatorCtrlManual(ElevatorIO io) {
     this.io = io;
     inputs = new ElevatorIOInputsAutoLogged();
-    controller = new PIDController(pGain.get(), kI, kD);
+    controller = new PIDController(pGain.get(), KI, KD);
     targetInches = 0.0;
   }
 
@@ -31,7 +31,7 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
 
     // PID change
     if (pGain.hasChanged(pGain.hashCode())) {
-      controller.setP(kP);
+      controller.setP(KP);
     }
 
     // Scale PID to voltage output
@@ -42,6 +42,6 @@ public class ElevatorCtrlManual extends SubsystemBase implements ElevatorCtrl {
 
   @Override
   public void manualAdjustPosition(double inches) {
-    targetInches = MathUtil.clamp(targetInches + inches, 0, kMaxHeightInches);
+    targetInches = MathUtil.clamp(targetInches + inches, 0, MAX_HEIGHT_INCHES);
   }
 }

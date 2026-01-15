@@ -1,9 +1,9 @@
 package frc.robot.commands;
 
-import static frc.robot.subsystems.drive.DriveConstants.feederLeftBlue;
-import static frc.robot.subsystems.drive.DriveConstants.feederLeftRed;
-import static frc.robot.subsystems.drive.DriveConstants.feederRightBlue;
-import static frc.robot.subsystems.drive.DriveConstants.feederRightRed;
+import static frc.robot.subsystems.drive.DriveConstants.FEEDER_LEFT_BLUE;
+import static frc.robot.subsystems.drive.DriveConstants.FEEDER_LEFT_RED;
+import static frc.robot.subsystems.drive.DriveConstants.FEEDER_RIGHT_BLUE;
+import static frc.robot.subsystems.drive.DriveConstants.FEEDER_RIGHT_RED;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,12 +21,12 @@ public class AutoCommands {
     Pose2d startingPose;
     Pose2d feederPose;
     if (DriverStation.getAlliance().get() == Alliance.Red) {
-      startingPose = DriveConstants.startingPoseLeftRed;
-      feederPose = feederLeftRed;
+      startingPose = DriveConstants.STARTING_POSE_LEFT_RED;
+      feederPose = FEEDER_LEFT_RED;
 
     } else {
-      startingPose = DriveConstants.startingPoseLeftBlue;
-      feederPose = feederLeftBlue;
+      startingPose = DriveConstants.STARTING_POSE_LEFT_BLUE;
+      feederPose = FEEDER_LEFT_BLUE;
     }
     return Commands.sequence(
             IntakeCommands.intakeCoral(intake),
@@ -44,11 +44,11 @@ public class AutoCommands {
     Pose2d startingPose;
     Pose2d feederPose;
     if (DriverStation.getAlliance().get() == Alliance.Red) {
-      startingPose = DriveConstants.startingPoseRightRed;
-      feederPose = feederRightRed;
+      startingPose = DriveConstants.STARTING_POSE_RIGHT_RED;
+      feederPose = FEEDER_RIGHT_RED;
     } else {
-      startingPose = DriveConstants.startingPoseRightBlue;
-      feederPose = feederRightBlue;
+      startingPose = DriveConstants.STARTING_POSE_RIGHT_BLUE;
+      feederPose = FEEDER_RIGHT_BLUE;
     }
     return Commands.sequence(
             IntakeCommands.intakeCoral(intake),
@@ -65,9 +65,9 @@ public class AutoCommands {
   public static Command center1Coral(Drive drive, Elevator elevator, Moon moon, Intake intake) {
     Pose2d startingPose;
     if (DriverStation.getAlliance().get() == Alliance.Red) {
-      startingPose = DriveConstants.startingPoseCenterRed;
+      startingPose = DriveConstants.STARTING_POSE_CENTER_RED;
     } else {
-      startingPose = DriveConstants.startingPoseCenterBlue;
+      startingPose = DriveConstants.STARTING_POSE_CENTER_BLUE;
     }
 
     return Commands.sequence(

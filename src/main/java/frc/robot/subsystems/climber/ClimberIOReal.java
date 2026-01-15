@@ -1,6 +1,7 @@
 package frc.robot.subsystems.climber;
 
 import static frc.robot.subsystems.climber.ClimberConstants.*;
+import static frc.robot.subsystems.intake.IntakeConstants.CAN_ID;
 import static frc.robot.util.SparkUtil.tryUntilOk;
 
 import com.revrobotics.RelativeEncoder;
@@ -34,10 +35,10 @@ public class ClimberIOReal implements ClimberIO {
   private boolean isMotorConnected;
 
   public ClimberIOReal() {
-    servo = new Servo(kServoChannel);
+    servo = new Servo(SERVO_CHANNEL);
     isServoUnlocked = true;
     setServo(true);
-    motor = new SparkFlex(kCanID, MotorType.kBrushless);
+    motor = new SparkFlex(CAN_ID, MotorType.kBrushless);
     encoder = motor.getEncoder();
 
     // Configure drive motor
@@ -45,12 +46,12 @@ public class ClimberIOReal implements ClimberIO {
     motorConfig
         .idleMode(IdleMode.kBrake)
         .inverted(true)
-        .smartCurrentLimit(kCurrentLimit)
+        .smartCurrentLimit(CURRENT_LIMIT)
         .voltageCompensation(12.0);
     motorConfig
         .encoder
-        .positionConversionFactor(kEncoderPositionFactor)
-        .velocityConversionFactor(kEncoderVelocityFactor)
+        .positionConversionFactor(ENCODER_POSITION_FACTOR)
+        .velocityConversionFactor(ENCODER_VELOCITY_FACTOR)
         .uvwMeasurementPeriod(10)
         .uvwAverageDepth(2);
     motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
@@ -71,12 +72,12 @@ public class ClimberIOReal implements ClimberIO {
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(motor, 5, () -> encoder.setPosition(0.0));
     reverseLimitSwitch = motor.getReverseLimitSwitch();
-    cageLimit1 = new DigitalInput(kCageLimitSwitch1);
-    cageLimit2 = new DigitalInput(kCageLimitSwitch2);
-    beamBreak1 = new DigitalInput(kBeamBreak1);
-    beamBreak2 = new DigitalInput(kBeamBreak2);
+    cageLimit1 = new DigitalInput(CAGE_LIMIT_SWITCH_1_CHANNEL);
+    cageLimit2 = new DigitalInput(CAGE_LIMIT_SWITCH_2_CHANNEL);
+    beamBreak1 = new DigitalInput(BEAM_BREAK_1_CHANNEL);
+    beamBreak2 = new DigitalInput(BEAM_BRAKE_2_CHANNEL);
     backgroundThread = new Notifier(this::updateBackground);
-    backgroundThread.startPeriodic(Constants.backgroundThreadPeriod);
+    backgroundThread.startPeriodic(Constants.BACKGROUND_THREAD_PERIOD);
   }
 
   private void updateBackground() {
@@ -103,7 +104,7 @@ public class ClimberIOReal implements ClimberIO {
     } else {
       inputs.reverseLimitReached = false;
     }
-    if (inputs.positionRadians >= (kExtendedRadians - kDeadband)) {
+    if (inputs.positionRadians >= (EXTENDED_RADIANS - DEADBAND)) {
       inputs.forwardLimitReached = true;
     } else {
       inputs.forwardLimitReached = false;
@@ -113,9 +114,9 @@ public class ClimberIOReal implements ClimberIO {
   @Override
   public void setServo(boolean isUnlocked) {
     if (isUnlocked) {
-      servo.setPosition(kServoReleasePosition);
+      servo.setPosition(SERVO_RELEASE_POSITION);
     } else {
-      servo.setPosition(kServoBrakePosition);
+      servo.setPosition(SERVO_BRAKE_POSITION);
     }
     isServoUnlocked = isUnlocked;
   }

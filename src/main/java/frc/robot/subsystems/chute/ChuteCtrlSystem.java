@@ -26,15 +26,15 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
   @AutoLogOutput private boolean manualOverride;
   @AutoLogOutput private double manualVoltage;
   private static final LoggedTunableNumber maxVolts =
-      new LoggedTunableNumber("Chute/Volts", kMaxVoltage);
-  private static final LoggedTunableNumber pGain = new LoggedTunableNumber("Chute/P", kP);
+      new LoggedTunableNumber("Chute/Volts", MAX_VOLTAGE);
+  private static final LoggedTunableNumber pGain = new LoggedTunableNumber("Chute/P", KP);
   private static final LoggedTunableNumber zeroingVolts =
-      new LoggedTunableNumber("Chute/ZeroingVolts", kZeroingVoltage);
+      new LoggedTunableNumber("Chute/ZeroingVolts", ZEROING_VOLTAGE);
 
   public ChuteCtrlSystem(ChuteIO io) {
     this.io = io;
     inputs = new ChuteIOInputsAutoLogged();
-    controller = new PIDController(pGain.get(), kI, kD);
+    controller = new PIDController(pGain.get(), KI, KD);
     state = State.UNKNOWN;
     desiredState = State.RETRACTED;
   }
@@ -62,17 +62,17 @@ public class ChuteCtrlSystem extends SubsystemBase implements ChuteCtrl {
     if (state != desiredState) {
       switch (desiredState) {
         case UNKNOWN:
-          desiredPosition = kRetractedInches;
+          desiredPosition = RETRACTED_INCHES;
           io.setVoltage(zeroingVolts.get());
           return;
         case RETRACTED:
-          desiredPosition = kRetractedInches;
+          desiredPosition = RETRACTED_INCHES;
           break;
         case EXTENDED:
-          desiredPosition = kExtendedInches;
+          desiredPosition = EXTENDED_INCHES;
           break;
         default:
-          desiredPosition = kRetractedInches;
+          desiredPosition = RETRACTED_INCHES;
           break;
       }
       state = State.MOVING;

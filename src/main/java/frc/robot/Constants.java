@@ -22,17 +22,17 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
-  public static final Mode simMode = Mode.SIM;
-  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
-  public static final boolean tuningMode = true;
-  public static final boolean disableHAL = false;
-  public static final boolean chuteManualMode = false;
-  public static final boolean elevatorManualMode = false;
-  public static final boolean moonManualMode = false;
-  public static final boolean climberManualMode = false;
-  public static final DCMotor k1Vortex = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 1);
-  public static final DCMotor k2Vortex = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 2);
-  public static final double backgroundThreadPeriod = 2;
+  public static final Mode SIM_MODE = Mode.SIM;
+  public static final Mode CURRENT_MODE = RobotBase.isReal() ? Mode.REAL : SIM_MODE;
+  public static final boolean TUNING_MODE = true;
+  public static final boolean DISABLE_HAL = false;
+  public static final boolean CHUTE_MANUAL_MODE = false;
+  public static final boolean ELEVATOR_MANUAL_MODE = false;
+  public static final boolean MOON_MANUAL_MODE = false;
+  public static final boolean CLIMBER_MANUAL_MODE = false;
+  public static final DCMotor K1_VORTEX = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 1);
+  public static final DCMotor K2_VORTEX = new DCMotor(12.0, 2.98, 150.0, 1.5, 710.0, 2);
+  public static final double BACKGROUND_THREAD_PERIOD = 2;
 
   public static enum Mode {
     /** Running on a real robot. */
