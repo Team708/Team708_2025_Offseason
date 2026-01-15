@@ -82,6 +82,7 @@ public class RobotContainer {
   private final Climber climber;
   private final Moon moon;
   private final Intake intake;
+  
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
