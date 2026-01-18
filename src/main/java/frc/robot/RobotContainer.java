@@ -218,10 +218,6 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption("Left 3 Coral", AutoCommands.left3Coral(drive, elevator, moon, intake));
-    autoChooser.addOption("Right 3 Coral", AutoCommands.right3Coral(drive, elevator, moon, intake));
-    autoChooser.addOption(
-        "Center 1 Coral", AutoCommands.center1Coral(drive, elevator, moon, intake));
 
     configureButtonBindings();
   }
